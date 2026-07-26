@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📚 Mis Cuestionarios - Guías SPC</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Roboto, sans-serif;
+            background: #f0f4f8;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+        }
+        .container {
+            background: white;
+            max-width: 700px;
+            width: 100%;
+            border-radius: 24px;
+            padding: 2.5rem;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+            text-align: center;
+        }
+        h1 {
+            font-size: 2rem;
+            color: #1e2b3c;
+            margin-bottom: 0.5rem;
+        }
+        .subtitulo {
+            color: #5a6f88;
+            font-size: 1rem;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid #e9edf4;
+            padding-bottom: 1rem;
+        }
+        .menu {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+            text-align: left;
+            margin: 1.5rem 0;
+        }
+        .menu-item {
+            background: #f9fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 14px;
+            padding: 1rem 1.5rem;
+            display: flex;
+            align-items: center;
+            transition: all 0.15s;
+            text-decoration: none;
+            color: #1e2b3c;
+            font-weight: 500;
+        }
+        .menu-item:hover {
+            background: #edf2f9;
+            border-color: #2a7de1;
+            transform: scale(1.01);
+        }
+        .menu-item .icono {
+            font-size: 1.5rem;
+            margin-right: 1rem;
+        }
+        .menu-item .nombre {
+            flex: 1;
+        }
+        .menu-item .flecha {
+            color: #8a9bb0;
+        }
+        .footer {
+            margin-top: 2rem;
+            font-size: 0.9rem;
+            color: #7a8fa5;
+            border-top: 2px solid #e9edf4;
+            padding-top: 1.2rem;
+        }
+        .badge {
+            background: #1e2b3c;
+            color: white;
+            padding: 0.2rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            margin-left: 0.8rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📚 Mis Cuestionarios</h1>
+        <div class="subtitulo">Guías, resúmenes y exámenes de SPC</div>
+
+        <div class="menu">
+            <!-- ========================================= -->
+            <!-- AQUÍ AGREGA TUS CARPETAS / CUESTIONARIOS  -->
+            <!-- Copia esta estructura para cada nuevo examen -->
+            <!-- ========================================= -->
+
+            <a href="Diseno_conceptual/" class="menu-item">
+                <span class="icono">📊</span>
+                <span class="nombre">Diseño conceptual para estadísticas (INEGI)</span>
+                <span class="badge">Examen</span>
+                <span class="flecha">→</span>
+            </a>
+
+            <!-- Ejemplo de otro cuestionario (descomenta cuando lo tengas) -->
+            <!--
+            <a href="Cuestionario_SPC/" class="menu-item">
+                <span class="icono">📋</span>
+                <span class="nombre">Cuestionario SPC - Módulo 1</span>
+                <span class="badge">Práctica</span>
+                <span class="flecha">→</span>
+            </a>
+            -->
+
+            <!-- Ejemplo de resumen (descomenta cuando lo tengas) -->
+            <!--
+            <a href="Resumenes/" class="menu-item">
+                <span class="icono">📝</span>
+                <span class="nombre">Resúmenes ejecutivos</span>
+                <span class="badge">PDF</span>
+                <span class="flecha">→</span>
+            </a>
+            -->
+        </div>
+
+        <div class="footer">
+            📍 Repositorio: <strong>Gu-as_SPC</strong> · Actualizado automáticamente
+        </div>
+    </div>
+</body>
+</html>
