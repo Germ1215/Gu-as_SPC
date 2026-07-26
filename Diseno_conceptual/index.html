@@ -1,0 +1,1788 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Examen Interactivo – Diseño Conceptual INEGI</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+            background: #f5f7fa;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 20px;
+        }
+        .container {
+            background: white;
+            max-width: 850px;
+            width: 100%;
+            border-radius: 24px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.08), 0 6px 12px rgba(0,0,0,0.05);
+            padding: 2rem 2rem 2rem;
+            transition: all 0.2s;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #e9edf4;
+            padding-bottom: 0.75rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+        .header h1 {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #1e2b3c;
+            letter-spacing: -0.3px;
+        }
+        .progress {
+            background: #e9edf4;
+            border-radius: 40px;
+            padding: 0.35rem 1rem;
+            font-weight: 500;
+            color: #1e2b3c;
+            font-size: 0.9rem;
+        }
+        .pregunta-texto {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            color: #1e2b3c;
+            margin-bottom: 1.8rem;
+            font-weight: 500;
+            background: #f9fafc;
+            padding: 1.2rem 1.5rem;
+            border-radius: 16px;
+            border-left: 5px solid #2a7de1;
+        }
+        .opciones {
+            display: flex;
+            flex-direction: column;
+            gap: 0.7rem;
+            margin-bottom: 2rem;
+        }
+        .opcion {
+            display: flex;
+            align-items: center;
+            background: #f9fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 14px;
+            padding: 0.9rem 1.2rem;
+            cursor: pointer;
+            transition: all 0.15s;
+            font-size: 1rem;
+            color: #1e2b3c;
+        }
+        .opcion:hover {
+            background: #edf2f9;
+            border-color: #b3c7e5;
+        }
+        .opcion.seleccionada {
+            background: #dbeafe;
+            border-color: #2a7de1;
+            box-shadow: 0 0 0 2px rgba(42,125,225,0.2);
+        }
+        .opcion.correcta {
+            background: #d1fae5;
+            border-color: #0b8a4a;
+        }
+        .opcion.incorrecta {
+            background: #fee2e2;
+            border-color: #b91c1c;
+        }
+        .opcion.deshabilitada {
+            cursor: default;
+            opacity: 0.8;
+        }
+        .opcion .letra {
+            font-weight: 700;
+            color: #4a5a72;
+            margin-right: 1rem;
+            min-width: 28px;
+        }
+        .acciones {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 0.5rem;
+        }
+        .btn {
+            background: white;
+            border: 2px solid #d0d9e8;
+            padding: 0.7rem 1.8rem;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: #1e2b3c;
+            cursor: pointer;
+            transition: all 0.15s;
+            background: #f9fafc;
+        }
+        .btn:hover:not(:disabled) {
+            background: #e9edf4;
+            border-color: #a0b5d0;
+        }
+        .btn.primario {
+            background: #1e2b3c;
+            border-color: #1e2b3c;
+            color: white;
+        }
+        .btn.primario:hover:not(:disabled) {
+            background: #2a3d54;
+            border-color: #2a3d54;
+        }
+        .btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+        .feedback {
+            margin-top: 1.8rem;
+            padding: 1.2rem 1.5rem;
+            border-radius: 16px;
+            background: #f0f4fe;
+            border-left: 5px solid #2a7de1;
+            display: none;
+        }
+        .feedback.mostrar {
+            display: block;
+        }
+        .feedback .correcto {
+            color: #0b7a3e;
+            font-weight: 700;
+        }
+        .feedback .incorrecto {
+            color: #b91c1c;
+            font-weight: 700;
+        }
+        .feedback .justificacion {
+            margin-top: 0.6rem;
+            color: #1e2b3c;
+            line-height: 1.5;
+        }
+        .feedback .distractores {
+            margin-top: 0.5rem;
+            font-size: 0.95rem;
+            color: #3d4e66;
+            background: #e8edf5;
+            padding: 0.7rem 1rem;
+            border-radius: 10px;
+        }
+        .footer {
+            margin-top: 2rem;
+            border-top: 2px solid #e9edf4;
+            padding-top: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+        }
+        .resultado-final {
+            background: #1e2b3c;
+            color: white;
+            padding: 1.2rem 2rem;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 1.2rem;
+            text-align: center;
+            margin-top: 1rem;
+        }
+        .oculto {
+            display: none !important;
+        }
+        @media (max-width: 600px) {
+            .container { padding: 1.2rem; }
+            .pregunta-texto { font-size: 1rem; padding: 1rem; }
+            .opcion { padding: 0.7rem 1rem; font-size: 0.95rem; }
+            .btn { padding: 0.6rem 1.2rem; font-size: 0.9rem; }
+        }
+    </style>
+</head>
+<body>
+<div class="container" id="app">
+    <div class="header">
+        <h1>📊 Diseño Conceptual · INEGI</h1>
+        <span class="progress" id="progreso">1 / 100</span>
+    </div>
+
+    <div id="preguntaContainer">
+        <div class="pregunta-texto" id="preguntaTexto">Cargando pregunta…</div>
+        <div class="opciones" id="opcionesContainer"></div>
+    </div>
+
+    <div class="acciones">
+        <button class="btn" id="btnResponder" disabled>▶ Responder</button>
+        <button class="btn primario" id="btnSiguiente" disabled>Siguiente →</button>
+    </div>
+
+    <div class="feedback" id="feedback">
+        <div id="feedbackResultado"></div>
+        <div class="justificacion" id="feedbackJustificacion"></div>
+        <div class="distractores" id="feedbackDistractores"></div>
+    </div>
+
+    <div class="footer">
+        <span id="aciertosTexto">Aciertos: 0</span>
+        <span id="preguntaNumero">Pregunta 1 de 100</span>
+    </div>
+
+    <div id="resultadoFinal" class="resultado-final oculto"></div>
+</div>
+
+<script>
+    // ============================================================
+    // DATOS: 100 preguntas (opciones A, B, C, D)
+    // Cada objeto: { id, texto, opciones: {A, B, C, D}, correcta, justificacion, distractores }
+    // ============================================================
+    const preguntas = [
+        // 1
+        {
+            id: 1,
+            texto: "El diseño conceptual es la fase del proceso de generación de estadística básica que consiste en una serie de actividades para identificar las necesidades de información y determinar: el marco conceptual, los instrumentos de captación, los criterios de validación y _______________.",
+            opciones: {
+                A: "el diseño de la muestra",
+                B: "el esquema para la presentación de resultados",
+                C: "la planeación estratégica",
+                D: "la codificación de los datos"
+            },
+            correcta: "B",
+            justificacion: "Página 7: 'El diseño conceptual es: Serie de actividades para identificar las necesidades de información y determinar: El marco conceptual, los instrumentos de captación, los criterios de validación y el esquema para la presentación de resultados.'",
+            distractores: "A es fase de diseño de muestra; C es fase de planeación; D es parte del procesamiento."
+        },
+        // 2
+        {
+            id: 2,
+            texto: "Relaciona cada atributo de calidad con su definición: 1. Relevancia, 2. Rigor conceptual, 3. Confiabilidad, 4. Oportunidad. A) Grado en que un dato se aproxima a la veracidad. B) Lapso mínimo entre presentación de resultados y referencia temporal. C) Utilidad para atender necesidades. D) Denominaciones claras y precisas.",
+            opciones: {
+                A: "1-C, 2-D, 3-A, 4-B",
+                B: "1-D, 2-C, 3-B, 4-A",
+                C: "1-A, 2-B, 3-C, 4-D",
+                D: "1-B, 2-A, 3-D, 4-C"
+            },
+            correcta: "A",
+            justificacion: "Página 10, cuadro de atributos. Relevancia: utilidad; Rigor conceptual: claridad; Confiabilidad: aproximación a la veracidad; Oportunidad: lapso mínimo.",
+            distractores: "Las otras opciones invierten las relaciones correctas entre atributos y definiciones."
+        },
+        // 3
+        {
+            id: 3,
+            texto: "¿Cuál de las siguientes afirmaciones sobre la investigación documental es INCORRECTA según el documento?",
+            opciones: {
+                A: "Incluye revisión de antecedentes, recomendaciones internacionales, leyes y reglamentos.",
+                B: "Sus productos incluyen fichas con variables, preguntas, criterios de validación y sistemas de clasificación.",
+                C: "Se realiza únicamente al inicio del diseño conceptual y no interactúa con otras macroactividades.",
+                D: "Ayuda a resolver controversias entre lo que se quiere captar y lo que se puede captar."
+            },
+            correcta: "C",
+            justificacion: "Página 12: 'Esta primer macroactividad puede tener diferentes momentos e interactuar con todas las demás.'",
+            distractores: "A, B y D son afirmaciones correctas según el texto."
+        },
+        // 4
+        {
+            id: 4,
+            texto: "El marco conceptual es un esquema bajo el cual se presenta, en forma ordenada y con los vínculos correspondientes, el conjunto de conceptos referentes a _______________, con sus respectivas definiciones.",
+            opciones: {
+                A: "temas, categorías, variables y clasificaciones",
+                B: "preguntas, opciones de respuesta y rangos de validación",
+                C: "unidades de observación, informantes y entrevistadores",
+                D: "productos estadísticos, medios y formas de divulgación"
+            },
+            correcta: "A",
+            justificacion: "Página 8: 'El marco conceptual es el esquema bajo el cual se presenta, en forma ordenada y con los vínculos correspondientes, el conjunto de conceptos referentes a temas, categorías, variables y clasificaciones con sus respectivas definiciones.'",
+            distractores: "Las otras opciones describen otros elementos del proyecto (cuestionario, operativos, divulgación)."
+        },
+        // 5
+        {
+            id: 5,
+            texto: "Relaciona cada tipo de variable según la forma como se capta: 1. Variable directa, 2. Variable indirecta. A) Cuyos valores se obtienen a partir de información sobre otros atributos. B) Cuyos valores son observables en cada elemento.",
+            opciones: {
+                A: "1-A, 2-B",
+                B: "1-B, 2-A",
+                C: "1-B, 2-B",
+                D: "1-A, 2-A"
+            },
+            correcta: "B",
+            justificacion: "Página 27: Variable directa = valores observables en cada elemento; indirecta = valores obtenidos a partir de otros atributos o categorías.",
+            distractores: "Las otras opciones invierten o repiten las relaciones incorrectamente."
+        },
+        // 6
+        {
+            id: 6,
+            texto: "En el contexto de la validación, los criterios de validación son reglas de naturaleza conceptual que se utilizan para:",
+            opciones: {
+                A: "Diseñar el marco muestral y seleccionar la muestra.",
+                B: "Revisar y corregir los datos que así lo requieran, sin alterar los datos válidos originales.",
+                C: "Definir los objetivos y alcance del proyecto estadístico.",
+                D: "Establecer los formatos de presentación de resultados."
+            },
+            correcta: "B",
+            justificacion: "Página 47: 'los criterios de validación son reglas de naturaleza conceptual que se utilizan para revisar y, en su caso, proponer la solución más adecuada para aquellos datos que presentan algún tipo de error o inconsistencia... asegure la eliminación de errores, sin alterar los datos válidos originales.'",
+            distractores: "A es diseño de muestra; C es planeación; D es presentación de resultados."
+        },
+        // 7
+        {
+            id: 7,
+            texto: "Los criterios de prioridad permiten jerarquizar y seleccionar conceptos, y se basan en: relevancia para planeación gubernamental, importancia para programas privados y académicos, compromisos internacionales, impacto social y _______________.",
+            opciones: {
+                A: "el costo de captación de cada variable",
+                B: "la frecuencia con que se solicita determinada información",
+                C: "la disponibilidad de informantes",
+                D: "la complejidad de las definiciones"
+            },
+            correcta: "B",
+            justificacion: "Página 18: 'Los criterios de prioridad... tales como: la relevancia... importancia... compromisos... impacto social... la frecuencia con que se solicita determinada información.'",
+            distractores: "Las otras opciones no se mencionan como criterios de prioridad."
+        },
+        // 8
+        {
+            id: 8,
+            texto: "Relaciona cada problema de integridad: 1. Subcobertura, 2. Registros duplicados, 3. Omisión de respuesta. A) Repetición de datos de la misma unidad. B) Ausencia de respuestas donde debería haberlas. C) Falta de registro de unidades completas.",
+            opciones: {
+                A: "1-A, 2-B, 3-C",
+                B: "1-B, 2-C, 3-A",
+                C: "1-C, 2-A, 3-B",
+                D: "1-C, 2-B, 3-A"
+            },
+            correcta: "C",
+            justificacion: "Página 48: subcobertura = falta de registro de unidades; registros duplicados = repetición; omisión = ausencia de respuestas.",
+            distractores: "Las otras combinaciones son incorrectas."
+        },
+        // 9
+        {
+            id: 9,
+            texto: "La idoneidad del proyecto se refiere a:",
+            opciones: {
+                A: "La capacidad técnica para captar datos con la mayor precisión posible.",
+                B: "El conjunto de elementos que permiten determinar si el proyecto es el adecuado para captar una variable, en términos de confiabilidad, oportunidad, desglose geográfico y costo.",
+                C: "La factibilidad de captación basada exclusivamente en el presupuesto disponible.",
+                D: "La aprobación de los usuarios externos para realizar el proyecto."
+            },
+            correcta: "B",
+            justificacion: "Página 18: 'Idoneidad del proyecto. Es el conjunto de elementos que permiten determinar para cada variable, si el proyecto en desarrollo es el adecuado para captarla, en términos de confiabilidad, oportunidad, desglose geográfico y costo.'",
+            distractores: "A es parcial pero no incluye todos los elementos; C reduce a presupuesto; D no se menciona."
+        },
+        // 10
+        {
+            id: 10,
+            texto: "Una clasificación es el ordenamiento de todas las ______________ admitidos por una variable.",
+            opciones: {
+                A: "modalidades nominales o intervalos numéricos",
+                B: "preguntas y opciones de respuesta",
+                C: "categorías y subcategorías",
+                D: "definiciones conceptuales"
+            },
+            correcta: "A",
+            justificacion: "Página 31: 'Es el ordenamiento de todas las modalidades nominales o intervalos numéricos admitidos por una variable.'",
+            distractores: "Las otras opciones no corresponden a la definición de clasificación."
+        },
+        // 11
+        {
+            id: 11,
+            texto: "Según el documento, la accesibilidad se refiere a:",
+            opciones: {
+                A: "La facilidad con que los usuarios pueden establecer la existencia de la información y precisar su localización, así como la sencillez de los procedimientos para acceder a ella.",
+                B: "El grado en que los datos se aproximan a la veracidad.",
+                C: "El lapso mínimo entre la captación y la difusión de los datos.",
+                D: "La claridad y precisión de las definiciones."
+            },
+            correcta: "A",
+            justificacion: "Página 11: 'Accesibilidad. Se refiere tanto a la facilidad con la que los usuarios pueden establecer la existencia de la información estadística requerida y precisar su localización, como a la sencillez de los procedimientos que les permitan acceder a ella.'",
+            distractores: "B es confiabilidad; C es oportunidad; D es rigor conceptual."
+        },
+        // 12
+        {
+            id: 12,
+            texto: "En la integración del marco conceptual, ¿cuál de las siguientes afirmaciones es correcta?",
+            opciones: {
+                A: "El marco conceptual debe ser idéntico al cuestionario en número de preguntas.",
+                B: "Una variable puede traducirse operativamente en dos o más preguntas.",
+                C: "Las variables indirectas siempre se captan mediante una sola pregunta directa.",
+                D: "Los temas, categorías y variables no requieren definiciones separadas."
+            },
+            correcta: "B",
+            justificacion: "Página 20: 'Si bien el marco conceptual debe tener una correspondencia con el cuestionario, con fines operativos pueden presentarse las siguientes situaciones: • Una variable se traduce operativamente en dos o más preguntas.'",
+            distractores: "A es falso; C falso (las indirectas no se captan con una sola); D falso (sí requieren definiciones)."
+        },
+        // 13
+        {
+            id: 13,
+            texto: "Relaciona el tipo de variable según el número de valores: 1. Variable dicotómica, 2. Variable polinomial. A) Sexo (Hombre/Mujer), B) Ocupación (muchas categorías).",
+            opciones: {
+                A: "1-A, 2-B",
+                B: "1-B, 2-A",
+                C: "1-A, 2-A",
+                D: "1-B, 2-B"
+            },
+            correcta: "A",
+            justificacion: "Página 26-27: dicotómica admite solo dos valores (ej. sexo); polinomial admite tres o más (ej. ocupación).",
+            distractores: "Las otras opciones invierten o repiten incorrectamente."
+        },
+        // 14
+        {
+            id: 14,
+            texto: "¿Cuál de las siguientes NO es una regla básica para la elaboración de definiciones en el contexto estadístico, según el documento?",
+            opciones: {
+                A: "Cubrir las características esenciales del concepto.",
+                B: "Redactar en forma clara, precisa y sencilla.",
+                C: "Incluir ejemplos para facilitar la comprensión.",
+                D: "No utilizar el término objeto de la definición en la misma definición."
+            },
+            correcta: "C",
+            justificacion: "Página 37: reglas básicas incluyen 'No incluir ejemplos.'",
+            distractores: "A, B y D son reglas correctas según el texto."
+        },
+        // 15
+        {
+            id: 15,
+            texto: "En el diseño del esquema para la presentación de resultados, la segmentación de usuarios consiste en:",
+            opciones: {
+                A: "Identificar similitudes entre los usuarios para definir perfiles y determinar grupos con base en sus características.",
+                B: "Clasificar a los usuarios según su nivel socioeconómico.",
+                C: "Asignar aleatoriamente los productos a los usuarios.",
+                D: "Seleccionar únicamente a los usuarios más importantes para el proyecto."
+            },
+            correcta: "A",
+            justificacion: "Página 40: 'segmentación de los usuarios; ésta consiste en la identificación de similitudes entre los usuarios para definir sus perfiles y determinar grupos con base en sus características.'",
+            distractores: "Las otras opciones no corresponden a la definición."
+        },
+        // 16
+        {
+            id: 16,
+            texto: "Los criterios de validación incluyen reglas para la revisión y para encarar la solución de problemas. ¿Cuál de los siguientes NO es un tipo de solución recomendado?",
+            opciones: {
+                A: "Rectificación del valor mediante reconsulta.",
+                B: "Derivación aritmética de un valor.",
+                C: "Eliminación del cuestionario completo.",
+                D: "Estimación del valor con base en métodos estadísticos."
+            },
+            correcta: "C",
+            justificacion: "Página 52: los tipos de solución son rectificación, derivación aritmética, estimación estadística y asignación de 'no especificado'. No se menciona eliminar todo el cuestionario.",
+            distractores: "A, B y D son soluciones recomendadas."
+        },
+        // 17
+        {
+            id: 17,
+            texto: "La categoría es:",
+            opciones: {
+                A: "El enunciado genérico de un campo de conocimiento.",
+                B: "El concepto que admite distintos valores para caracterizar un elemento.",
+                C: "El conjunto de personas, animales, eventos o elementos objeto de cuantificación y caracterización.",
+                D: "El ordenamiento de las modalidades de una variable."
+            },
+            correcta: "C",
+            justificacion: "Página 22: 'La categoría es un conjunto de elementos que puede ser cuantificado y caracterizado.' (y glosario p.57).",
+            distractores: "A es tema; B es variable; D es clasificación."
+        },
+        // 18
+        {
+            id: 18,
+            texto: "En el nivel operativo, la distribución de frecuencias de una variable se puede presentar en números absolutos o relativos y recibe denominaciones como:",
+            opciones: {
+                A: "Composición, estructura, participación o distribución.",
+                B: "Pregunta abierta o cerrada.",
+                C: "Variables directas o indirectas.",
+                D: "Categorías de existencias o de flujo."
+            },
+            correcta: "A",
+            justificacion: "Página 21: 'cuando ya se captaron y agregaron los datos, lo que se obtiene es la distribución de frecuencias de la variable, la cual se puede presentar en números absolutos o relativos y recibe distintas denominaciones según el objeto o tipo de estudio, tales como, composición, estructura, participación o distribución.'",
+            distractores: "B, C y D son clasificaciones de otros conceptos."
+        },
+        // 19
+        {
+            id: 19,
+            texto: "Relaciona cada actividad de la investigación documental con su propósito: 1. Revisión de antecedentes, 2. Recomendaciones internacionales, 3. Leyes y reglamentos. A) Conocer conceptos, formatos, criterios y restricciones legales. B) Considerar comparabilidad internacional. C) Obtener información sobre variables, problemas y calidad en proyectos similares.",
+            opciones: {
+                A: "1-C, 2-B, 3-A",
+                B: "1-A, 2-C, 3-B",
+                C: "1-B, 2-A, 3-C",
+                D: "1-C, 2-A, 3-B"
+            },
+            correcta: "A",
+            justificacion: "Páginas 14-15: antecedentes → variables, problemas; recomendaciones internacionales → comparabilidad; leyes → conceptos y restricciones.",
+            distractores: "Las otras opciones invierten las relaciones."
+        },
+        // 20
+        {
+            id: 20,
+            texto: "La suficiencia, como atributo de calidad, se define como:",
+            opciones: {
+                A: "El grado en que las estadísticas disponibles permiten el conocimiento de un objeto o fenómeno respecto a sus aspectos de magnitud, estructura, distribución, comportamiento temporal e interrelación.",
+                B: "La facilidad con que los usuarios pueden acceder a la información.",
+                C: "El grado en que los datos son comparables con otras fuentes.",
+                D: "La claridad y precisión de las definiciones."
+            },
+            correcta: "A",
+            justificacion: "Página 11: 'Suficiencia. Grado en el que las estadísticas disponibles permiten el conocimiento de un objeto o fenómeno respecto a sus aspectos de magnitud, estructura, distribución, comportamiento temporal e interrelación.'",
+            distractores: "B es accesibilidad; C es comparabilidad; D es rigor conceptual."
+        },
+        // 21
+        {
+            id: 21,
+            texto: "En el diseño de instrumentos de captación, el análisis del marco conceptual permite:",
+            opciones: {
+                A: "Determinar quién podrá proporcionar la información de manera más precisa, el tipo de entrevista, la referencia temporal de las variables y las formas de presentación.",
+                B: "Decidir los colores y la tipografía del cuestionario.",
+                C: "Establecer el tamaño de la muestra.",
+                D: "Definir los indicadores económicos que se publicarán."
+            },
+            correcta: "A",
+            justificacion: "Página 44: 'el análisis del marco conceptual debe ser el punto de partida para el diseño de los instrumentos de captación, y para determinar el perfil del informante adecuado, el tipo de entrevista que resulte más conveniente, la referencia temporal de las variables y las formas en que debe presentarse cada uno de los conceptos.'",
+            distractores: "B es edición; C es diseño de muestra; D es presentación de resultados."
+        },
+        // 22
+        {
+            id: 22,
+            texto: "Las preguntas abiertas se caracterizan por:",
+            opciones: {
+                A: "Tener opciones de respuesta predeterminadas.",
+                B: "Captar lo indicado por los informantes sin presentar opciones predeterminadas.",
+                C: "Ser siempre de tipo cuantitativo.",
+                D: "No requerir espacio para el registro de la respuesta."
+            },
+            correcta: "B",
+            justificacion: "Glosario p.60: 'Preguntas abiertas. Las que captan lo indicado por los informantes y no presentan opciones predeterminadas de respuesta.'",
+            distractores: "A es cerradas; C falso; D falso (sí requieren espacio)."
+        },
+        // 23
+        {
+            id: 23,
+            texto: "La secuencia de preguntas en un cuestionario debe procurar:",
+            opciones: {
+                A: "Ir de las más específicas a las más generales.",
+                B: "Colocar las preguntas de mayor riesgo de rechazo al principio.",
+                C: "Ir de las más generales a las más específicas y agrupar por temas.",
+                D: "Ordenar las preguntas alfabéticamente."
+            },
+            correcta: "C",
+            justificacion: "Página 45: 'se determina la secuencia de las preguntas, procurando ir de las más generales a las más específicas... En este ordenamiento debe considerarse también la agrupación por temas...'",
+            distractores: "A es inverso; B es incorrecto (se dejan para etapa intermedia); D no se menciona."
+        },
+        // 24
+        {
+            id: 24,
+            texto: "En la definición de criterios de validación, los rangos de aceptación para variables cuantitativas se expresan como:",
+            opciones: {
+                A: "Una lista de códigos válidos.",
+                B: "Restricciones de rango con un valor mínimo y máximo.",
+                C: "Una relación de opciones de respuesta.",
+                D: "Un conjunto de reglas de congruencia."
+            },
+            correcta: "B",
+            justificacion: "Página 50: 'para variables cuantitativas, donde los criterios quedarán expresados como restricciones de rango, con un valor mínimo y un valor máximo.'",
+            distractores: "A es para cualitativas; C es para preguntas; D es para congruencia."
+        },
+        // 25
+        {
+            id: 25,
+            texto: "La validación en el procesamiento implica tres grupos de actividades: determinación de criterios, revisión de datos y _______________.",
+            opciones: {
+                A: "diseño del instrumento",
+                B: "eliminación o sustitución de datos que no cumplen los criterios",
+                C: "elaboración del marco conceptual",
+                D: "publicación de resultados"
+            },
+            correcta: "B",
+            justificacion: "Página 47: 'La validación implica entonces tres grupos de actividades: la determinación de los criterios... la revisión de los datos y, la eliminación o sustitución de los datos que no cumplen con los requisitos plasmados en dichos criterios de validación.'",
+            distractores: "A y C son diseño conceptual; D es presentación de resultados."
+        },
+        // 26
+        {
+            id: 26,
+            texto: "¿Cuál de los siguientes es un ejemplo de categoría de flujo?",
+            opciones: {
+                A: "Viviendas",
+                B: "Edificios",
+                C: "Nacimientos",
+                D: "Inmuebles"
+            },
+            correcta: "C",
+            justificacion: "Página 25: 'Las categorías de flujo se refieren a conjuntos de hechos que prácticamente se suceden de manera continua... Ejemplo de este tipo de categorías son... Nacimientos.' Las otras son de existencias.",
+            distractores: "A, B y D son ejemplos de existencias/inventario."
+        },
+        // 27
+        {
+            id: 27,
+            texto: "La variable de control tiene como función:",
+            opciones: {
+                A: "Ser útil para el conocimiento del fenómeno de interés.",
+                B: "Distinguir categorías a las que se aplican otras variables específicas.",
+                C: "Identificar o confirmar otros datos del cuestionario o detectar la presencia del fenómeno de interés.",
+                D: "Medir el nivel de ingreso de los hogares."
+            },
+            correcta: "C",
+            justificacion: "Página 28: 'Variable de control.- Es útil para identificar o confirmar otros datos del cuestionario o para detectar la presencia del fenómeno o evento que interesa investigar.'",
+            distractores: "A es análisis temático; B es filtro; D es un ejemplo de variable temática."
+        },
+        // 28
+        {
+            id: 28,
+            texto: "En la documentación del diseño conceptual, ¿cuál de los siguientes capítulos se recomienda incluir?",
+            opciones: {
+                A: "Justificación del marco conceptual",
+                B: "Diseño de la muestra",
+                C: "Plan de análisis de regresión",
+                D: "Evaluación de impacto del proyecto"
+            },
+            correcta: "A",
+            justificacion: "Página 54: se recomienda incluir capítulos de justificación del marco conceptual, marco conceptual, instrumentos de captación. No se incluyen diseño de muestra ni análisis de regresión.",
+            distractores: "B, C y D no son parte de la estructura recomendada para la documentación del diseño conceptual."
+        },
+        // 29
+        {
+            id: 29,
+            texto: "Relaciona el tipo de categoría según su determinación: 1. Captación directa, 2. Derivada. A) Se construye a partir de operaciones matemáticas o combinación de valores. B) Se determina directamente en el cuestionario.",
+            opciones: {
+                A: "1-A, 2-B",
+                B: "1-B, 2-A",
+                C: "1-B, 2-B",
+                D: "1-A, 2-A"
+            },
+            correcta: "B",
+            justificacion: "Página 22: 'categorías que se determinan directamente en el instrumento de captación denominadas “de captación directa” y las derivadas, que se construyen a partir de operaciones matemáticas...'",
+            distractores: "Las otras opciones invierten o repiten incorrectamente."
+        },
+        // 30
+        {
+            id: 30,
+            texto: "La factibilidad de captación está dada por elementos como: costos y presupuesto, restricciones del marco jurídico, experiencia en proyectos similares y _______________.",
+            opciones: {
+                A: "la segmentación de usuarios",
+                B: "la evaluación del sistema de registro si se trata de aprovechamiento de registros administrativos",
+                C: "la redacción de las preguntas abiertas",
+                D: "el tamaño de la muestra"
+            },
+            correcta: "B",
+            justificacion: "Página 18: elementos de factibilidad: costos, restricciones legales, experiencia, y 'evaluación del sistema de registro, si se tratara de un proyecto de aprovechamiento con fines estadísticos.'",
+            distractores: "A es de presentación; C es diseño; D es diseño de muestra."
+        },
+        // 31
+        {
+            id: 31,
+            texto: "Según el documento, la comparabilidad se refiere al grado en que son equivalentes las definiciones y clasificaciones de conceptos comunes, de datos referentes a distinta fuente, momento o _______________.",
+            opciones: {
+                A: "unidad geográfica",
+                B: "tema de estudio",
+                C: "categoría",
+                D: "instrumento de captación"
+            },
+            correcta: "A",
+            justificacion: "Página 11: 'Comparabilidad. Grado en que son equivalentes las definiciones y clasificaciones de conceptos comunes, de datos referentes a distinta fuente, momento o unidad geográfica.'",
+            distractores: "Las otras opciones no completan la definición correctamente."
+        },
+        // 32
+        {
+            id: 32,
+            texto: "En la determinación de los contenidos por tipo de producto, se debe considerar para el análisis:",
+            opciones: {
+                A: "Tendencias y comportamiento en el tiempo, estructuras, diferencias espaciales y relación entre variables.",
+                B: "Únicamente la frecuencia de uso de los datos.",
+                C: "El costo de producción de cada producto.",
+                D: "La cantidad de preguntas en el cuestionario."
+            },
+            correcta: "A",
+            justificacion: "Página 40: 'Para ello será útil considerar, las necesidades básicas de análisis en cuanto a: tendencias y comportamiento en el tiempo; estructuras, composición o participación; diferencias espaciales o regionales y relación entre variables o fenómenos.'",
+            distractores: "B, C y D no son parte de las necesidades básicas de análisis."
+        },
+        // 33
+        {
+            id: 33,
+            texto: "Las formas para presentar los datos incluyen formatos tabulares, gráficos, mapas y textos. ¿Cuál de estas afirmaciones es correcta según el documento?",
+            opciones: {
+                A: "Los tabulados son útiles para panoramas generales, mientras que las gráficas permiten detalles.",
+                B: "Los mapas son útiles para datos referenciados a unidades geográficas.",
+                C: "Los textos no son recomendados porque desvían la atención de los datos.",
+                D: "Las gráficas son preferibles cuando hay muchos desgloses de clasificación."
+            },
+            correcta: "B",
+            justificacion: "Página 41: 'El uso de mapas es de gran utilidad tratándose de datos referenciados a distintas unidades geográficas...'",
+            distractores: "A invierte los roles; C falso; D falso porque gráficas son buenas cuando los desgloses no son demasiado detallados."
+        },
+        // 34
+        {
+            id: 34,
+            texto: "Un informante adecuado es:",
+            opciones: {
+                A: "La persona que tiene el mayor nivel educativo en el hogar.",
+                B: "La persona apropiada para proporcionar la información que requiere el proyecto estadístico.",
+                C: "Cualquier persona mayor de 18 años.",
+                D: "El jefe del hogar siempre."
+            },
+            correcta: "B",
+            justificacion: "Glosario p.60: 'Informante adecuado. Persona apropiada para proporcionar la información que requiere el proyecto estadístico.'",
+            distractores: "A, C y D no son definiciones generales; depende del proyecto."
+        },
+        // 35
+        {
+            id: 35,
+            texto: "La elaboración de instructivos de llenado y documentos de apoyo debe realizarse:",
+            opciones: {
+                A: "Únicamente por el personal de procesamiento.",
+                B: "Coordinadamente entre personal de diseño conceptual, operativo de captación y procesamiento.",
+                C: "Exclusivamente por los expertos en diseño conceptual.",
+                D: "Después de la captación de datos."
+            },
+            correcta: "B",
+            justificacion: "Página 46: 'Es deseable que en la elaboración de estos documentos participen coordinadamente tanto el personal involucrado en el diseño conceptual como los responsables del operativo de captación y del procesamiento.'",
+            distractores: "A, C y D son incorrectos según el texto."
+        },
+        // 36
+        {
+            id: 36,
+            texto: "El análisis de los reportes de actividades realizadas para documentar el diseño conceptual tiene como objetivo:",
+            opciones: {
+                A: "Seleccionar y sintetizar las ideas sustantivas para el documento, considerando a quién va dirigido.",
+                B: "Decidir el presupuesto del proyecto.",
+                C: "Definir las variables que se captarán.",
+                D: "Establecer los criterios de validación."
+            },
+            correcta: "A",
+            justificacion: "Página 54: 'estos reportes constituyen la materia prima para seleccionar y sintetizar las ideas sustantivas para la documentación del diseño conceptual. Se recomienda hacer esta selección considerando a quien va dirigido este manual...'",
+            distractores: "B, C y D son otras actividades, no el objetivo del análisis de reportes."
+        },
+        // 37
+        {
+            id: 37,
+            texto: "Relaciona cada tipo de variable según su naturaleza: 1. Variable cualitativa, 2. Variable cuantitativa. A) Atributo con valores nominales sin medida de distancia. B) Atributo con valores numéricos ordenables.",
+            opciones: {
+                A: "1-A, 2-B",
+                B: "1-B, 2-A",
+                C: "1-A, 2-A",
+                D: "1-B, 2-B"
+            },
+            correcta: "A",
+            justificacion: "Página 26: cualitativa → valores nominales sin medida de distancia; cuantitativa → valores numéricos ordenables.",
+            distractores: "Las otras opciones invierten o repiten incorrectamente."
+        },
+        // 38
+        {
+            id: 38,
+            texto: "La justificación del marco conceptual debe responder a cuestionamientos sobre:",
+            opciones: {
+                A: "El por qué de la selección de cada concepto y la forma en que se incluye en el proyecto.",
+                B: "El costo de cada pregunta en el cuestionario.",
+                C: "El método de muestreo utilizado.",
+                D: "La periodicidad de la captación."
+            },
+            correcta: "A",
+            justificacion: "Página 37: 'La argumentación debe responder a cuestionamientos sobre el por qué de la selección de cada concepto y de la forma en que se incluye en el proyecto.'",
+            distractores: "B, C y D son otros aspectos no relacionados con la justificación conceptual."
+        },
+        // 39
+        {
+            id: 39,
+            texto: "En la determinación de los medios de presentación, se consideran publicaciones impresas, discos compactos y _______________.",
+            opciones: {
+                A: "carteles",
+                B: "servicios en Internet o en línea",
+                C: "presentaciones en PowerPoint",
+                D: "videos institucionales"
+            },
+            correcta: "B",
+            justificacion: "Página 41: 'Los medios de presentación de resultados corresponden a las publicaciones impresas, los discos compactos y los servicios en Internet o en línea.'",
+            distractores: "A, C y D no se mencionan como medios de presentación."
+        },
+        // 40
+        {
+            id: 40,
+            texto: "Los criterios de congruencia entre valores de respuesta para variables relacionadas se definen identificando relaciones de interdependencia, causalidad, o _______________.",
+            opciones: {
+                A: "relaciones teóricas o lógico-matemáticas",
+                B: "relaciones de muestreo",
+                C: "relaciones de costo-beneficio",
+                D: "relaciones de prioridad"
+            },
+            correcta: "A",
+            justificacion: "Página 51: 'Para la identificación de relaciones teóricas entre variables, además de la revisión de antecedentes es muy conveniente la revisión de la literatura científica... Ejemplo de una relación lógica o matemática...'",
+            distractores: "B, C y D no son tipos de relaciones considerados para congruencia."
+        },
+        // 41
+        {
+            id: 41,
+            texto: "La clase es:",
+            opciones: {
+                A: "Cada una de las modalidades nominales o intervalos numéricos admitidos por una variable.",
+                B: "El conjunto de elementos que comparten una característica común.",
+                C: "El ordenamiento de todas las modalidades de una variable.",
+                D: "El campo de conocimiento al que pertenece el proyecto."
+            },
+            correcta: "A",
+            justificacion: "Glosario p.57: 'Clase. Cada una de las modalidades nominales o intervalos numéricos admitidos por una variable.'",
+            distractores: "B es categoría; C es clasificación; D es tema."
+        },
+        // 42
+        {
+            id: 42,
+            texto: "En la redacción del documento de diseño conceptual, se recomienda considerar:",
+            opciones: {
+                A: "Solo la opinión de los expertos en informática.",
+                B: "Identificar claramente a los posibles usuarios, su contexto lingüístico y profesional, y su motivación.",
+                C: "Utilizar un lenguaje coloquial para todos los públicos.",
+                D: "Redactar primero la introducción y luego los capítulos."
+            },
+            correcta: "B",
+            justificacion: "Página 55: 'Para esta redacción se recomienda en primer lugar, identificar claramente a los posibles usuarios o destinatarios. Para ello, se sugiere considerar algunas preguntas como las siguientes: ¿Quiénes son los destinatarios? ¿Cuál es su contexto lingüístico, profesional o laboral? ¿Qué conocen? ¿Cuáles pueden ser sus actitudes y motivación?'",
+            distractores: "A es excluyente; C no es adecuado; D no es una recomendación general."
+        },
+        // 43
+        {
+            id: 43,
+            texto: "Las variables filtro son útiles para:",
+            opciones: {
+                A: "Distinguir aquellas categorías a las que se aplican otras variables específicas.",
+                B: "Medir el nivel de ingreso de los hogares.",
+                C: "Verificar la consistencia de los datos.",
+                D: "Presentar los resultados en gráficas."
+            },
+            correcta: "A",
+            justificacion: "Página 28: 'Variable filtro.- Es útil para distinguir aquellas categorías a las que se aplican otras variables específicas.'",
+            distractores: "B es temática; C es validación; D es presentación."
+        },
+        // 44
+        {
+            id: 44,
+            texto: "El rigor conceptual impacta en la calidad de los datos porque:",
+            opciones: {
+                A: "Asegura la oportunidad de la difusión.",
+                B: "Garantiza que se utilicen los términos más adecuados y definiciones probadas, coadyuvando a la comparabilidad.",
+                C: "Incrementa la accesibilidad de los datos.",
+                D: "Reduce los costos de captación."
+            },
+            correcta: "B",
+            justificacion: "Página 10: 'Rigor conceptual... La investigación documental permite garantizar que se utilicen los términos más adecuados para denominar los conceptos, así como la selección de las definiciones que hayan sido suficientemente probadas en cuanto a claridad y precisión, lo que a su vez coadyuva a la comparabilidad.'",
+            distractores: "A es oportunidad; C es accesibilidad; D no se menciona."
+        },
+        // 45
+        {
+            id: 45,
+            texto: "La investigación documental incluye la revisión de investigaciones especializadas, cuyo objetivo es:",
+            opciones: {
+                A: "Conocer cómo se emplean los datos, temas, variables, indicadores requeridos y definiciones de conceptos.",
+                B: "Establecer el presupuesto del proyecto.",
+                C: "Definir la muestra.",
+                D: "Capacitar al personal de campo."
+            },
+            correcta: "A",
+            justificacion: "Página 15: 'permite conocer la forma de cómo se emplean los datos; los temas, variables, indicadores de los que se requiere información, así como la definición de conceptos...'",
+            distractores: "B, C y D son otras actividades no relacionadas con investigaciones especializadas."
+        },
+        // 46
+        {
+            id: 46,
+            texto: "La determinación de la información mínima para aceptar un cuestionario se basa en:",
+            opciones: {
+                A: "Los objetivos del proyecto y el alto impacto de ciertos temas y datos de control.",
+                B: "La cantidad de preguntas del cuestionario.",
+                C: "El tiempo de entrevista.",
+                D: "El número de informantes."
+            },
+            correcta: "A",
+            justificacion: "Página 50: 'es necesario determinar con base en los objetivos del proyecto, la información que es indispensable para aceptar como válido un cuestionario, por ser de alto impacto para el éxito o fracaso del proyecto, tanto en lo que se refiere a los temas de interés prioritario como en lo referente a los datos de control necesarios para la georeferenciación.'",
+            distractores: "B, C y D no son criterios para información mínima."
+        },
+        // 47
+        {
+            id: 47,
+            texto: "En el diseño de instrumentos de captación, la edición del formato en medios impresos considera: tipo de cuestionario, tamaño de hoja, márgenes, tipos de letra, calidad de papel y _______________.",
+            opciones: {
+                A: "el diseño de sistemas de captura-validación",
+                B: "el tipo de encuadernado que asegure durabilidad",
+                C: "la cantidad de preguntas abiertas",
+                D: "el perfil del informante"
+            },
+            correcta: "B",
+            justificacion: "Página 46: 'se debe cuidar los requisitos de facilidad en la lectura y manejo... considerar los aspectos estéticos de presentación, la calidad de papel y, en su caso, el encuadernado que debe asegurar cierta durabilidad en las condiciones de su manejo.' La opción A es para medios electrónicos.",
+            distractores: "A es para medios electrónicos; C y D no son parte de la edición física."
+        },
+        // 48
+        {
+            id: 48,
+            texto: "La consistencia en la validación se refiere a:",
+            opciones: {
+                A: "La presencia de dos o más valores que se contraponen o manifiestan falta de lógica entre preguntas relacionadas.",
+                B: "La falta de respuestas en algunas preguntas.",
+                C: "La repetición de datos capturados.",
+                D: "El registro de respuestas en preguntas no aplicables."
+            },
+            correcta: "A",
+            justificacion: "Página 48: 'Inconsistencia. Presencia de dos o más valores que se contraponen o manifiestan falta de lógica entre preguntas relacionadas.'",
+            distractores: "B es omisión; C es duplicado; D es no aplicable."
+        },
+        // 49
+        {
+            id: 49,
+            texto: "Los productos del diseño conceptual que son insumos para la fase de Captación incluyen:",
+            opciones: {
+                A: "El marco conceptual y el esquema para la presentación de resultados.",
+                B: "El cuestionario y los criterios de validación.",
+                C: "El diseño de la muestra.",
+                D: "Los manuales de codificación."
+            },
+            correcta: "B",
+            justificacion: "Página 7: 'Los cuestionarios, los criterios de validación y los esquemas para la presentación de resultados, son productos del Diseño Conceptual que constituyen insumos relevantes para las fases de Captación, Procesamiento y Presentación de resultados.' El cuestionario y criterios son insumos directos para captación y procesamiento.",
+            distractores: "A es para presentación; C es fase de diseño de muestra; D es procesamiento."
+        },
+        // 50
+        {
+            id: 50,
+            texto: "La oportunidad como atributo de calidad se refiere al lapso mínimo que transcurre entre:",
+            opciones: {
+                A: "La captación de datos y su publicación.",
+                B: "La presentación de resultados y la referencia temporal de los datos captados.",
+                C: "La planeación y el diseño conceptual.",
+                D: "La publicación y la siguiente actualización."
+            },
+            correcta: "B",
+            justificacion: "Página 10: 'Oportunidad. Se refiere al lapso mínimo que transcurre entre la presentación de resultados de un proyecto estadístico y la referencia temporal de los datos captados.'",
+            distractores: "A y D no son correctos; C es otra cosa."
+        },
+        // 51
+        {
+            id: 51,
+            texto: "En el esquema del marco conceptual, las categorías son objeto de caracterización a partir de variables. Si una clase de una variable tiene variables de interés exclusivo, puede considerarse como:",
+            opciones: {
+                A: "una categoría particular.",
+                B: "una variable indirecta.",
+                C: "un subtema.",
+                D: "un criterio de validación."
+            },
+            correcta: "A",
+            justificacion: "Página 33: 'en un segundo nivel pueden ser considerados como categorías con sus variables de interés propias.' Y página 23: 'También pueden identificarse categorías generales y particulares donde estas últimas son subconjuntos de las primeras...'",
+            distractores: "B, C y D no corresponden."
+        },
+        // 52
+        {
+            id: 52,
+            texto: "La consulta a usuarios, productores y expertos en información estadística se recomienda realizar mediante:",
+            opciones: {
+                A: "Encuestas por correo electrónico.",
+                B: "Talleres, seminarios o reuniones de trabajo.",
+                C: "Revisión de páginas web.",
+                D: "Entrevistas telefónicas aleatorias."
+            },
+            correcta: "B",
+            justificacion: "Página 17: 'es necesario contactar a los usuarios, productores y expertos... por medio de talleres, seminarios o reuniones de trabajo...'",
+            distractores: "A, C y D no son los medios recomendados."
+        },
+        // 53
+        {
+            id: 53,
+            texto: "Las restricciones aritméticas en los criterios de validación se refieren a:",
+            opciones: {
+                A: "Condiciones aritméticas a las que los datos necesariamente deben ajustarse para no provocar sesgos en la información agregada.",
+                B: "La suma total de preguntas en el cuestionario.",
+                C: "El cálculo del tamaño de muestra.",
+                D: "La asignación de códigos a las respuestas."
+            },
+            correcta: "A",
+            justificacion: "Página 50: 'Restricciones aritméticas.- Condiciones aritméticas a las que los datos necesariamente deben ajustarse con el fin de no provocar sesgos en la información agregada.'",
+            distractores: "B, C y D no son restricciones aritméticas."
+        },
+        // 54
+        {
+            id: 54,
+            texto: "La facilidad de consulta se ve favorecida cuando los usuarios disponen de:",
+            opciones: {
+                A: "Definiciones, instrumento de captación y notas metodológicas.",
+                B: "Solo los cuadros estadísticos.",
+                C: "Gráficas sin metadatos.",
+                D: "Bases de datos sin documentación."
+            },
+            correcta: "A",
+            justificacion: "Página 11: 'La comprensión y uso de los datos estadísticos se facilita en la medida en que los usuarios disponen de las definiciones, el instrumento de captación y las notas metodológicas.'",
+            distractores: "B, C y D carecen de elementos necesarios para la facilidad de consulta."
+        },
+        // 55
+        {
+            id: 55,
+            texto: "Relaciona el tipo de solución con su descripción: 1. Derivación aritmética, 2. Estimación estadística, 3. Asignación de 'no especificado'. A) Asignación a partir de variables relacionadas o medidas de tendencia central. B) Corrección mediante operaciones aritméticas. C) Cancelación de la respuesta.",
+            opciones: {
+                A: "1-B, 2-A, 3-C",
+                B: "1-A, 2-C, 3-B",
+                C: "1-C, 2-B, 3-A",
+                D: "1-B, 2-C, 3-A"
+            },
+            correcta: "A",
+            justificacion: "Página 52: derivación aritmética (corrección mediante operaciones), estimación (asignación a partir de variables relacionadas o métodos estadísticos), asignación de 'no especificado' (cancelación).",
+            distractores: "Las otras opciones invierten las relaciones."
+        },
+        // 56
+        {
+            id: 56,
+            texto: "La integración de estadísticas de distintas fuentes se facilita cuando el marco conceptual:",
+            opciones: {
+                A: "Utiliza sistemas de códigos que reflejen diferentes niveles de detalle y permitan la identificación del proyecto y sus conceptos.",
+                B: "Se basa únicamente en definiciones nacionales.",
+                C: "No incluye clasificaciones estandarizadas.",
+                D: "Es independiente de otros proyectos."
+            },
+            correcta: "A",
+            justificacion: "Página 36: 'El sistema de códigos debe reflejar los diferentes niveles de detalle del marco conceptual, y en el contexto de un sistema de información, deben permitir la identificación del proyecto estadístico, de sus temas, categorías, variables y cada clase de sus respectivas clasificaciones, lo cual facilita el diseño de los productos para la presentación de resultados del propio proyecto, y en un contexto más amplio, la integración de estadísticas de distintas fuentes.'",
+            distractores: "B, C y D dificultan la integración."
+        },
+        // 57
+        {
+            id: 57,
+            texto: "En el análisis de factibilidad, la evaluación del sistema de registro es relevante cuando el proyecto es de:",
+            opciones: {
+                A: "Aprovechamiento de registros administrativos.",
+                B: "Encuesta por muestreo.",
+                C: "Censo de población.",
+                D: "Estadísticas derivadas."
+            },
+            correcta: "A",
+            justificacion: "Página 18: elemento de factibilidad 'La evaluación del sistema de registro, si se tratara de un proyecto de aprovechamiento con fines estadísticos.'",
+            distractores: "B, C y D no requieren evaluación del sistema de registro de la misma manera."
+        },
+        // 58
+        {
+            id: 58,
+            texto: "El rigor de justificación se refiere a:",
+            opciones: {
+                A: "Los requisitos para argumentar la utilidad de cada concepto del marco conceptual.",
+                B: "La precisión de las definiciones.",
+                C: "La confiabilidad de los datos.",
+                D: "La oportunidad de la difusión."
+            },
+            correcta: "A",
+            justificacion: "Glosario p.61: 'Rigor de justificación. Requisitos para argumentar la utilidad de cada uno de los conceptos del marco conceptual...'",
+            distractores: "B es rigor conceptual; C es confiabilidad; D es oportunidad."
+        },
+        // 59
+        {
+            id: 59,
+            texto: "En la redacción de instrucciones para el cuestionario, se debe procurar que sean:",
+            opciones: {
+                A: "Breves y claras en función de las personas a quienes van dirigidas.",
+                B: "Muy detalladas y técnicas.",
+                C: "Redactadas exclusivamente para el entrevistador.",
+                D: "Extensas para cubrir todas las dudas."
+            },
+            correcta: "A",
+            justificacion: "Página 45: 'Debe cuidarse que estas sean breves y claras en función de las personas a quienes van dirigidas...'",
+            distractores: "B, C y D no son recomendaciones del texto."
+        },
+        // 60
+        {
+            id: 60,
+            texto: "La cobertura conceptual se refiere a:",
+            opciones: {
+                A: "Los temas, categorías, variables y clasificaciones de los cuales se requiere obtener información.",
+                B: "El territorio al que se refiere la captación.",
+                C: "El momento o periodo al que corresponden los datos.",
+                D: "El nivel de detalle de la división territorial."
+            },
+            correcta: "A",
+            justificacion: "Glosario p.57: 'Cobertura conceptual. Se refiere a los temas, categorías, variables y sus clasificaciones, de los cuales se requiere obtener información.'",
+            distractores: "B es cobertura geográfica; C es referencia temporal; D es desagregación geográfica."
+        },
+        // 61
+        {
+            id: 61,
+            texto: "¿Cuál de las siguientes es una característica de una buena clasificación según la ONU?",
+            opciones: {
+                A: "Las clases son exhaustivas y mutuamente excluyentes.",
+                B: "Las clases pueden superponerse para mayor detalle.",
+                C: "La clasificación debe ser completamente diferente a los estándares internacionales.",
+                D: "La clasificación no requiere instrucciones para su uso."
+            },
+            correcta: "A",
+            justificacion: "Página 31: 'Entre las características que la ONU menciona en su glosario, para una buena clasificación, se encuentran las siguientes: • Las clases son exhaustivas y mutuamente excluyentes.'",
+            distractores: "B, C y D contradicen las características señaladas."
+        },
+        // 62
+        {
+            id: 62,
+            texto: "Las variables de análisis temático son útiles para:",
+            opciones: {
+                A: "El conocimiento del fenómeno de interés y la presentación de resultados.",
+                B: "Distinguir categorías a las que se aplican otras variables.",
+                C: "Identificar o confirmar otros datos del cuestionario.",
+                D: "Controlar la calidad de la captación."
+            },
+            correcta: "A",
+            justificacion: "Página 28: 'Variable de análisis temático.- Es útil para el conocimiento del fenómeno o evento de interés y la presentación de resultados del proyecto estadístico.'",
+            distractores: "B es filtro; C es control; D no es una función de variable temática."
+        },
+        // 63
+        {
+            id: 63,
+            texto: "En la determinación de los tipos de contenido para los productos, además de la información estadística, se debe definir:",
+            opciones: {
+                A: "La información metodológica, técnica y conceptual que puede requerir el usuario.",
+                B: "El presupuesto del proyecto.",
+                C: "El tamaño de la muestra.",
+                D: "El nombre de los informantes."
+            },
+            correcta: "A",
+            justificacion: "Página 40: 'Además de la información estadística, para cada producto se debe definir la información metodológica, técnica y conceptual que puede requerir el usuario para un mejor conocimiento sobre el alcance de los datos presentados.'",
+            distractores: "B, C y D no son contenidos de los productos."
+        },
+        // 64
+        {
+            id: 64,
+            texto: "La prueba y ajuste del cuestionario debe realizarse:",
+            opciones: {
+                A: "En un contexto representativo al de su aplicación, con apoyo en métodos estadísticos y técnicas de validez y confiabilidad.",
+                B: "Solo con expertos en diseño conceptual.",
+                C: "Sin considerar el tiempo de entrevista.",
+                D: "Después de la captación definitiva."
+            },
+            correcta: "A",
+            justificacion: "Página 46: 'Las pruebas deben realizarse en un contexto que sea representativo al de su aplicación, con apoyo en métodos estadísticos y técnicas para verificar la validez y confiabilidad del instrumento de captación.'",
+            distractores: "B, C y D son incorrectos."
+        },
+        // 65
+        {
+            id: 65,
+            texto: "La validación se aplica para evitar que problemas como subcobertura, registros duplicados, omisión de respuesta, valores fuera de rango y _______________ limiten la calidad de la información.",
+            opciones: {
+                A: "inconsistencia",
+                B: "falta de presupuesto",
+                C: "errores de muestreo",
+                D: "baja capacitación del personal"
+            },
+            correcta: "A",
+            justificacion: "Página 48: 'Los problemas que se presentan durante la captación... son: Problemas de integridad (subcobertura, registros duplicados, omisión de respuesta), respuestas a preguntas no aplicables, valores fuera de rango, multirrespuesta, inconsistencia.'",
+            distractores: "B, C y D no son problemas de validación."
+        },
+        // 66
+        {
+            id: 66,
+            texto: "El tema en el marco conceptual se define como:",
+            opciones: {
+                A: "El enunciado genérico referente a un campo de conocimiento.",
+                B: "El conjunto de elementos objeto de cuantificación.",
+                C: "El concepto que admite distintos valores.",
+                D: "El ordenamiento de las modalidades de una variable."
+            },
+            correcta: "A",
+            justificacion: "Glosario p.61: 'Tema. Enunciado genérico referente a un campo de conocimiento.'",
+            distractores: "B es categoría; C es variable; D es clasificación."
+        },
+        // 67
+        {
+            id: 67,
+            texto: "En la identificación detallada de necesidades de información, el producto final es:",
+            opciones: {
+                A: "Un informe que incluye a quiénes se consultó, qué conceptos demandan, para qué los usan, frecuencia y medio requerido, y conceptos jerarquizados.",
+                B: "El cuestionario definitivo.",
+                C: "El marco conceptual.",
+                D: "Los criterios de validación."
+            },
+            correcta: "A",
+            justificacion: "Página 16-17: Producto de la identificación: 'Informe que incluya: - ¿A quiénes o qué se consultó? ... - ¿Qué conceptos demandan? - ¿Para qué los usan? - ¿Con qué frecuencia son usados? - ¿En qué medio los requieren? ... Conceptos jerarquizados.'",
+            distractores: "B, C y D son productos de otras actividades."
+        },
+        // 68
+        {
+            id: 68,
+            texto: "Los criterios de validación para solucionar problemas de multirespuesta deben determinar:",
+            opciones: {
+                A: "A cuál opción se le dará prioridad o mayor peso.",
+                B: "Eliminar todas las respuestas.",
+                C: "Dejar la pregunta en blanco.",
+                D: "Aplicar una derivación aritmética."
+            },
+            correcta: "A",
+            justificacion: "Página 50-51: 'en caso de haber varias opciones de respuesta seleccionadas, a cuál se le dará prioridad o mayor peso.'",
+            distractores: "B, C y D no son soluciones para multirespuesta."
+        },
+        // 69
+        {
+            id: 69,
+            texto: "La segmentación de usuarios en el diseño de productos permite:",
+            opciones: {
+                A: "Definir grupos con base en características como tipo de información, frecuencia de uso, preferencias de presentación y medios de consulta.",
+                B: "Reducir el número de productos a uno solo.",
+                C: "Aumentar el costo de los productos.",
+                D: "Eliminar a los usuarios no especializados."
+            },
+            correcta: "A",
+            justificacion: "Página 40: 'segmentación de los usuarios; ésta consiste en la identificación de similitudes entre los usuarios para definir sus perfiles y determinar grupos con base en sus características, como por ejemplo: tipo de información y desglose geográfico que requieren, frecuencia de uso o aplicación que le dan a dicha información, preferencias en la presentación y medios para la consulta...'",
+            distractores: "B, C y D no son propósitos de la segmentación."
+        },
+        // 70
+        {
+            id: 70,
+            texto: "La confiabilidad se ve impactada por el diseño conceptual a través de:",
+            opciones: {
+                A: "El diseño y prueba del instrumento de captación para verificar que la información presente tasas de no respuesta o sesgo dentro de márgenes permitidos.",
+                B: "La definición de los objetivos del proyecto.",
+                C: "La selección de la muestra.",
+                D: "La publicación de los resultados."
+            },
+            correcta: "A",
+            justificacion: "Página 10: 'Confiabilidad... El diseño y prueba del instrumento de captación ayuda a verificar que la información que se capte presente tasas de no respuesta, sesgo u otro problema dentro de los márgenes permitidos para el proyecto.'",
+            distractores: "B es planeación; C es diseño de muestra; D es presentación."
+        },
+        // 71
+        {
+            id: 71,
+            texto: "En la redacción del documento de diseño conceptual, la evaluación de lo escrito debe considerar aspectos de cohesión, redacción y estilo, y _______________.",
+            opciones: {
+                A: "edición",
+                B: "presupuesto",
+                C: "muestreo",
+                D: "codificación"
+            },
+            correcta: "A",
+            justificacion: "Página 56: cuadro de aspectos para revisión: cohesión, redacción y estilo, y edición.",
+            distractores: "B, C y D no son aspectos de evaluación del documento."
+        },
+        // 72
+        {
+            id: 72,
+            texto: "La variable operativa 'Tipo de hogar' se deriva de la pregunta sobre 'condición de parentesco'. Esto la convierte en una:",
+            opciones: {
+                A: "Variable indirecta.",
+                B: "Variable directa.",
+                C: "Variable filtro.",
+                D: "Variable de control."
+            },
+            correcta: "A",
+            justificacion: "Página 27: 'Variable indirecta.- Atributo cuyos valores se obtienen a partir de la información sobre otros tipos de atributos... El ejemplo clásico de este tipo de variables... es el tipo de hogar, que se construye a partir de la respuesta proporcionada en la relación de parentesco.'",
+            distractores: "B, C y D no corresponden."
+        },
+        // 73
+        {
+            id: 73,
+            texto: "El diagrama de flujo de la investigación documental incluye actividades como revisar antecedentes, recomendaciones internacionales, leyes, planes sectoriales y _______________.",
+            opciones: {
+                A: "investigaciones especializadas",
+                B: "el diseño del cuestionario",
+                C: "la prueba piloto",
+                D: "la definición de criterios de validación"
+            },
+            correcta: "A",
+            justificacion: "Página 13: diagrama de flujo de investigación documental incluye revisar antecedentes, recomendaciones internacionales, leyes, planes y programas, e investigaciones especializadas.",
+            distractores: "B, C y D son actividades de otras macroactividades."
+        },
+        // 74
+        {
+            id: 74,
+            texto: "Las categorías de existencias o inventario se refieren a:",
+            opciones: {
+                A: "Un momento o fecha determinada.",
+                B: "Conjuntos de hechos que se suceden continuamente.",
+                C: "Valores monetarios.",
+                D: "Flujos de producción."
+            },
+            correcta: "A",
+            justificacion: "Página 25: 'Las categorías de existencias o inventario, se refieren a un momento o fecha determinada.'",
+            distractores: "B es flujo; C y D no son categorías de existencias."
+        },
+        // 75
+        {
+            id: 75,
+            texto: "La asignación de respuesta como valor 'no especificado' se aplica cuando:",
+            opciones: {
+                A: "No es posible asignar un valor razonable mediante operaciones aritméticas, correlación o métodos estadísticos.",
+                B: "El informante se niega a responder.",
+                C: "El entrevistador olvidó hacer la pregunta.",
+                D: "El dato es inconsistente con la mayoría de los casos."
+            },
+            correcta: "A",
+            justificacion: "Página 52: 'Asignación de respuesta como valor “no especificado” o la cancelación de la respuesta no válida, se aplica en los casos en que no es posible la asignación de un valor razonable ya sea a partir de operaciones aritméticas, de la correlación entre variables, o de alguno de los métodos estadísticos, deductivos o probabilísticos, disponibles para este fin.'",
+            distractores: "B, C y D no son las condiciones para asignar 'no especificado'."
+        },
+        // 76
+        {
+            id: 76,
+            texto: "En la determinación de la secuencia de preguntas, las preguntas de mayor riesgo de rechazo se dejan para:",
+            opciones: {
+                A: "Una etapa intermedia de la entrevista.",
+                B: "El principio de la entrevista.",
+                C: "El final de la entrevista.",
+                D: "Un cuestionario aparte."
+            },
+            correcta: "A",
+            justificacion: "Página 45: 'considerando que las preguntas de mayor riesgo de rechazo afecten la buena predisposición del informante se dejen para una etapa intermedia de la entrevista...'",
+            distractores: "B, C y D no son recomendados."
+        },
+        // 77
+        {
+            id: 77,
+            texto: "La codificación es el procedimiento para:",
+            opciones: {
+                A: "Asignar identificadores numéricos o alfanuméricos a los conceptos en un orden establecido.",
+                B: "Diseñar el cuestionario.",
+                C: "Seleccionar la muestra.",
+                D: "Validar los datos."
+            },
+            correcta: "A",
+            justificacion: "Glosario p.57: 'Codificación. Procedimiento para asignar identificadores numéricos o alfanuméricos a los conceptos en un orden establecido.'",
+            distractores: "B, C y D son otras actividades."
+        },
+        // 78
+        {
+            id: 78,
+            texto: "La revisión de planes y programas sectoriales en la investigación documental apoya:",
+            opciones: {
+                A: "La definición de conceptos a captar y la orientación de la presentación de resultados según necesidades de dependencias gubernamentales.",
+                B: "La selección del método de muestreo.",
+                C: "El diseño de la tipografía del cuestionario.",
+                D: "La determinación del presupuesto."
+            },
+            correcta: "A",
+            justificacion: "Página 15: 'La consulta de los planes y programas gubernamentales del ámbito de estudio del proyecto, apoyará en la definición de los conceptos a captar. Asimismo, orientará la presentación de los resultados, para que ésta se realice con base en el conocimiento de las necesidades de información de las dependencias y organismos de la administración pública...'",
+            distractores: "B, C y D no son propósitos de la revisión de planes sectoriales."
+        },
+        // 79
+        {
+            id: 79,
+            texto: "El marco conceptual debe incluir definiciones formales de los conceptos, las cuales se presentan por separado en un:",
+            opciones: {
+                A: "Glosario.",
+                B: "Cuestionario.",
+                C: "Manual operativo.",
+                D: "Instructivo de llenado."
+            },
+            correcta: "A",
+            justificacion: "Página 37: 'las definiciones de los conceptos deben presentarse por separado, en un glosario.'",
+            distractores: "B, C y D no son el lugar para las definiciones formales."
+        },
+        // 80
+        {
+            id: 80,
+            texto: "La evaluación de la calidad de los datos en el diseño conceptual se relaciona con atributos como relevancia, rigor conceptual, confiabilidad, oportunidad, accesibilidad, comparabilidad, suficiencia y _______________.",
+            opciones: {
+                A: "facilidad de consulta",
+                B: "costo",
+                C: "complejidad",
+                D: "durabilidad"
+            },
+            correcta: "A",
+            justificacion: "Página 10: 'el INEGI ha establecido en su Código de ética los siguientes atributos: relevancia, rigor conceptual, confiabilidad, oportunidad, accesibilidad, comparabilidad, suficiencia y facilidad de consulta.'",
+            distractores: "B, C y D no son atributos de calidad."
+        },
+        // 81
+        {
+            id: 81,
+            texto: "En el diseño del esquema para la presentación de resultados, la determinación de las formas para presentar los datos se basa en:",
+            opciones: {
+                A: "Las características de la información y el tipo de usuario al que se dirige.",
+                B: "El presupuesto disponible.",
+                C: "La preferencia personal del diseñador.",
+                D: "La cantidad de preguntas en el cuestionario."
+            },
+            correcta: "A",
+            justificacion: "Página 41: 'La decisión sobre las formas de presentación debe basarse tanto en las características de la información como en el tipo de usuario al que se dirige.'",
+            distractores: "B, C y D no son los criterios mencionados."
+        },
+        // 82
+        {
+            id: 82,
+            texto: "El impacto del diseño conceptual en la comparabilidad se da porque:",
+            opciones: {
+                A: "La investigación documental sugiere adoptar definiciones y clasificaciones estandarizadas.",
+                B: "Se incrementa la oportunidad de los datos.",
+                C: "Se reducen los costos de captación.",
+                D: "Se mejora la accesibilidad."
+            },
+            correcta: "A",
+            justificacion: "Página 11: 'La investigación documental contempla la revisión de recomendaciones nacionales e internacionales y de la documentación de eventos anteriores en que se captó la información, sugiriendo la adopción de definiciones y clasificaciones estandarizadas en la integración del marco conceptual.'",
+            distractores: "B, C y D son otros atributos."
+        },
+        // 83
+        {
+            id: 83,
+            texto: "Las variables que se construyen a partir de la combinación de valores de dos o más variables se denominan:",
+            opciones: {
+                A: "Indirectas.",
+                B: "Directas.",
+                C: "Filtro.",
+                D: "De control."
+            },
+            correcta: "A",
+            justificacion: "Página 27: 'Variable indirecta.- Atributo cuyos valores se obtienen a partir de la información sobre otros tipos de atributos o sobre otras categorías.' (se obtienen por combinación).",
+            distractores: "B, C y D no son correctos."
+        },
+        // 84
+        {
+            id: 84,
+            texto: "La investigación documental sobre recomendaciones internacionales debe orientarse a considerar:",
+            opciones: {
+                A: "Los requisitos de comparabilidad internacional y el aprovechamiento de avances técnicos y metodológicos.",
+                B: "Únicamente las leyes nacionales.",
+                C: "Las preferencias de los usuarios locales.",
+                D: "El costo de los instrumentos."
+            },
+            correcta: "A",
+            justificacion: "Página 14: 'Esta revisión debe orientarse a considerar los requisitos de comparabilidad internacional y el aprovechamiento de avances técnicos y metodológicos.'",
+            distractores: "B, C y D no son el propósito de la revisión de recomendaciones internacionales."
+        },
+        // 85
+        {
+            id: 85,
+            texto: "En la validación, la identificación de 'valores fuera del rango de aceptación' se refiere a:",
+            opciones: {
+                A: "Registro de respuestas consideradas no válidas por presentar niveles poco probables o improcedentes.",
+                B: "Repetición de datos capturados.",
+                C: "Ausencia de respuestas en preguntas donde debería haberlas.",
+                D: "Inconsistencia entre preguntas relacionadas."
+            },
+            correcta: "A",
+            justificacion: "Página 48: 'Valores fuera del rango de aceptación. Registro de respuestas consideradas no válidas, por presentar niveles poco probables o improcedentes, en preguntas abiertas referidas a variables cuantitativas.'",
+            distractores: "B es duplicado; C es omisión; D es inconsistencia."
+        },
+        // 86
+        {
+            id: 86,
+            texto: "La distribución de contenidos en el cuestionario debe incluir:",
+            opciones: {
+                A: "Carátula de identificación y control, indicaciones generales, secciones temáticas e instrucciones específicas de llenado.",
+                B: "Solo las preguntas sin instrucciones.",
+                C: "Un glosario al final.",
+                D: "Una sección de respuestas abiertas."
+            },
+            correcta: "A",
+            justificacion: "Página 45: 'Distribución de contenidos. Esto debe hacerse de manera tal que contribuyan a facilitar y dar fluidez al llenado del instrumento de captación incluyendo la carátula de identificación y control, la sección de indicaciones generales y bases legales, las secciones temáticas para los datos objeto de captación y las instrucciones específicas de llenado.'",
+            distractores: "B, C y D no cubren todos los elementos necesarios."
+        },
+        // 87
+        {
+            id: 87,
+            texto: "La 'situación imposible' en los rangos de aceptación se refiere a:",
+            opciones: {
+                A: "Valores de la variable o combinación de valores que son imposibles en la realidad por razones biológicas, físicas o legales.",
+                B: "Valores poco probables pero posibles.",
+                C: "Datos atípicos.",
+                D: "Respuestas omitidas."
+            },
+            correcta: "A",
+            justificacion: "Página 50: 'Situaciones imposibles.- Valores de la variable o combinación de valores, que son imposibles en la realidad, ya sea por razones biológicas, físicas o legales.'",
+            distractores: "B es situación improbable; C es atípico; D es omisión."
+        },
+        // 88
+        {
+            id: 88,
+            texto: "La integración del esquema para la presentación de resultados debe cubrir el requisito de:",
+            opciones: {
+                A: "Correspondencia con las necesidades de información.",
+                B: "Reducción de costos.",
+                C: "Simplicidad máxima.",
+                D: "Incluir solo gráficas."
+            },
+            correcta: "A",
+            justificacion: "Página 42: 'En la determinación del esquema para la presentación de resultados debe cubrirse el requisito de co-rrespondencia de la presentación de resultados con las necesidades de información.'",
+            distractores: "B, C y D no son requisitos señalados."
+        },
+        // 89
+        {
+            id: 89,
+            texto: "La variable pivote en la validación es:",
+            opciones: {
+                A: "Una variable fácil de captar y con baja probabilidad de error, que tiene mayor credibilidad y se usa para ajustar variables relacionadas.",
+                B: "La variable más compleja del cuestionario.",
+                C: "La que tiene mayor costo de captación.",
+                D: "La que se utiliza solo en preguntas abiertas."
+            },
+            correcta: "A",
+            justificacion: "Página 51: 'a este tipo de variables se les denomina “variables pivote” y constituye un tipo de variable fácil de captar y con baja probabilidad de error, por lo cual tiene mayor credibilidad y en función de la misma, se ajustan las variables relacionadas, de acuerdo al método seleccionado.'",
+            distractores: "B, C y D no corresponden a la definición."
+        },
+        // 90
+        {
+            id: 90,
+            texto: "El documento del diseño conceptual debe basarse en:",
+            opciones: {
+                A: "Los resultados de las actividades de identificación de necesidades, justificación y definición del marco conceptual, diseño de instrumentos, etc.",
+                B: "Únicamente en la revisión bibliográfica.",
+                C: "En la opinión de los usuarios finales.",
+                D: "En el presupuesto del proyecto."
+            },
+            correcta: "A",
+            justificacion: "Página 54: 'El documento del diseño conceptual se basa en los resultados de las actividades realizadas en torno a la identificación de las necesidades de información y el esquema propuesto para atenderlas, la justificación y definición del marco conceptual y el diseño de los instrumentos de captación.'",
+            distractores: "B, C y D son insuficientes o incorrectos."
+        },
+        // 91
+        {
+            id: 91,
+            texto: "Las pruebas del cuestionario pueden enfocarse a elementos particulares como preguntas, opciones de respuesta, bloques, términos, tiempo de entrevista, o bien:",
+            opciones: {
+                A: "Probar el cuestionario completo y los instrumentos de apoyo.",
+                B: "Probar solo el marco conceptual.",
+                C: "Probar la muestra.",
+                D: "Probar los criterios de validación por separado."
+            },
+            correcta: "A",
+            justificacion: "Página 46: 'Las pruebas pueden enfocarse a elementos particulares como a determinadas preguntas... así como también a probar el cuestionario completo y los respectivos instrumentos de apoyo.'",
+            distractores: "B, C y D no son objeto de las pruebas del cuestionario."
+        },
+        // 92
+        {
+            id: 92,
+            texto: "La 'multirrespuesta' se presenta cuando:",
+            opciones: {
+                A: "Se consignan dos o más respuestas para preguntas que admiten una sola opción.",
+                B: "Se repiten datos capturados.",
+                C: "Se omite una respuesta.",
+                D: "Se registra una respuesta en una pregunta no aplicable."
+            },
+            correcta: "A",
+            justificacion: "Página 48: 'Multirrespuesta. Se consignan, dos o más respuestas para preguntas que admiten una sola opción.'",
+            distractores: "B es duplicado; C es omisión; D es no aplicable."
+        },
+        // 93
+        {
+            id: 93,
+            texto: "En la documentación, la determinación de la estructura del documento debe considerar capítulos como:",
+            opciones: {
+                A: "Justificación del marco conceptual, marco conceptual, instrumentos de captación, y referencias.",
+                B: "Diseño de la muestra y procesamiento.",
+                C: "Análisis de costo-beneficio.",
+                D: "Plan de difusión."
+            },
+            correcta: "A",
+            justificacion: "Página 54: 'se recomienda considerar, por los menos, los siguientes capítulos: • Justificación del marco conceptual... • Marco conceptual... • Instrumentos de captación... Además... referencias bibliográficas.'",
+            distractores: "B, C y D no son parte de la estructura recomendada para el documento de diseño conceptual."
+        },
+        // 94
+        {
+            id: 94,
+            texto: "La oportunidad en la calidad de los datos se ve favorecida porque el diseño conceptual contribuye a:",
+            opciones: {
+                A: "Que las etapas de captación y procesamiento se realicen de forma ágil y eficiente.",
+                B: "Que se utilicen definiciones claras.",
+                C: "Que los datos sean accesibles.",
+                D: "Que los datos sean comparables."
+            },
+            correcta: "A",
+            justificacion: "Página 10: 'los productos que se obtienen en el diseño conceptual... contribuyen a que las etapas de captación y procesamiento se realicen de forma ágil y eficiente, y con ello mejorar la oportunidad con la que se difunde la información.'",
+            distractores: "B es rigor conceptual; C es accesibilidad; D es comparabilidad."
+        },
+        // 95
+        {
+            id: 95,
+            texto: "La variable 'condición de actividad económica' en la ENOE es un ejemplo de:",
+            opciones: {
+                A: "Variable de análisis temático.",
+                B: "Variable filtro.",
+                C: "Variable de control.",
+                D: "Variable indirecta."
+            },
+            correcta: "A",
+            justificacion: "Página 33 (ejemplo): 'Condición de actividad económica' es una variable para caracterizar a la población, por lo tanto es de análisis temático. No es filtro (no distingue para aplicar otras variables), no es de control (no confirma otros datos), no es indirecta (se capta directamente con pregunta).",
+            distractores: "B, C y D no corresponden."
+        },
+        // 96
+        {
+            id: 96,
+            texto: "La revisión de leyes, reglamentos y otros documentos relacionados con la temática del proyecto puede arrojar:",
+            opciones: {
+                A: "Conceptos, formatos, criterios y restricciones respecto a la captación.",
+                B: "El tamaño de la muestra.",
+                C: "Las preferencias de los usuarios.",
+                D: "Los costos de impresión."
+            },
+            correcta: "A",
+            justificacion: "Página 14: 'Esta actividad resulta útil para conocer, entre otros aspectos, los conceptos, formatos, criterios y restricciones respecto a la captación de la información.'",
+            distractores: "B, C y D no son resultados de la revisión legal."
+        },
+        // 97
+        {
+            id: 97,
+            texto: "En la validación, la solución mediante 'reconsulta' se caracteriza por:",
+            opciones: {
+                A: "Verificar directamente con la fuente informante para ratificar o rectificar datos.",
+                B: "Asignar un valor estadístico estimado.",
+                C: "Derivar un valor aritméticamente.",
+                D: "Asignar 'no especificado'."
+            },
+            correcta: "A",
+            justificacion: "Página 52: 'Rectificación del valor de respuesta, verificando directamente con la fuente informante, siempre que ello resulte factible...'",
+            distractores: "B es estimación; C es derivación; D es no especificado."
+        },
+        // 98
+        {
+            id: 98,
+            texto: "La comparabilidad entre proyectos se cuida en el diseño conceptual mediante:",
+            opciones: {
+                A: "La adopción de definiciones y clasificaciones estandarizadas.",
+                B: "La segmentación de usuarios.",
+                C: "La reducción del número de variables.",
+                D: "La elección de un método de captación específico."
+            },
+            correcta: "A",
+            justificacion: "Página 11: 'La investigación documental contempla la revisión de recomendaciones nacionales e internacionales y de la documentación de eventos anteriores en que se captó la información, sugiriendo la adopción de definiciones y clasificaciones estandarizadas en la integración del marco conceptual.'",
+            distractores: "B, C y D no son los principales medios para asegurar comparabilidad."
+        },
+        // 99
+        {
+            id: 99,
+            texto: "El glosario del documento de diseño conceptual debe contener:",
+            opciones: {
+                A: "La relación de los conceptos contenidos en el marco conceptual con la definición formal correspondiente.",
+                B: "El listado de preguntas del cuestionario.",
+                C: "Los criterios de validación.",
+                D: "El esquema de presentación de resultados."
+            },
+            correcta: "A",
+            justificacion: "Glosario p.59: 'GLOSARIO. Relación de los conceptos contenidos en el marco conceptual con la definición formal correspondiente.'",
+            distractores: "B, C y D son otros componentes del documento."
+        },
+        // 100
+        {
+            id: 100,
+            texto: "La integración, edición y revisión del documento de diseño conceptual debe incluir una evaluación global considerando aspectos de cohesión, redacción y estilo, y edición, y debe ser realizada por:",
+            opciones: {
+                A: "Personas que participaron en la redacción y otras vinculadas al proyecto.",
+                B: "Únicamente el responsable del proyecto.",
+                C: "Un consultor externo sin conocimiento del proyecto.",
+                D: "El personal de informática."
+            },
+            correcta: "A",
+            justificacion: "Página 55: 'A partir del primer borrador disponible se aconseja una evaluación global tanto de las personas que participaron en la redacción como de personas que no lo hicieron pero que estén vinculadas al proyecto.'",
+            distractores: "B, C y D no son las personas recomendadas para la evaluación."
+        }
+    ];
+
+    // ============================================================
+    // LÓGICA DE LA INTERFAZ
+    // ============================================================
+    let indiceActual = 0;
+    let aciertos = 0;
+    let respondida = false;
+    let opcionSeleccionada = null;
+
+    const preguntaTexto = document.getElementById('preguntaTexto');
+    const opcionesContainer = document.getElementById('opcionesContainer');
+    const btnResponder = document.getElementById('btnResponder');
+    const btnSiguiente = document.getElementById('btnSiguiente');
+    const feedback = document.getElementById('feedback');
+    const feedbackResultado = document.getElementById('feedbackResultado');
+    const feedbackJustificacion = document.getElementById('feedbackJustificacion');
+    const feedbackDistractores = document.getElementById('feedbackDistractores');
+    const progreso = document.getElementById('progreso');
+    const aciertosTexto = document.getElementById('aciertosTexto');
+    const preguntaNumero = document.getElementById('preguntaNumero');
+    const resultadoFinal = document.getElementById('resultadoFinal');
+
+    function renderPregunta(index) {
+        const p = preguntas[index];
+        preguntaTexto.textContent = `${index+1}. ${p.texto}`;
+        const letras = ['A', 'B', 'C', 'D'];
+        opcionesContainer.innerHTML = '';
+        letras.forEach(letra => {
+            const div = document.createElement('div');
+            div.className = 'opcion';
+            div.dataset.letra = letra;
+            div.innerHTML = `<span class="letra">${letra}.</span> ${p.opciones[letra]}`;
+            div.addEventListener('click', () => seleccionarOpcion(letra));
+            opcionesContainer.appendChild(div);
+        });
+
+        // Resetear estado
+        respondida = false;
+        opcionSeleccionada = null;
+        btnResponder.disabled = true;
+        btnSiguiente.disabled = true;
+        feedback.classList.remove('mostrar');
+        // Limpiar clases de opciones
+        document.querySelectorAll('.opcion').forEach(el => {
+            el.classList.remove('seleccionada', 'correcta', 'incorrecta', 'deshabilitada');
+        });
+
+        actualizarInfo();
+    }
+
+    function seleccionarOpcion(letra) {
+        if (respondida) return;
+        // Quitar selección anterior
+        document.querySelectorAll('.opcion').forEach(el => el.classList.remove('seleccionada'));
+        // Marcar la seleccionada
+        const opcionEl = document.querySelector(`.opcion[data-letra="${letra}"]`);
+        if (opcionEl) opcionEl.classList.add('seleccionada');
+        opcionSeleccionada = letra;
+        btnResponder.disabled = false;
+    }
+
+    function responder() {
+        if (respondida || !opcionSeleccionada) return;
+        respondida = true;
+        const p = preguntas[indiceActual];
+        const esCorrecta = (opcionSeleccionada === p.correcta);
+        if (esCorrecta) aciertos++;
+
+        // Mostrar retroalimentación
+        feedback.classList.add('mostrar');
+        const resultadoTexto = esCorrecta ? '✅ Correcto' : '❌ Incorrecto';
+        const claseResultado = esCorrecta ? 'correcto' : 'incorrecto';
+        feedbackResultado.innerHTML = `<span class="${claseResultado}">${resultadoTexto}</span> (Respuesta correcta: ${p.correcta})`;
+        feedbackJustificacion.textContent = `📘 Justificación: ${p.justificacion}`;
+        feedbackDistractores.textContent = `🧩 Análisis de distractores: ${p.distractores}`;
+
+        // Marcar opciones: correcta e incorrecta
+        document.querySelectorAll('.opcion').forEach(el => {
+            const letra = el.dataset.letra;
+            el.classList.remove('seleccionada');
+            if (letra === p.correcta) {
+                el.classList.add('correcta');
+            } else if (letra === opcionSeleccionada && letra !== p.correcta) {
+                el.classList.add('incorrecta');
+            }
+            el.classList.add('deshabilitada');
+        });
+
+        btnResponder.disabled = true;
+        btnSiguiente.disabled = false;
+        actualizarInfo();
+    }
+
+    function siguiente() {
+        if (indiceActual < preguntas.length - 1) {
+            indiceActual++;
+            renderPregunta(indiceActual);
+        } else {
+            // Final del examen
+            mostrarResultadoFinal();
+        }
+    }
+
+    function actualizarInfo() {
+        const total = preguntas.length;
+        const num = indiceActual + 1;
+        progreso.textContent = `${num} / ${total}`;
+        aciertosTexto.textContent = `Aciertos: ${aciertos}`;
+        preguntaNumero.textContent = `Pregunta ${num} de ${total}`;
+    }
+
+    function mostrarResultadoFinal() {
+        document.getElementById('preguntaContainer').style.display = 'none';
+        document.querySelector('.acciones').style.display = 'none';
+        feedback.style.display = 'none';
+        document.querySelector('.footer').style.display = 'none';
+        resultadoFinal.classList.remove('oculto');
+        const porcentaje = Math.round((aciertos / preguntas.length) * 100);
+        let mensaje = '';
+        if (porcentaje >= 90) mensaje = '🏆 Excelente dominio del diseño conceptual.';
+        else if (porcentaje >= 70) mensaje = '📚 Buen conocimiento, revisa algunos conceptos.';
+        else if (porcentaje >= 50) mensaje = '📖 Nivel básico; estudia con mayor profundidad.';
+        else mensaje = '🔁 Repasa el material completo.';
+        resultadoFinal.innerHTML = `
+            <div style="font-size:2.5rem; margin-bottom:0.5rem;">📊</div>
+            <div>Has respondido <strong>${aciertos}</strong> de ${preguntas.length} preguntas correctamente.</div>
+            <div style="font-size:2rem; margin:0.5rem 0;">${porcentaje}%</div>
+            <div>${mensaje}</div>
+            <button class="btn primario" style="margin-top:1.2rem;" onclick="location.reload()">↻ Reintentar</button>
+        `;
+    }
+
+    // Event listeners
+    btnResponder.addEventListener('click', responder);
+    btnSiguiente.addEventListener('click', siguiente);
+
+    // Iniciar
+    renderPregunta(0);
+</script>
+</body>
+</html>
