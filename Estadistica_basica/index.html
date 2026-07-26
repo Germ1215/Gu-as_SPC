@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>La generación de información estadística básica en el INEGI, 2008</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Segoe UI', Roboto, sans-serif;
+            background: #f0f4f8;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+        }
+        .container {
+            background: white;
+            max-width: 850px;
+            width: 100%;
+            border-radius: 24px;
+            padding: 2rem 2rem;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #e9edf4;
+            padding-bottom: 0.75rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+        .header h1 {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #1e2b3c;
+        }
+        .progress {
+            background: #e9edf4;
+            border-radius: 40px;
+            padding: 0.35rem 1rem;
+            font-weight: 500;
+            color: #1e2b3c;
+            font-size: 0.9rem;
+        }
+        .pregunta-texto {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            color: #1e2b3c;
+            margin-bottom: 1.8rem;
+            font-weight: 500;
+            background: #f9fafc;
+            padding: 1.2rem 1.5rem;
+            border-radius: 16px;
+            border-left: 5px solid #2a7de1;
+        }
+        .opciones {
+            display: flex;
+            flex-direction: column;
+            gap: 0.7rem;
+            margin-bottom: 2rem;
+        }
+        .opcion {
+            display: flex;
+            align-items: center;
+            background: #f9fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 14px;
+            padding: 0.9rem 1.2rem;
+            cursor: pointer;
+            transition: all 0.15s;
+            font-size: 1rem;
+            color: #1e2b3c;
+        }
+        .opcion:hover { background: #edf2f9; border-color: #b3c7e5; }
+        .opcion.seleccionada { background: #dbeafe; border-color: #2a7de1; box-shadow: 0 0 0 2px rgba(42,125,225,0.2); }
+        .opcion.correcta { background: #d1fae5; border-color: #0b8a4a; }
+        .opcion.incorrecta { background: #fee2e2; border-color: #b91c1c; }
+        .opcion.deshabilitada { cursor: default; opacity: 0.8; }
+        .opcion .letra { font-weight: 700; color: #4a5a72; margin-right: 1rem; min-width: 28px; }
+        .acciones {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 0.5rem;
+        }
+        .btn {
+            background: white;
+            border: 2px solid #d0d9e8;
+            padding: 0.7rem 1.8rem;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: #1e2b3c;
+            cursor: pointer;
+            transition: all 0.15s;
+            background: #f9fafc;
+        }
+        .btn:hover:not(:disabled) { background: #e9edf4; border-color: #a0b5d0; }
+        .btn.primario { background: #1e2b3c; border-color: #1e2b3c; color: white; }
+        .btn.primario:hover:not(:disabled) { background: #2a3d54; border-color: #2a3d54; }
+        .btn:disabled { opacity: 0.4; cursor: not-allowed; }
+        .feedback {
+            margin-top: 1.8rem;
+            padding: 1.2rem 1.5rem;
+            border-radius: 16px;
+            background: #f0f4fe;
+            border-left: 5px solid #2a7de1;
+            display: none;
+        }
+        .feedback.mostrar { display: block; }
+        .feedback .correcto { color: #0b7a3e; font-weight: 700; }
+        .feedback .incorrecto { color: #b91c1c; font-weight: 700; }
+        .feedback .justificacion { margin-top: 0.6rem; color: #1e2b3c; line-height: 1.5; }
+        .feedback .distractores { margin-top: 0.5rem; font-size: 0.95rem; color: #3d4e66; background: #e8edf5; padding: 0.7rem 1rem; border-radius: 10px; }
+        .footer {
+            margin-top: 2rem;
+            border-top: 2px solid #e9edf4;
+            padding-top: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+        }
+        .resultado-final {
+            background: #1e2b3c;
+            color: white;
+            padding: 1.2rem 2rem;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 1.2rem;
+            text-align: center;
+            margin-top: 1rem;
+        }
+        .oculto { display: none !important; }
+        @media (max-width: 600px) {
+            .container { padding: 1.2rem; }
+            .pregunta-texto { font-size: 1rem; padding: 1rem; }
+            .opcion { padding: 0.7rem 1rem; font-size: 0.95rem; }
+            .btn { padding: 0.6rem 1.2rem; font-size: 0.9rem; }
+        }
+    </style>
+</head>
+<body>
+<div class="container" id="app">
+    <div class="header">
+        <h1>📊 La generación de información estadística básica en el INEGI, 2008</h1>
+        <span class="progress" id="progreso">1 / 30</span>
+    </div>
+
+    <div id="preguntaContainer">
+        <div class="pregunta-texto" id="preguntaTexto">Cargando pregunta…</div>
+        <div class="opciones" id="opcionesContainer"></div>
+    </div>
+
+    <div class="acciones">
+        <button class="btn" id="btnResponder" disabled>▶ Responder</button>
+        <button class="btn primario" id="btnSiguiente" disabled>Siguiente →</button>
+    </div>
+
+    <div class="feedback" id="feedback">
+        <div id="feedbackResultado"></div>
+        <div class="justificacion" id="feedbackJustificacion"></div>
+        <div class="distractores" id="feedbackDistractores"></div>
+    </div>
+
+    <div class="footer">
+        <span id="aciertosTexto">Aciertos: 0</span>
+        <span id="preguntaNumero">Pregunta 1 de 30</span>
+    </div>
+
+    <div id="resultadoFinal" class="resultado-final oculto"></div>
+</div>
+
+<script>
+// =================== DATOS DE 30 PREGUNTAS ===================
+const preguntas = [
+    {
+        id: 1,
+        texto: 'Según el documento, la palabra "estadística" procede del latín *statisticum collegium* ("consejo de Estado") y de su derivado italiano "statista", que significa _______.',
+        opciones: {
+            A: "hombre de Estado o político",
+            B: "recolector de datos",
+            C: "científico social",
+            D: "analista numérico"
+        },
+        correcta: "A",
+        justificacion: "Página 11: 'la palabra \"estadística\" procede del latín statisticum collegium (\"consejo de Estado\") y de su derivado italiano \"statista\" (\"hombre de Estado\" o \"político\").'",
+        distractores: "B es una acepción moderna; C y D no se mencionan."
+    },
+    {
+        id: 2,
+        texto: 'Relaciona cada acepción de "estadística" con su descripción: 1. Estadística como datos numéricos, 2. Estadística como disciplina científica. A) Proporciona bases teóricas y técnicas para la generación y análisis de datos. B) Datos sobre un determinado conjunto de elementos, con relación a un espacio y tiempo.',
+        opciones: {
+            A: "1-A, 2-B",
+            B: "1-B, 2-A",
+            C: "1-A, 2-A",
+            D: "1-B, 2-B"
+        },
+        correcta: "B",
+        justificacion: "Página 11: 'Hoy en día, sobre el término estadística se distinguen dos acepciones: la primera referente a datos numéricos sobre un determinado conjunto de elementos... la segunda describe a la disciplina científica que proporciona las bases teóricas y técnicas para la generación y el análisis de datos estadísticos.'",
+        distractores: "Las otras opciones invierten o repiten incorrectamente."
+    },
+    {
+        id: 3,
+        texto: '¿Cuál de los siguientes NO es uno de los Principios de las Estadísticas Oficiales según la ONU?',
+        opciones: {
+            A: "Pertinencia, imparcialidad y acceso equitativo",
+            B: "Confidencialidad",
+            C: "Optimización de costos",
+            D: "Coordinación nacional"
+        },
+        correcta: "C",
+        justificacion: "Páginas 12-14: Los principios son 10: Pertinencia, imparcialidad y acceso equitativo; Normas y ética profesionales; Rendición de cuentas y transparencia; Prevención de la utilización indebida; Fuentes de las estadísticas oficiales; Confidencialidad; Legislación; Coordinación nacional; Utilización de normas internacionales; Cooperación internacional. No incluye optimización de costos.",
+        distractores: "A, B y D son principios correctos."
+    },
+    {
+        id: 4,
+        texto: 'El principio de "Rendición de cuentas y transparencia" establece que los organismos de estadística han de presentar información conforme a normas científicas sobre _______.',
+        opciones: {
+            A: "las fuentes, métodos y procedimientos de la estadística",
+            B: "los presupuestos asignados",
+            C: "los nombres de los informantes",
+            D: "las sanciones por incumplimiento"
+        },
+        correcta: "A",
+        justificacion: "Página 13, principio 3: 'Para facilitar una interpretación correcta de los datos, los organismos de estadística han de presentar información conforme a normas científicas sobre las fuentes, métodos y procedimientos de la estadística.'",
+        distractores: "B, C y D no corresponden al principio."
+    },
+    {
+        id: 5,
+        texto: 'Relaciona cada principio con su contenido: 1. Prevención de la utilización indebida, 2. Fuentes de las estadísticas oficiales, 3. Legislación. A) Los datos pueden obtenerse de encuestas o registros, seleccionando según calidad, oportunidad, costo y carga. B) Los organismos tienen derecho a formular observaciones sobre interpretaciones erróneas. C) Se han de dar a conocer al público las leyes, reglamentos y medidas que rigen los sistemas estadísticos.',
+        opciones: {
+            A: "1-B, 2-A, 3-C",
+            B: "1-A, 2-C, 3-B",
+            C: "1-C, 2-B, 3-A",
+            D: "1-B, 2-C, 3-A"
+        },
+        correcta: "A",
+        justificacion: "Páginas 13-14: Principio 4 → Prevención de utilización indebida (derecho a formular observaciones); Principio 5 → Fuentes (encuestas o registros); Principio 7 → Legislación (dar a conocer leyes).",
+        distractores: "Las otras combinaciones son incorrectas."
+    },
+    {
+        id: 6,
+        texto: 'La confidencialidad en las estadísticas oficiales implica que:',
+        opciones: {
+            A: "Los datos deben ser públicos siempre, sin excepción.",
+            B: "Los datos que reúnan los organismos para compilación estadística, ya sea de personas naturales o jurídicas, deben ser estrictamente confidenciales.",
+            C: "Solo los datos de personas físicas son confidenciales.",
+            D: "La confidencialidad se aplica únicamente a los censos."
+        },
+        correcta: "B",
+        justificacion: "Página 14, principio 6: 'Los datos que reúnan los organismos de estadística para la compilación estadística, ya sea que se refieran a personas naturales o jurídicas, deben ser estrictamente confidenciales.'",
+        distractores: "A es falso; C y D son limitaciones incorrectas."
+    },
+    {
+        id: 7,
+        texto: 'En México, el interés por disponer de estadísticas sobre la población y sus actividades económicas se remonta a la época prehispánica. Durante la época colonial, destaca el llamado _______.',
+        opciones: {
+            A: "Censo de Revillagigedo de 1790",
+            B: "Censo de 1882",
+            C: "Censo de 1970",
+            D: "Censo de 2000"
+        },
+        correcta: "A",
+        justificacion: "Página 15: 'Son notables los esfuerzos en esa época por elaborar estadísticas tipo inventario, destacándose el llamado Censo de Revillagigedo de 1790.'",
+        distractores: "B es la creación de la DGE; C y D son censos posteriores."
+    },
+    {
+        id: 8,
+        texto: 'Relaciona la institución con el año de creación: 1. Dirección General de Estadística (DGE), 2. INEGI (como Instituto Nacional de Estadística, Geografía e Informática), 3. Ley del Sistema Nacional de Información Estadística y Geográfica (LSNIEG).',
+        opciones: {
+            A: "1-B, 2-A, 3-C",
+            B: "1-A, 2-B, 3-C",
+            C: "1-C, 2-A, 3-B",
+            D: "1-B, 2-C, 3-A"
+        },
+        correcta: "A",
+        justificacion: "Páginas 15-16: DGE creada en 1882; INEGI como INEGI (con Informática) en 1983; LSNIEG publicada en 2008.",
+        distractores: "Las otras combinaciones son incorrectas."
+    },
+    {
+        id: 9,
+        texto: 'La Ley del Sistema Nacional de Información Estadística y Geográfica (LSNIEG) fue publicada en el Diario Oficial de la Federación en:',
+        opciones: {
+            A: "1882",
+            B: "1983",
+            C: "2006",
+            D: "2008"
+        },
+        correcta: "D",
+        justificacion: "Página 16: 'Ley del Sistema Nacional de Información Estadística y Geográfica (LSNIEG), publicada en el Diario Oficial de la Federación en abril de 2008.'",
+        distractores: "1882 (DGE), 1983 (INEGI), 2006 (reforma constitucional)."
+    },
+    {
+        id: 10,
+        texto: 'El Sistema Nacional de Información Estadística y Geográfica (SNIEG) está formado por el Consejo Consultivo Nacional, los Subsistemas Nacionales de Información y _______.',
+        opciones: {
+            A: "el Instituto Nacional de Estadística y Geografía",
+            B: "la Dirección General de Estadística",
+            C: "la Red Nacional de Información",
+            D: "el Programa Nacional de Estadística"
+        },
+        correcta: "A",
+        justificacion: "Página 17: 'El Sistema Nacional de Información Estadística y Geográfica está formado por el Consejo Consultivo Nacional, los Subsistemas Nacionales de Información y el Instituto Nacional de Información Estadística y Geográfica.'",
+        distractores: "B es una institución anterior; C es parte de la red, no del SNIEG; D es un instrumento."
+    },
+    {
+        id: 11,
+        texto: 'Relaciona cada Subsistema Nacional de Información con su objetivo: 1. Demográfico y Social, 2. Económico, 3. Geográfico y del Medio Ambiente. A) Producir información económica y financiera. B) Producir información demográfica y social. C) Producir información geográfica y del medio ambiente.',
+        opciones: {
+            A: "1-B, 2-A, 3-C",
+            B: "1-A, 2-B, 3-C",
+            C: "1-C, 2-A, 3-B",
+            D: "1-B, 2-C, 3-A"
+        },
+        correcta: "A",
+        justificacion: "Página 17: 'El SNIEG contará con los siguientes tres Subsistemas Nacionales de Información: Demográfico y Social; Económico y Geográfico, y del Medio Ambiente. Cada subsistema tendrá como objetivo producir, integrar y difundir información demográfica y social; económica y financiera, y geográfica y del medio ambiente, según corresponda.'",
+        distractores: "Las otras opciones invierten los objetivos."
+    },
+    {
+        id: 12,
+        texto: 'Según la LSNIEG, la Información de Interés Nacional debe cumplir con varios criterios, entre ellos:',
+        opciones: {
+            A: "Ser generada en forma regular y periódica.",
+            B: "Ser elaborada con base en una metodología empírica no comprobada.",
+            C: "No requerir ser comparable en el tiempo.",
+            D: "Ser aprobada por el Consejo Consultivo Nacional por mayoría simple."
+        },
+        correcta: "A",
+        justificacion: "Página 18: criterios de Información de Interés Nacional: 'III. Sea generada en forma regular y periódica, y IV. Se elabore con base en una metodología científicamente sustentada.'",
+        distractores: "B es falsa; C es falsa (debe ser comparable); D es falsa (unanimidad)."
+    },
+    {
+        id: 13,
+        texto: 'La Red Nacional de Información es el conjunto de procedimientos de intercambio y resguardo de información, para apoyar por un lado las actividades de coordinación del Sistema y por otro la presentación del _______.',
+        opciones: {
+            A: "Servicio Público de Información",
+            B: "Programa Anual de Estadística",
+            C: "Censo Nacional",
+            D: "Sistema de Cuentas Nacionales"
+        },
+        correcta: "A",
+        justificacion: "Página 17: 'La Red Nacional de Información es el conjunto de procedimientos de intercambio y resguardo de información, para apoyar por un lado las actividades de coordinación del Sistema y de sus Subsistemas y por otro la presentación del Servicio Público de Información a toda la sociedad.'",
+        distractores: "B, C y D son otros componentes del sistema."
+    },
+    {
+        id: 14,
+        texto: 'Relaciona el instrumento de programación con su nivel: 1. Programa Estratégico del SNIEG, 2. Programa Nacional de Estadística y Geografía, 3. Programa Anual de Estadística y Geografía.',
+        opciones: {
+            A: "1-B, 2-C, 3-A",
+            B: "1-A, 2-B, 3-C",
+            C: "1-C, 2-A, 3-B",
+            D: "1-B, 2-A, 3-C"
+        },
+        correcta: "A",
+        justificacion: "Página 19: 'La ordenación y regulación de las actividades necesarias... se llevará a cabo por medio de los instrumentos siguientes: I. El Programa Estratégico del Sistema Nacional de Información Estadística y Geográfica; II. El Programa Nacional de Estadística y Geografía, y III. El Programa Anual de Estadística y Geografía.'",
+        distractores: "Las otras opciones invierten los niveles."
+    },
+    {
+        id: 15,
+        texto: 'Según el resumen del documento, la estadística como disciplina científica:',
+        opciones: {
+            A: "Se refiere exclusivamente a la recolección de datos.",
+            B: "Proporciona las bases teóricas y técnicas para la generación y análisis de datos estadísticos.",
+            C: "Solo se aplica a fenómenos económicos.",
+            D: "Es un concepto introducido en el siglo XVIII por John Sinclair."
+        },
+        correcta: "B",
+        justificacion: "Página 11: 'la segunda [acepción] describe a la disciplina científica que proporciona las bases teóricas y técnicas para la generación y el análisis de datos estadísticos.'",
+        distractores: "A es la primera acepción; C es limitante; D es error histórico (John Sinclair introdujo el concepto de recolectar y clasificar datos en el siglo XIX)."
+    },
+    {
+        id: 16,
+        texto: 'El principio de "Cooperación internacional" establece que la cooperación bilateral y multilateral en la esfera de la estadística contribuye a _______.',
+        opciones: {
+            A: "mejorar los sistemas estadísticos oficiales en todos los países",
+            B: "reducir los costos de los censos nacionales",
+            C: "unificar los sistemas políticos de los países",
+            D: "eliminar la necesidad de estándares nacionales"
+        },
+        correcta: "A",
+        justificacion: "Página 14, principio 10: 'La cooperación bilateral y multilateral en la esfera de la estadística contribuye a mejorar los sistemas estadísticos oficiales en todos los países.'",
+        distractores: "B, C y D no corresponden al principio."
+    },
+    {
+        id: 17,
+        texto: 'Relaciona el término con su definición según el glosario: 1. Estadística básica, 2. Estadística derivada, 3. Integración de estadísticas. A) Datos obtenidos mediante el uso de estadísticas de una o varias fuentes con cálculos basados en conceptualizaciones ajenas. B) Datos obtenidos de un proyecto censal, encuesta o registro, sin aplicación de criterios ajenos. C) Ordenamiento de datos estadísticos básicos o derivados de fuentes distintas, presentados para facilitar su consulta.',
+        opciones: {
+            A: "1-B, 2-A, 3-C",
+            B: "1-A, 2-C, 3-B",
+            C: "1-C, 2-B, 3-A",
+            D: "1-B, 2-C, 3-A"
+        },
+        correcta: "A",
+        justificacion: "Glosario, páginas 22-23: Estadística básica → sin conceptualizaciones ajenas; Estadística derivada → con conceptualizaciones ajenas; Integración → ordenamiento de datos de fuentes distintas.",
+        distractores: "Las otras combinaciones son incorrectas."
+    },
+    {
+        id: 18,
+        texto: 'El método de generación de datos estadísticos que utiliza una muestra representativa de la población de estudio se denomina:',
+        opciones: {
+            A: "Censo",
+            B: "Encuesta por muestreo",
+            C: "Aprovechamiento de registros administrativos",
+            D: "Integración de estadísticas"
+        },
+        correcta: "B",
+        justificacion: "Glosario, página 23: 'Encuesta por muestreo.- Método de generación de datos estadísticos que utiliza una muestra representativa de la población de estudio, seleccionada mediante procedimientos técnicos y de la cual se infieren datos válidos para la población total, bajo determinados niveles de precisión.'",
+        distractores: "A es censo (todos los elementos); C es registros administrativos; D es integración."
+    },
+    {
+        id: 19,
+        texto: 'Según el glosario, el marco conceptual es el ordenamiento de temas, categorías, variables y clasificaciones, incluido un _______ donde se presenta la definición correspondiente a cada concepto.',
+        opciones: {
+            A: "glosario",
+            B: "cuestionario",
+            C: "manual de procedimientos",
+            D: "diccionario de datos"
+        },
+        correcta: "A",
+        justificacion: "Glosario, página 25: 'Marco conceptual.- Es el ordenamiento de temas, categorías, variables y clasificaciones al cual se referirán los datos objeto de captación, incluido un glosario donde se presenta la definición correspondiente a cada uno de los conceptos utilizados.'",
+        distractores: "B, C y D son otros instrumentos."
+    },
+    {
+        id: 20,
+        texto: 'Relaciona cada fase del proceso de generación de estadística básica con su descripción: 1. Diseño conceptual, 2. Captación, 3. Procesamiento, 4. Presentación de resultados. A) Conjunto de actividades para obtener los datos de cada elemento de la población. B) Fase en la que se concretan los esquemas de presentación definidos previamente. C) Serie de actividades para identificar necesidades y determinar el marco conceptual, instrumentos, criterios de validación y esquema de resultados. D) Fase en la que se preparan los archivos de datos asegurando su congruencia.',
+        opciones: {
+            A: "1-C, 2-A, 3-D, 4-B",
+            B: "1-A, 2-B, 3-C, 4-D",
+            C: "1-D, 2-C, 3-B, 4-A",
+            D: "1-B, 2-D, 3-A, 4-C"
+        },
+        correcta: "A",
+        justificacion: "Glosario, páginas 23-24: Diseño conceptual → identificar necesidades y determinar marco conceptual, instrumentos, criterios y esquema; Captación → obtener datos de cada elemento; Procesamiento → preparar archivos; Presentación → concretar esquemas definidos.",
+        distractores: "Las otras opciones invierten las fases."
+    },
+    {
+        id: 21,
+        texto: 'La evaluación en el proceso de generación de estadística básica:',
+        opciones: {
+            A: "Se realiza solo al final del proyecto.",
+            B: "Debe realizarse en cada etapa y definir indicadores sensibles para acciones correctivas o mejoras futuras.",
+            C: "Es responsabilidad exclusiva del INEGI.",
+            D: "Se aplica únicamente a la fase de captación."
+        },
+        correcta: "B",
+        justificacion: "Glosario, página 25: 'Evaluación.- Esta fase debe realizarse en cada una de las etapas del proceso de generación de información estadística, para lo cual se tienen que definir, implementar y monitorear indicadores sensibles, que permitan establecer acciones correctivas durante el desarrollo del proyecto o promover mejoras para ejercicios subsiguientes.'",
+        distractores: "A es falsa; C es falsa (no es exclusiva del INEGI); D es limitante."
+    },
+    {
+        id: 22,
+        texto: 'La "Clase" en el glosario se define como cada uno de los _______ de una clasificación.',
+        opciones: {
+            A: "subconjuntos",
+            B: "valores numéricos",
+            C: "códigos",
+            D: "temas"
+        },
+        correcta: "A",
+        justificacion: "Glosario, página 25: 'Clase.- Cada uno de los subconjuntos de una clasificación.'",
+        distractores: "B, C y D no corresponden a la definición."
+    },
+    {
+        id: 23,
+        texto: 'Relaciona el concepto con su definición: 1. Categoría, 2. Variable, 3. Clasificación. A) Concepto que admite distintos valores para la caracterización de elementos. B) Ordenamiento de todas las modalidades cualitativas o intervalos numéricos admitidos por una variable. C) Conjunto objeto de cuantificación y caracterización.',
+        opciones: {
+            A: "1-C, 2-A, 3-B",
+            B: "1-A, 2-B, 3-C",
+            C: "1-B, 2-C, 3-A",
+            D: "1-C, 2-B, 3-A"
+        },
+        correcta: "A",
+        justificacion: "Glosario, página 25: Categoría → conjunto objeto de cuantificación; Variable → admite distintos valores; Clasificación → ordenamiento de modalidades.",
+        distractores: "Las otras opciones invierten las definiciones."
+    },
+    {
+        id: 24,
+        texto: 'El Sistema Nacional Estadístico, según la OCDE, es:',
+        opciones: {
+            A: "El conjunto de organizaciones y unidades con las cuales un país en forma conjunta colecta, procesa y disemina estadísticas a nombre del gobierno nacional.",
+            B: "El conjunto de datos estadísticos de un país.",
+            C: "La unidad central de estadística de un país.",
+            D: "El sistema de cuentas nacionales."
+        },
+        correcta: "A",
+        justificacion: "Glosario, página 22: 'Sistema Nacional Estadístico.- Conjunto de organizaciones y unidades con las cuales un país en forma conjunta colecta, procesa y disemina estadísticas a nombre del gobierno nacional. (OCDE. Glosario de términos estadísticos).'",
+        distractores: "B es confusión con datos; C es confusión con INEGI; D es cuentas nacionales."
+    },
+    {
+        id: 25,
+        texto: 'Según el resumen, los diez Principios de las Estadísticas Oficiales fueron adoptados por _______.',
+        opciones: {
+            A: "la Organización de las Naciones Unidas",
+            B: "la OCDE",
+            C: "el Fondo Monetario Internacional",
+            D: "el INEGI"
+        },
+        correcta: "A",
+        justificacion: "Página 20, Resumen: 'La generación de estadísticas oficiales se realiza con el apoyo de diversos recursos técnicos y metodológicos elaborados en los propios países y por organismos como la Organización de las Naciones Unidas, para dotarlos de recomendaciones en la materia, tal es el caso de los siguientes Principios para las Estadísticas Oficiales.'",
+        distractores: "B, C y D son organismos, pero el documento atribuye los principios a la ONU."
+    },
+    {
+        id: 26,
+        texto: 'Relaciona el principio con su enfoque: 1. Normas y ética profesionales, 2. Utilización de normas internacionales, 3. Coordinación nacional. A) La coordinación entre organismos es indispensable para la coherencia y eficiencia del sistema. B) Los organismos han de decidir con arreglo a principios científicos y ética profesional. C) La utilización de conceptos, clasificaciones y métodos internacionales fomenta la coherencia.',
+        opciones: {
+            A: "1-B, 2-C, 3-A",
+            B: "1-A, 2-B, 3-C",
+            C: "1-C, 2-A, 3-B",
+            D: "1-B, 2-A, 3-C"
+        },
+        correcta: "A",
+        justificacion: "Páginas 13-14: Principio 2 (Normas y ética) → decisión con arreglo a principios científicos y ética; Principio 9 (Utilización de normas internacionales) → fomenta coherencia y eficiencia; Principio 8 (Coordinación nacional) → indispensable para coherencia y eficiencia.",
+        distractores: "Las otras opciones invierten las relaciones."
+    },
+    {
+        id: 27,
+        texto: 'El Programa Nacional de Desarrollo de Estadística y de Información Geográfica (PRONADEIG) fue presentado en el año:',
+        opciones: {
+            A: "1882",
+            B: "1983",
+            C: "2004",
+            D: "2008"
+        },
+        correcta: "C",
+        justificacion: "Página 19: 'En el año 2004 se presentó el primer Programa Nacional de Desarrollo de Estadística y de Información Geográfica (PRONADEIG)...'",
+        distractores: "1882 (DGE), 1983 (INEGI), 2008 (LSNIEG)."
+    },
+    {
+        id: 28,
+        texto: 'El objetivo prioritario del INEGI es realizar acciones para que la Información de Interés Nacional se sujete a los principios de accesibilidad, transparencia, objetividad e _______.',
+        opciones: {
+            A: "independencia",
+            B: "confidencialidad",
+            C: "oportunidad",
+            D: "comparabilidad"
+        },
+        correcta: "A",
+        justificacion: "Página 18: 'El Instituto Nacional de Estadística y Geografía tiene como objetivo prioritario, realizar las acciones tendientes a lograr que la Información de Interés Nacional se sujete a los principios de accesibilidad, transparencia, objetividad e independencia.'",
+        distractores: "B, C y D son atributos, pero no los que menciona el texto para este objetivo."
+    },
+    {
+        id: 29,
+        texto: 'Relaciona el tipo de fuente con su método: 1. Censo, 2. Encuesta por muestreo, 3. Aprovechamiento de registros administrativos. A) Obtiene datos de todos y cada uno de los elementos del conjunto. B) Utiliza una muestra representativa para inferir datos válidos para la población total. C) Usa sistemas de registro de hechos o sucesos individuales que realizan dependencias públicas.',
+        opciones: {
+            A: "1-A, 2-B, 3-C",
+            B: "1-B, 2-A, 3-C",
+            C: "1-C, 2-B, 3-A",
+            D: "1-A, 2-C, 3-B"
+        },
+        correcta: "A",
+        justificacion: "Glosario, páginas 22-23: Censo → todos los elementos; Encuesta por muestreo → muestra representativa; Registros administrativos → sistemas de registro de dependencias.",
+        distractores: "Las otras opciones invierten los métodos."
+    },
+    {
+        id: 30,
+        texto: 'La Ley del Sistema Nacional de Información Estadística y Geográfica establece que la Información de Interés Nacional debe ser generada en forma regular y periódica, y elaborada con base en una metodología _______.',
+        opciones: {
+            A: "científicamente sustentada",
+            B: "económicamente viable",
+            C: "políticamente aceptable",
+            D: "estadísticamente simple"
+        },
+        correcta: "A",
+        justificacion: "Página 18: criterio IV: 'Se elabore con base en una metodología científicamente sustentada.'",
+        distractores: "B, C y D no son criterios establecidos por la LSNIEG."
+    }
+];
+
+// =================== LÓGICA DEL EXAMEN ===================
+let indiceActual = 0;
+let aciertos = 0;
+let respondida = false;
+let opcionSeleccionada = null;
+
+const preguntaTexto = document.getElementById('preguntaTexto');
+const opcionesContainer = document.getElementById('opcionesContainer');
+const btnResponder = document.getElementById('btnResponder');
+const btnSiguiente = document.getElementById('btnSiguiente');
+const feedback = document.getElementById('feedback');
+const feedbackResultado = document.getElementById('feedbackResultado');
+const feedbackJustificacion = document.getElementById('feedbackJustificacion');
+const feedbackDistractores = document.getElementById('feedbackDistractores');
+const progreso = document.getElementById('progreso');
+const aciertosTexto = document.getElementById('aciertosTexto');
+const preguntaNumero = document.getElementById('preguntaNumero');
+const resultadoFinal = document.getElementById('resultadoFinal');
+
+function renderPregunta(index) {
+    const p = preguntas[index];
+    preguntaTexto.textContent = `${index+1}. ${p.texto}`;
+    const letras = ['A', 'B', 'C', 'D'];
+    opcionesContainer.innerHTML = '';
+    letras.forEach(letra => {
+        const div = document.createElement('div');
+        div.className = 'opcion';
+        div.dataset.letra = letra;
+        div.innerHTML = `<span class="letra">${letra}.</span> ${p.opciones[letra]}`;
+        div.addEventListener('click', () => seleccionarOpcion(letra));
+        opcionesContainer.appendChild(div);
+    });
+
+    respondida = false;
+    opcionSeleccionada = null;
+    btnResponder.disabled = true;
+    btnSiguiente.disabled = true;
+    feedback.classList.remove('mostrar');
+    document.querySelectorAll('.opcion').forEach(el => {
+        el.classList.remove('seleccionada', 'correcta', 'incorrecta', 'deshabilitada');
+    });
+
+    actualizarInfo();
+}
+
+function seleccionarOpcion(letra) {
+    if (respondida) return;
+    document.querySelectorAll('.opcion').forEach(el => el.classList.remove('seleccionada'));
+    const opcionEl = document.querySelector(`.opcion[data-letra="${letra}"]`);
+    if (opcionEl) opcionEl.classList.add('seleccionada');
+    opcionSeleccionada = letra;
+    btnResponder.disabled = false;
+}
+
+function responder() {
+    if (respondida || !opcionSeleccionada) return;
+    respondida = true;
+    const p = preguntas[indiceActual];
+    const esCorrecta = (opcionSeleccionada === p.correcta);
+    if (esCorrecta) aciertos++;
+
+    feedback.classList.add('mostrar');
+    const resultadoTexto = esCorrecta ? '✅ Correcto' : '❌ Incorrecto';
+    const claseResultado = esCorrecta ? 'correcto' : 'incorrecto';
+    feedbackResultado.innerHTML = `<span class="${claseResultado}">${resultadoTexto}</span> (Respuesta correcta: ${p.correcta})`;
+    feedbackJustificacion.textContent = `📘 Justificación: ${p.justificacion}`;
+    feedbackDistractores.textContent = `🧩 Análisis de distractores: ${p.distractores}`;
+
+    document.querySelectorAll('.opcion').forEach(el => {
+        const letra = el.dataset.letra;
+        el.classList.remove('seleccionada');
+        if (letra === p.correcta) {
+            el.classList.add('correcta');
+        } else if (letra === opcionSeleccionada && letra !== p.correcta) {
+            el.classList.add('incorrecta');
+        }
+        el.classList.add('deshabilitada');
+    });
+
+    btnResponder.disabled = true;
+    btnSiguiente.disabled = false;
+    actualizarInfo();
+}
+
+function siguiente() {
+    if (indiceActual < preguntas.length - 1) {
+        indiceActual++;
+        renderPregunta(indiceActual);
+    } else {
+        mostrarResultadoFinal();
+    }
+}
+
+function actualizarInfo() {
+    const total = preguntas.length;
+    const num = indiceActual + 1;
+    progreso.textContent = `${num} / ${total}`;
+    aciertosTexto.textContent = `Aciertos: ${aciertos}`;
+    preguntaNumero.textContent = `Pregunta ${num} de ${total}`;
+}
+
+function mostrarResultadoFinal() {
+    document.getElementById('preguntaContainer').style.display = 'none';
+    document.querySelector('.acciones').style.display = 'none';
+    feedback.style.display = 'none';
+    document.querySelector('.footer').style.display = 'none';
+    resultadoFinal.classList.remove('oculto');
+    const porcentaje = Math.round((aciertos / preguntas.length) * 100);
+    let mensaje = '';
+    if (porcentaje >= 90) mensaje = '🏆 Excelente dominio del tema.';
+    else if (porcentaje >= 70) mensaje = '📚 Buen conocimiento, revisa algunos conceptos.';
+    else if (porcentaje >= 50) mensaje = '📖 Nivel básico; estudia con mayor profundidad.';
+    else mensaje = '🔁 Repasa el material completo.';
+    resultadoFinal.innerHTML = `
+        <div style="font-size:2.5rem; margin-bottom:0.5rem;">📊</div>
+        <div>Has respondido <strong>${aciertos}</strong> de ${preguntas.length} preguntas correctamente.</div>
+        <div style="font-size:2rem; margin:0.5rem 0;">${porcentaje}%</div>
+        <div>${mensaje}</div>
+        <button class="btn primario" style="margin-top:1.2rem;" onclick="location.reload()">↻ Reintentar</button>
+    `;
+}
+
+btnResponder.addEventListener('click', responder);
+btnSiguiente.addEventListener('click', siguiente);
+
+renderPregunta(0);
+</script>
+</body>
+</html>
