@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Los datos demográficos. CEPAL (2014)</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+            background: #f5f7fb;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .container {
+            background: white;
+            max-width: 850px;
+            width: 100%;
+            border-radius: 28px;
+            box-shadow: 0 20px 40px -12px rgba(0,0,0,0.2);
+            padding: 30px 35px;
+            transition: 0.3s;
+        }
+        h1 {
+            font-size: 1.9rem;
+            font-weight: 600;
+            color: #0b2b4a;
+            border-left: 6px solid #2a7faa;
+            padding-left: 18px;
+            margin-bottom: 8px;
+        }
+        .subtitle {
+            color: #2c3e50;
+            font-size: 0.95rem;
+            margin-bottom: 25px;
+            padding-left: 24px;
+            opacity: 0.75;
+        }
+        .progress-bar {
+            background: #e9ecf0;
+            height: 8px;
+            border-radius: 20px;
+            margin: 20px 0 25px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            background: #2a7faa;
+            border-radius: 20px;
+            transition: width 0.4s ease;
+        }
+        .question-number {
+            font-weight: 600;
+            color: #1a4b6d;
+            font-size: 0.9rem;
+            letter-spacing: 0.3px;
+            margin-bottom: 6px;
+        }
+        .question-text {
+            font-size: 1.2rem;
+            font-weight: 500;
+            color: #0b1e2e;
+            line-height: 1.5;
+            margin-bottom: 25px;
+        }
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 30px;
+        }
+        .option {
+            background: #f8faff;
+            border: 1.5px solid #dde3ed;
+            border-radius: 14px;
+            padding: 14px 18px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.15s;
+            color: #1a2b3c;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .option:hover {
+            background: #edf3fc;
+            border-color: #8ab3d0;
+        }
+        .option.selected {
+            border-color: #2a7faa;
+            background: #e1edf7;
+        }
+        .option.correct {
+            border-color: #1e8b4c;
+            background: #dff0e6;
+        }
+        .option.wrong {
+            border-color: #b13e3e;
+            background: #f7e3e3;
+        }
+        .option.disabled {
+            pointer-events: none;
+            opacity: 0.85;
+        }
+        .option-letter {
+            font-weight: 700;
+            color: #2a5f7a;
+            min-width: 24px;
+        }
+        .feedback {
+            background: #f0f4fa;
+            border-radius: 16px;
+            padding: 18px 22px;
+            margin: 10px 0 25px;
+            border-left: 5px solid #2a7faa;
+            display: none;
+        }
+        .feedback.correct {
+            border-left-color: #1e8b4c;
+            background: #eaf6ef;
+        }
+        .feedback.wrong {
+            border-left-color: #b13e3e;
+            background: #f7ecec;
+        }
+        .feedback-title {
+            font-weight: 600;
+            font-size: 1rem;
+            margin-bottom: 6px;
+        }
+        .feedback-detail {
+            font-size: 0.95rem;
+            line-height: 1.5;
+            color: #1f3345;
+        }
+        .feedback-detail strong {
+            color: #0b2b4a;
+        }
+        .btn {
+            background: #2a7faa;
+            border: none;
+            color: white;
+            font-weight: 600;
+            font-size: 1rem;
+            padding: 12px 28px;
+            border-radius: 40px;
+            cursor: pointer;
+            transition: 0.2s;
+            margin-top: 5px;
+            display: inline-block;
+        }
+        .btn:hover {
+            background: #1d6488;
+            transform: scale(1.02);
+        }
+        .btn:disabled {
+            opacity: 0.5;
+            pointer-events: none;
+        }
+        .result-box {
+            text-align: center;
+            padding: 25px 10px;
+        }
+        .result-score {
+            font-size: 3.2rem;
+            font-weight: 700;
+            color: #0b2b4a;
+        }
+        .result-msg {
+            font-size: 1.1rem;
+            color: #1e3b54;
+            margin-top: 8px;
+        }
+        .restart-btn {
+            margin-top: 25px;
+            background: #3d5f7a;
+        }
+        .hidden {
+            display: none;
+        }
+        @media (max-width: 550px) {
+            .container { padding: 20px; }
+            h1 { font-size: 1.4rem; }
+            .question-text { font-size: 1rem; }
+        }
+    </style>
+</head>
+<body>
+<div class="container" id="app">
+    <h1>📊 Los datos demográficos</h1>
+    <div class="subtitle">CEPAL (2014) · Alcances, limitaciones y métodos de evaluación</div>
+
+    <div class="progress-bar">
+        <div class="progress-fill" id="progressFill"></div>
+    </div>
+
+    <div id="questionArea">
+        <div class="question-number" id="qNumber">Pregunta 1 de 30</div>
+        <div class="question-text" id="qText">Cargando pregunta...</div>
+        <div class="options" id="optionsContainer"></div>
+        <div class="feedback" id="feedback">
+            <div class="feedback-title" id="fbTitle"></div>
+            <div class="feedback-detail" id="fbDetail"></div>
+        </div>
+        <button class="btn" id="nextBtn" disabled>Siguiente →</button>
+    </div>
+
+    <div id="resultArea" class="result-box hidden">
+        <div class="result-score" id="finalScore">0%</div>
+        <div class="result-msg" id="finalMsg"></div>
+        <button class="btn restart-btn" id="restartBtn">🔄 Reiniciar examen</button>
+    </div>
+</div>
+
+<script>
+    // ========== PREGUNTAS (30) ==========
+    const questions = [
+        // ---- ERROR EN DATOS DEMOGRÁFICOS (pág. 35) ----
+        {
+            type: 'opcion',
+            text: 'Según el documento, los errores de cobertura en los datos demográficos se refieren a:',
+            options: [
+                'A) La mala calidad de la información registrada sobre las características de las personas.',
+                'B) La omisión o duplicación de personas o eventos en el registro, generando subenumeración o sobreenumeración.',
+                'C) Los errores derivados del diseño muestral en encuestas por muestreo.',
+                'D) La falta de correspondencia entre las definiciones legales y las prácticas de registro.'
+            ],
+            correct: 1,
+            justification: 'El documento define: “Los errores de cobertura surgen cuando las personas o eventos no se registran, o bien se lo hace cuando no correspondía incluirlos, o se los registra más de una vez. Estas situaciones producen errores cuantitativos, generando subenumeración o sobreenumeración.” (pág. 35)',
+            distractors: [
+                'A) Describe errores de contenido, no de cobertura.',
+                'C) Corresponde al error de muestreo, no a cobertura.',
+                'D) Se refiere a problemas de definición, no directamente a cobertura.'
+            ]
+        },
+        {
+            type: 'opcion',
+            text: 'Los errores de contenido en los datos demográficos son de naturaleza:',
+            options: [
+                'A) Cuantitativa, porque afectan al número total de personas contabilizadas.',
+                'B) Cualitativa, porque afectan a la precisión de las características registradas de las personas o eventos.',
+                'C) Aleatoria, porque se producen sin un patrón predefinido.',
+                'D) Sistemática, porque siempre siguen una dirección conocida.'
+            ],
+            correct: 1,
+            justification: 'El texto indica: “Los errores de contenido, en tanto, aluden a todos aquellos casos en que las personas o eventos se han contabilizado pero sus características se han registrado incorrectamente. Se trata de errores que se refieren a la calidad de la información, es decir, cualitativos.” (pág. 35)',
+            distractors: [
+                'A) Es lo opuesto: los errores de cobertura son cuantitativos.',
+                'C) Pueden ser aleatorios o sistemáticos, pero su naturaleza es cualitativa.',
+                'D) No todos los errores de contenido son sistemáticos.'
+            ]
+        },
+        {
+            type: 'completar',
+            text: 'La fórmula para calcular el porcentaje de error de cobertura es: % error cobertura = ( ______ ) / E × 100, donde E es el valor estimado y R el valor registrado.',
+            options: [
+                'A) (R - E)',
+                'B) (E - R)',
+                'C) (E + R)',
+                'D) (R / E)'
+            ],
+            correct: 1,
+            justification: 'En la página 35 se presenta: “% error cobertura = (E - R) / E × 100”.',
+            distractors: [
+                'A) Invierte el signo; daría sobreenumeración cuando hay omisión.',
+                'C) No corresponde a la fórmula de diferencia relativa.',
+                'D) Es una razón, no un porcentaje de error.'
+            ]
+        },
+        {
+            type: 'opcion',
+            text: 'El error de muestreo en encuestas demográficas surge porque:',
+            options: [
+                'A) La muestra no es representativa de la población objetivo.',
+                'B) Las respuestas provienen de una parte de la población y al ponderarlas se obtienen resultados que difieren de los que se obtendrían con un censo completo.',
+                'C) Los entrevistadores cometen errores al registrar las respuestas.',
+                'D) Los informantes falsean deliberadamente la información.'
+            ],
+            correct: 1,
+            justification: 'El documento establece: “Estos errores surgen del hecho de que las respuestas provienen de una parte de la población, entonces, al realizar la ponderación correspondiente para representarla a toda, se obtendrán resultados que inevitablemente difieren un poco de los que se hubieran alcanzado si estas preguntas se hubieran aplicado a toda la población.” (pág. 35)',
+            distractors: [
+                'A) Es una causa posible, pero la definición formal es la diferencia por muestreo.',
+                'C) Son errores de procesamiento, no de muestreo.',
+                'D) Son errores de contenido, no de muestreo.'
+            ]
+        },
+        {
+            type: 'opcion',
+            text: 'La “omisión completa de áreas geográficas” en un censo se produce principalmente por:',
+            options: [
+                'A) Errores en la declaración de edad de los informantes.',
+                'B) Problemas de cartografía, obstáculos geográficos o zonas peligrosas que impiden el relevamiento.',
+                'C) La falta de respuesta a preguntas específicas del cuestionario.',
+                'D) La duplicación de viviendas en el listado censal.'
+            ],
+            correct: 1,
+            justification: 'En la página 35 se menciona: “La omisión completa de áreas geográficas ocurre cuando el operativo de relevamiento no cubre un área geográfica determinada, y las viviendas y personas que residen allí quedan excluidas del recuento. Esto puede suceder por diversos motivos: mala cartografía, obstáculos geográficos, zonas peligrosas, entre otros.”',
+            distractors: [
+                'A) Es un error de contenido, no de cobertura geográfica.',
+                'C) Es un error de no respuesta, no de cobertura de área.',
+                'D) Es un error de sobreenumeración, no de omisión de áreas.'
+            ]
+        },
+        {
+            type: 'opcion',
+            text: '¿Cuál de las siguientes situaciones corresponde a un error de contenido?',
+            options: [
+                'A) Una vivienda completa no fue visitada por el censista.',
+                'B) Una persona fue censada en dos viviendas diferentes.',
+                'C) Se registró la edad de una persona como 25 años cuando en realidad tiene 30.',
+                'D) Un área rural fue excluida del operativo censal por problemas de acceso.'
+            ],
+            correct: 2,
+            justification: 'Los errores de contenido son aquellos en que la persona o evento es contabilizado pero sus características se registran incorrectamente. Registrar mal la edad es un ejemplo típico (pág. 35).',
+            distractors: [
+                'A) Es omisión de área (error de cobertura).',
+                'B) Es sobreenumeración (error de cobertura).',
+                'D) Es omisión de área (error de cobertura).'
+            ]
+        },
+        {
+            type: 'opcion',
+            text: 'La sobreenumeración en un censo se produce cuando:',
+            options: [
+                'A) Algunas personas no son captadas por el operativo censal.',
+                'B) Los individuos son empadronados más de una vez.',
+                'C) Las respuestas a las preguntas son inconsistentes entre sí.',
+                'D) Se omite la información de una variable en el cuestionario.'
+            ],
+            correct: 1,
+            justification: 'El texto indica: “La sobreenumeración en censos y encuestas se produce cuando los individuos son empadronados más de una vez.” (pág. 35)',
+            distractors: [
+                'A) Es omisión, no sobreenumeración.',
+                'C) Es un error de consistencia, no de cobertura.',
+                'D) Es un error de contenido (falta de respuesta).'
+            ]
+        },
+        {
+            type: 'opcion',
+            text: 'Según el documento, la omisión de personas aisladas en un censo suele afectar especialmente a:',
+            options: [
+                'A) Los adultos mayores de 65 años.',
+                'B) Los niños menores, las personas que viven solas y los trabajadores rurales.',
+                'C) Las mujeres en edad fértil.',
+                'D) Los inmigrantes recientes.'
+            ],
+            correct: 1,
+            justification: 'En la página 35 se señala: “También se ha comprobado que en América Latina existe una tendencia a omitir a los niños menores, como si no fueran personas del hogar. ... También son propensas a ser omitidas las personas que viven solas y los trabajadores rurales, entre otros.”',
+            distractors: [
+                'A) No se menciona específicamente ese grupo.',
+                'C) No es un grupo particularmente propenso a omisión aislada.',
+                'D) Los inmigrantes pueden ser omitidos, pero no es el grupo típico señalado.'
+            ]
+        },
+        {
+            type: 'relacion',
+            text: 'Relacione cada tipo de error con su característica principal:',
+            options: [
+                'A) Error de cobertura → cualitativo; Error de contenido → cuantitativo',
+                'B) Error de cobertura → cuantitativo; Error de contenido → cualitativo',
+                'C) Error de cobertura → sistemático; Error de contenido → aleatorio',
+                'D) Error de cobertura → aleatorio; Error de contenido → sistemático'
+            ],
+            correct: 1,
+            justification: 'El documento clasifica: los errores de cobertura son cuantitativos (subenumeración o sobreenumeración) y los de contenido son cualitativos (afectan la calidad de la información). (pág. 35)',
+            distractors: [
+                'A) Invierte la relación correcta.',
+                'C) No es una distinción que se haga en el texto; ambos pueden ser sistemáticos o aleatorios.',
+                'D) Tampoco corresponde a la clasificación del documento.'
+            ]
+        },
+        {
+            type: 'opcion',
+            text: 'Cuando el error de cobertura se expresa como un porcentaje y el valor estimado es mayor que el registrado (E > R), se interpreta que:',
+            options: [
+                'A) Hay una sobreenumeración de la población.',
+                'B) Hay una omisión de población.',
+                'C) El censo es exacto y no requiere corrección.',
+                'D) El error es de contenido, no de cobertura.'
+            ],
+            correct: 1,
+            justification: 'La fórmula y su interpretación: “Cuando la cifra estimada es mayor que la registrada (E>R) el error expresa una omisión; en caso contrario, será una sobreenumeración (E<R) y la cifra será negativa.” (pág. 35)',
+            distractors: [
+                'A) Corresponde a E<R, no E>R.',
+                'C) No necesariamente; la diferencia indica error.',
+                'D) El error de cobertura se mide con esta fórmula.'
+            ]
+        },
+
+        // ---- ESTIMACIÓN INDIRECTA DE LA MIGRACIÓN (págs. 137-141) ----
+        {
+            type: 'opcion',
+            text: 'El método de los componentes interesales para estimar la migración indirecta se basa en:',
+            options: [
+                'A) La comparación de las tasas de mortalidad entre dos censos.',
+                'B) La aplicación de la ecuación compensadora al período intercensal, usando población, nacimientos y defunciones.',
+                'C) La proyección de la población por edad y sexo a partir de un solo censo.',
+                'D) El uso de encuestas de postenumeración para ajustar los flujos migratorios.'
+            ],
+            correct: 1,
+            justification: 'En la página 137 se indica: “Consiste en aplicar la ecuación compensadora al período intercesnal y derivar el saldo migratorio de la información sobre el cambio natural y el crecimiento total de la población.”',
+            distractors: [
+                'A) No es el método de componentes.',
+                'C) Se refiere al método de sobrevivencia de cohortes.',
+                'D) Es un método directo, no indirecto.'
+            ]
+        },
+        {
+            type: 'opcion',
+            text: 'Una limitación fundamental del método de los componentes para estimar el saldo migratorio es que:',
+            options: [
+                'A) Requiere información detallada sobre la causa de muerte.',
+                'B) Los errores de cobertura en los censos y registros pueden distorsionar el saldo, especialmente si no se conocen las omisiones.',
+                'C) No permite calcular la migración neta, solo la bruta.',
+                'D) Solo puede aplicarse a nivel nacional, no subnacional.'
+            ],
+            correct: 1,
+            justification: 'El texto advierte: “Pero, como se sabe, ambas fuentes tienen errores de cobertura asociados. En caso de errores conocidos (omisiones), la ecuación debe plantearse con las cifras corregidas. Cuando los porcentajes de omisión no son conocidos, el método pierde robustez y puede conducir a dimensiones del saldo migratorio muy distantes de la realidad.” (pág. 137)',
+            distractors: [
+                'A) No se requiere causa de muerte.',
+                'C) El método sí da migración neta.',
+                'D) Puede aplicarse a niveles subnacionales si se dispone de los datos.'
+            ]
+        },
+        {
+            type: 'opcion',
+            text: 'El método de sobrevivencia de cohortes estima la migración neta como:',
+            options: [
+                'A) La diferencia entre la población esperada (sin migración) y la población contabilizada en el segundo censo.',
+                'B) La suma de los nacimientos y defunciones en el período intercensal.',
+                'C) El cociente entre la población de dos censos sucesivos.',
+                'D) La relación de masculinidad ajustada por edad.'
+            ],
+            correct: 0,
+            justification: 'En la página 137: “Consiste en partir de la población por edad y sexo de un primer censo y aplicar las probabilidades de sobrevivencia correspondientes, para estimar la población esperada al final del período intercensal si no hubiera existido migración. La diferencia entre esta población estimada y la contabilizada en el segundo censo corresponde a la migración neta o saldo migratorio del período.”',
+            distractors: [
+                'B) Eso es el crecimiento natural, no la migración neta.',
+                'C) No es la definición del método.',
+                'D) Es un indicador de estructura, no de migración.'
+            ]
+        },
+        {
+            type: 'completar',
+            text: 'En el método de sobrevivencia de cohortes, la fórmula para el saldo migratorio de la cohorte de edad x+n en el momento t+n es: M(t,t+n)(x+n) = P(t+n)(x+n) – ______.',
+            options: [
+                'A) nS(x) * P(t)(x)',
+                'B) nS(x) / P(t)(x)',
+                'C) P(t)(x) / nS(x)',
+                'D) P(t)(x) * nS(x+n)'
+            ],
+            correct: 0,
+            justification: 'La fórmula presentada es: “M(t,t+n)(x+n) = P(t+n)(x+n) – nS(x) * P(t)(x)” (pág. 137).',
+            distractors: [
+                'B) No corresponde a la fórmula de sobrevivencia.',
+                'C) Es la inversa, no la correcta.',
+                'D) La relación de supervivencia se aplica a la edad inicial x, no x+n.'
+            ]
+        },
+        {
+            type: 'opcion',
+            text: 'En la variante “hacia adelante” del método de relaciones de supervivencia, la estimación del saldo migratorio tiende a:',
+            options: [
+                'A) Subestimar la migración, porque se excluyen los migrantes que murieron antes del final del período.',
+                'B) Sobrestimar la migración, porque se incluyen los migrantes que murieron después del período.',
+                'C) Dar el mismo resultado que la variante hacia atrás.',
+                'D) No considerar la mortalidad en el cálculo.'
+            ],
+            correct: 0,
+            justification: 'El recuadro 39 explica: “La variante ‘hacia adelante’ subestima. Reporta la distribución de edad de los migrantes al final del período, o sea que se obtiene la migración neta solo de quienes sobreviven hasta el final de ese período. Las muertes de cada cohorte ocurrirán con anterioridad a la migración => subestima pues excluye migrantes que murieron.” (pág. 138-139)',
+            distractors: [
+                'B) Esa es la característica de la variante hacia atrás.',
+                'C) Ambas variantes dan resultados diferentes.',
+                'D) Sí considera la mortalidad a través de las relaciones de supervivencia.'
+            ]
+        },
+        {
+            type: 'opcion',
+            text: 'La variante “hacia atrás” del método de relaciones de supervivencia tiende a sobrestimar la migración porque:',
+            options: [
+                'A) Asume que la migración ocurre al final del período, después de las defunciones.',
+                'B) Reporta la distribución de edad de los migrantes al inicio del período, incluyendo a aquellos que fallecieron después de migrar.',
+                'C) No utiliza relaciones de supervivencia, solo datos censales.',
+                'D) Aplica la ecuación compensadora de forma inversa.'
+            ],
+            correct: 1,
+            justification: 'El recuadro 39 señala: “La variante ‘hacia atrás’ sobrestima. Reporta la distribución de edad de los migrantes al inicio del período. Las defunciones se dan con posterioridad a la migración => sobrestima pues los incluye. Asume que la migración se da al inicio del período, antes que se produzcan las defunciones.” (pág. 139)',
+            distractors: [
+                'A) Es al revés: asume que la migración es al inicio.',
+                'C) Sí usa relaciones de supervivencia.',
+                'D) No es la descripción de la variante hacia atrás.'
+            ]
+        },
+        {
+            type: 'relacion',
+            text: 'Relacione cada variante del método de relaciones de supervivencia con su efecto en la estimación del saldo migratorio:',
+            options: [
+                'A) Hacia adelante → sobrestima; Hacia atrás → subestima',
+                'B) Hacia adelante → subestima; Hacia atrás → sobrestima',
+                'C) Ambas sobrestiman, pero en diferente magnitud.',
+                'D) Ambas subestiman, pero en diferente magnitud.'
+            ],
+            correct: 1,
+            justification: 'Según el recuadro 39: la variante hacia adelante subestima y la hacia atrás sobrestima. (pág. 139)',
+            distractors: [
+                'A) Invierte la relación correcta.',
+                'C) No es correcto, una subestima y la otra sobrestima.',
+                'D) Tampoco es correcto.'
+            ]
+        },
+        {
+            type: 'opcion',
+            text: 'Las relaciones de supervivencia (nS(x)) utilizadas en el método de cohortes reflejan principalmente:',
+            options: [
+                'A) La fecundidad de la población en el período intercensal.',
+                'B) El impacto de la mortalidad entre las edades x y x+n.',
+                'C) La tasa de migración neta de la cohorte.',
+                'D) El crecimiento natural de la población.'
+            ],
+            correct: 1,
+            justification: 'En la página 137 se define: “S(x) = Px+t / Px Esta tasa refleja el impacto de la mortalidad y se obtiene de las tablas de vida.”',
+            distractors: [
+                'A) La fecundidad interviene en los nacimientos, no en la supervivencia de cohortes existentes.',
+                'C) La migración es lo que se quiere estimar, no la relación de supervivencia.',
+                'D) El crecimiento natural incluye nacimientos y defunciones, no solo supervivencia.'
+            ]
+        },
+        {
+            type: 'opcion',
+            text: 'Para aplicar el método de sobrevivencia de cohortes se requiere, como mínimo:',
+            options: [
+                'A) Dos censos con población por edad y sexo, y relaciones de supervivencia.',
+                'B) Un censo y una encuesta de postenumeración.',
+                'C) Registros continuos de nacimientos y defunciones por edad.',
+                'D) Datos de migración internacional de los países de destino.'
+            ],
+            correct: 0,
+            justification: 'El texto indica: “Requiere: Población por edad y sexo en cada unidad territorial en ambos censos. Relaciones de sobrevivencia (probabilidad de que los individuos de una cohorte estén con vida t años más tarde, o sea, la proporción de personas que sobreviven de un censo al otro, por edades).” (pág. 137)',
+            distractors: [
+                'B) No es necesario para el método indirecto.',
+                'C) No es un requisito directo del método de cohortes.',
+                'D) Es información para métodos directos, no para este indirecto.'
+            ]
+        },
+        {
+            type: 'opcion',
+            text: 'En el método de los componentes, si los porcentajes de omisión censal no son conocidos, el saldo migratorio estimado:',
+            options: [
+                'A) Es siempre confiable porque la ecuación compensadora es exacta.',
+                'B) Puede ser muy distante de la realidad, perdiendo robustez.',
+                'C) Se puede corregir fácilmente usando la relación de sexos.',
+                'D) No depende de la cobertura de los censos, solo de los registros vitales.'
+            ],
+            correct: 1,
+            justification: 'El documento advierte: “Cuando los porcentajes de omisión no son conocidos, el método pierde robustez y puede conducir a dimensiones del saldo migratorio muy distantes de la realidad.” (pág. 137)',
+            distractors: [
+                'A) Es falso porque los errores de cobertura afectan la ecuación.',
+                'C) La relación de sexos no corrige la omisión.',
+                'D) Depende tanto de censos como de registros.'
+            ]
+        },
+
+        // ---- EVALUACIÓN Y MEJORAMIENTO DE LA INFORMACIÓN MIGRATORIA (págs. 139-141) ----
+        {
+            type: 'opcion',
+            text: 'Según el documento, la estrategia más viable para aproximarse a la medición de la migración es:',
+            options: [
+                'A) Utilizar exclusivamente los registros fronterizos, por su cobertura continua.',
+                'B) La combinación de fuentes directas e indirectas, triangulando la información.',
+                'C) Confiar únicamente en los censos de población por su universalidad.',
+                'D) Aplicar encuestas específicas de migración en todos los países.'
+            ],
+            correct: 1,
+            justification: 'En la página 139 se afirma: “La combinación de fuentes es hoy por hoy la única estrategia que permite una aproximación a la medición de la migración.”',
+            distractors: [
+                'A) Los registros fronterizos tienen limitaciones de cobertura y validez.',
+                'C) Los censos son importantes, pero no suficientes por sí solos.',
+                'D) Las encuestas específicas son útiles pero costosas y no siempre disponibles.'
+            ]
+        },
+        {
+            type: 'opcion',
+            text: 'El primer paso propuesto por el Center for Global Development para mejorar la información migratoria es:',
+            options: [
+                'A) Explotar los datos administrativos existentes.',
+                'B) Realizar tres preguntas básicas en todos los censos: país de nacimiento, país de residencia anterior y ciudadanía.',
+                'C) Facilitar el acceso público a registros individuales anónimos.',
+                'D) Recopilar datos de encuestas de población activa en una base de datos armonizada.'
+            ],
+            correct: 1,
+            justification: 'En la página 140 se enumeran los cinco pasos: “1. Realizar tres preguntas básicas en todos los censos de población, acerca del país de nacimiento, el país de residencia anterior y el de ciudadanía, y publicar tabulaciones cruzadas de esta información por edad y sexo.”',
+            distractors: [
+                'A) Es el segundo paso.',
+                'C) Es el cuarto paso.',
+                'D) Es el tercer paso.'
+            ]
+        },
+        {
+            type: 'opcion',
+            text: 'El segundo paso de la propuesta del Center for Global Development consiste en:',
+            options: [
+                'A) Aumentar el uso de módulos estandarizados en encuestas a hogares.',
+                'B) Explotar los recursos de datos administrativos existentes que contienen información sobre movimientos internacionales.',
+                'C) Facilitar el acceso público a registros individuales anónimos de migrantes.',
+                'D) Realizar tres preguntas básicas en todos los censos.'
+            ],
+            correct: 1,
+            justification: 'El paso 2 dice: “Explotar los recursos de datos administrativos existentes, que con frecuencia contienen información sobre movimientos internacionales rica en contenido e infrautilizada.” (pág. 140)',
+            distractors: [
+                'A) Es el quinto paso.',
+                'C) Es el cuarto paso.',
+                'D) Es el primer paso.'
+            ]
+        },
+        {
+            type: 'opcion',
+            text: 'El tercer paso de la propuesta mencionada es:',
+            options: [
+                'A) Recopilar los datos existentes en las encuestas de población activa de los países de todo el mundo en una única base de datos armonizada y actualizada.',
+                'B) Facilitar el acceso público a registros individuales anónimos.',
+                'C) Realizar tres preguntas básicas en todos los censos.',
+                'D) Aumentar el uso de módulos estandarizados en encuestas a hogares.'
+            ],
+            correct: 0,
+            justification: 'El paso 3: “Recopilar los datos existentes en las encuestas de población activa de los países de todo el mundo en una única base de datos armonizada y actualizada con frecuencia.” (pág. 140)',
+            distractors: [
+                'B) Es el cuarto paso.',
+                'C) Es el primer paso.',
+                'D) Es el quinto paso.'
+            ]
+        },
+        {
+            type: 'opcion',
+            text: 'El cuarto paso de la propuesta para mejorar la información migratoria es:',
+            options: [
+                'A) Explotar datos administrativos.',
+                'B) Realizar tres preguntas básicas en los censos.',
+                'C) Facilitar el acceso público a registros individuales anónimos de migrantes, manteniendo la confidencialidad.',
+                'D) Aumentar el uso de módulos estandarizados en encuestas a hogares.'
+            ],
+            correct: 2,
+            justification: 'El paso 4: “Facilitar el acceso público a registros individuales anónimos de migrantes internacionales procedentes de encuestas y datos administrativos, para permitir mejoras sustanciales en la calidad de la investigación al tiempo que se mantiene la más estricta confidencialidad.” (pág. 140)',
+            distractors: [
+                'A) Es el segundo paso.',
+                'B) Es el primer paso.',
+                'D) Es el quinto paso.'
+            ]
+        },
+        {
+            type: 'opcion',
+            text: 'El quinto paso de la propuesta del Center for Global Development es:',
+            options: [
+                'A) Aumentar el uso sistemático de módulos estandarizados de preguntas relacionadas con la migración en programas de encuestas a hogares actuales.',
+                'B) Recopilar datos de encuestas de población activa en una base de datos única.',
+                'C) Explotar los datos administrativos existentes.',
+                'D) Facilitar el acceso público a registros individuales anónimos.'
+            ],
+            correct: 0,
+            justification: 'El paso 5: “Aumentar el uso sistemático de módulos estandarizados de preguntas relacionadas con la migración en programas de encuestas a hogares actuales, en especial aquellas realizadas en países en desarrollo.” (pág. 141)',
+            distractors: [
+                'B) Es el tercer paso.',
+                'C) Es el segundo paso.',
+                'D) Es el cuarto paso.'
+            ]
+        },
+        {
+            type: 'opcion',
+            text: 'Según el documento, para la evaluación de la calidad de los datos migratorios:',
+            options: [
+                'A) Existen métodos estandarizados comparables a los de mortalidad y fecundidad.',
+                'B) No existe una receta única; se requiere triangulación con otras fuentes y estimaciones indirectas.',
+                'C) La comparación con distribuciones esperadas es el método más confiable.',
+                'D) Los censos proporcionan información suficiente para evaluar la emigración.'
+            ],
+            correct: 1,
+            justification: 'En la página 139 se lee: “No existe una receta para la detección de errores y la calificación de la calidad de los datos migratorios... las herramientas disponibles para la evaluación no pasan por la comparación con distribuciones esperadas o situaciones modelo. Los datos obtenidos mediante fuentes directas solo son comparables y evaluables a través de la triangulación con otras fuentes, y en particular con las estimaciones indirectas.”',
+            distractors: [
+                'A) No hay métodos estandarizados como en mortalidad/fecundidad.',
+                'C) No es el enfoque recomendado.',
+                'D) Los censos no captan directamente la emigración.'
+            ]
+        },
+        {
+            type: 'opcion',
+            text: 'Una de las dificultades señaladas para la medición de la migración es que:',
+            options: [
+                'A) La migración es un evento que ocurre una sola vez en la vida, como la muerte.',
+                'B) Los migrantes suelen estar sobrerrepresentados en los censos.',
+                'C) La definición de migración y los sistemas de recolección varían entre países, dificultando la comparabilidad.',
+                'D) Los registros fronterizos captan perfectamente los movimientos migratorios.'
+            ],
+            correct: 2,
+            justification: 'El texto menciona: “Las dificultades conceptuales en la definición de un migrante son mucho mayores que en la definición de un nacimiento o una muerte. Estas dificultades están asociadas a la variedad de conceptos y de sistemas de recolección de datos entre los países, que dan lugar a serios problemas de comparabilidad internacional.” (pág. 118)',
+            distractors: [
+                'A) La migración puede repetirse varias veces.',
+                'B) Suelen estar subrepresentados, no sobrerrepresentados.',
+                'D) Los registros fronterizos tienen problemas de cobertura y validez.'
+            ]
+        },
+        {
+            type: 'opcion',
+            text: 'La propuesta de los cinco pasos del Center for Global Development reconoce que, a largo plazo, se requiere:',
+            options: [
+                'A) Incrementar la capacidad institucional de los países en desarrollo para recopilar y divulgar datos migratorios.',
+                'B) Eliminar los censos de población y sustituirlos por registros administrativos.',
+                'C) Centralizar toda la información migratoria en una agencia internacional.',
+                'D) Reducir el número de preguntas sobre migración en los censos para simplificar el operativo.'
+            ],
+            correct: 0,
+            justification: 'El texto finaliza: “Los autores reconocen que si bien en el corto plazo estos pasos podrían generar beneficios mayores y rápidos a menor coste a partir de los actuales puntos fuertes de las instituciones, un avance importante a largo plazo requeriría incrementar la capacidad institucional de los países en desarrollo para recopilar y divulgar datos migratorios.” (pág. 141)',
+            distractors: [
+                'B) No se propone eliminar los censos.',
+                'C) No se propone centralización total.',
+                'D) Al contrario, se propone estandarizar y aumentar preguntas básicas.'
+            ]
+        },
+        {
+            type: 'opcion',
+            text: 'Según el documento, la triangulación de fuentes para evaluar la migración se basa en:',
+            options: [
+                'A) Utilizar una única fuente considerada perfecta.',
+                'B) Confrontar datos de diferentes fuentes (censos, registros, encuestas) y estimaciones indirectas para obtener una visión más coherente.',
+                'C) Aplicar siempre el método de los componentes porque es el más exacto.',
+                'D) Descartar los datos de los registros fronterizos por su baja calidad.'
+            ],
+            correct: 1,
+            justification: 'Se menciona que “los datos obtenidos mediante fuentes directas solo son comparables y evaluables a través de la triangulación con otras fuentes, y en particular con las estimaciones indirectas.” (pág. 139)',
+            distractors: [
+                'A) No existe una fuente perfecta.',
+                'C) No es el único método, y tiene limitaciones.',
+                'D) No se descartan, se usan con precaución.'
+            ]
+        }
+    ];
+
+    // ========== LÓGICA DEL EXAMEN ==========
+    let currentIndex = 0;
+    let score = 0;
+    let answered = false;
+    const totalQuestions = questions.length;
+
+    const qNumber = document.getElementById('qNumber');
+    const qText = document.getElementById('qText');
+    const optionsContainer = document.getElementById('optionsContainer');
+    const feedback = document.getElementById('feedback');
+    const fbTitle = document.getElementById('fbTitle');
+    const fbDetail = document.getElementById('fbDetail');
+    const nextBtn = document.getElementById('nextBtn');
+    const progressFill = document.getElementById('progressFill');
+    const questionArea = document.getElementById('questionArea');
+    const resultArea = document.getElementById('resultArea');
+    const finalScore = document.getElementById('finalScore');
+    const finalMsg = document.getElementById('finalMsg');
+    const restartBtn = document.getElementById('restartBtn');
+
+    function renderQuestion(index) {
+        const q = questions[index];
+        qNumber.textContent = `Pregunta ${index+1} de ${totalQuestions}`;
+        qText.textContent = q.text;
+        optionsContainer.innerHTML = '';
+        feedback.className = 'feedback';
+        feedback.style.display = 'none';
+        nextBtn.disabled = true;
+        answered = false;
+
+        const letters = ['A', 'B', 'C', 'D'];
+        q.options.forEach((opt, i) => {
+            const div = document.createElement('div');
+            div.className = 'option';
+            div.dataset.index = i;
+            div.innerHTML = `<span class="option-letter">${letters[i]}</span> ${opt.substring(3)}`;
+            div.addEventListener('click', () => selectOption(i));
+            optionsContainer.appendChild(div);
+        });
+
+        updateProgress();
+    }
+
+    function selectOption(selected) {
+        if (answered) return;
+        const q = questions[currentIndex];
+        const options = document.querySelectorAll('.option');
+        options.forEach((el, i) => {
+            el.classList.add('disabled');
+            if (i === q.correct) el.classList.add('correct');
+            if (i === selected && i !== q.correct) el.classList.add('wrong');
+            if (i === selected) el.classList.add('selected');
+        });
+
+        const isCorrect = (selected === q.correct);
+        if (isCorrect) score++;
+
+        // Mostrar feedback
+        feedback.style.display = 'block';
+        if (isCorrect) {
+            feedback.className = 'feedback correct';
+            fbTitle.textContent = '✅ Correcto';
+        } else {
+            feedback.className = 'feedback wrong';
+            fbTitle.textContent = '❌ Incorrecto';
+        }
+        let detail = `<strong>Justificación:</strong> ${q.justification}<br><br>`;
+        detail += `<strong>Análisis de distractores:</strong><br>`;
+        q.distractors.forEach((d, i) => {
+            const letter = String.fromCharCode(65 + i);
+            detail += `• ${letter}: ${d}<br>`;
+        });
+        fbDetail.innerHTML = detail;
+
+        answered = true;
+        nextBtn.disabled = false;
+        updateProgress();
+    }
+
+    function nextQuestion() {
+        if (currentIndex < totalQuestions - 1) {
+            currentIndex++;
+            renderQuestion(currentIndex);
+        } else {
+            showResults();
+        }
+    }
+
+    function updateProgress() {
+        const pct = ((currentIndex + (answered ? 1 : 0)) / totalQuestions) * 100;
+        progressFill.style.width = `${Math.min(pct, 100)}%`;
+    }
+
+    function showResults() {
+        questionArea.classList.add('hidden');
+        resultArea.classList.remove('hidden');
+        const pct = Math.round((score / totalQuestions) * 100);
+        finalScore.textContent = `${pct}%`;
+        let msg = '';
+        if (pct === 100) msg = '🏆 ¡Excelente! Dominas perfectamente los conceptos.';
+        else if (pct >= 80) msg = '🌟 Muy bien. Tienes un sólido entendimiento de los temas.';
+        else if (pct >= 60) msg = '📘 Buen esfuerzo. Revisa los temas donde fallaste para profundizar.';
+        else msg = '📖 Te recomendamos repasar las secciones indicadas y volver a intentarlo.';
+        finalMsg.textContent = msg;
+    }
+
+    function restart() {
+        currentIndex = 0;
+        score = 0;
+        answered = false;
+        questionArea.classList.remove('hidden');
+        resultArea.classList.add('hidden');
+        renderQuestion(0);
+    }
+
+    // Eventos
+    nextBtn.addEventListener('click', nextQuestion);
+    restartBtn.addEventListener('click', restart);
+
+    // Iniciar
+    renderQuestion(0);
+</script>
+</body>
+</html>
