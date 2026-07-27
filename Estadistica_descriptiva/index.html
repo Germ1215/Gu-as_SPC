@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estadística descriptiva (Rincón, 2017)</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+            background: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            margin: 0;
+        }
+        #exam-container {
+            max-width: 820px;
+            width: 100%;
+            background: #ffffff;
+            border-radius: 20px;
+            box-shadow: 0 12px 30px rgba(0,0,0,0.1);
+            padding: 30px 35px;
+            transition: 0.2s;
+        }
+        h1 {
+            font-size: 26px;
+            color: #0b1e3a;
+            border-bottom: 3px solid #dce3ef;
+            padding-bottom: 14px;
+            margin-top: 0;
+            text-align: center;
+            letter-spacing: -0.3px;
+        }
+        .subtitle {
+            text-align: center;
+            color: #3e5270;
+            font-size: 15px;
+            margin-top: -6px;
+            margin-bottom: 25px;
+            font-weight: 400;
+        }
+        #question-number {
+            font-weight: 700;
+            color: #1f3a6b;
+            font-size: 15px;
+            letter-spacing: 0.3px;
+            background: #e9eef6;
+            display: inline-block;
+            padding: 4px 14px;
+            border-radius: 30px;
+        }
+        #question-text {
+            font-size: 18px;
+            line-height: 1.6;
+            margin: 18px 0 24px 0;
+            min-height: 70px;
+            color: #1a2a44;
+            font-weight: 500;
+        }
+        #options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 22px;
+        }
+        .option {
+            display: flex;
+            align-items: center;
+            padding: 14px 18px;
+            background: #f4f7fc;
+            border-radius: 12px;
+            border: 2px solid transparent;
+            transition: all 0.12s ease;
+            cursor: pointer;
+        }
+        .option:hover:not(.disabled) {
+            background: #e4ecf7;
+            border-color: #b8cbe0;
+        }
+        .option input[type="radio"] {
+            margin-right: 16px;
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            flex-shrink: 0;
+            accent-color: #1f3a6b;
+        }
+        .option label {
+            font-size: 16px;
+            cursor: pointer;
+            width: 100%;
+            color: #1a2a44;
+            font-weight: 450;
+        }
+        .selected {
+            border-color: #2c6b9e;
+            background: #dce6f5;
+        }
+        .correct-answer {
+            background: #d4edda;
+            border-color: #28a745;
+        }
+        .incorrect-answer {
+            background: #f8d7da;
+            border-color: #dc3545;
+        }
+        .disabled {
+            cursor: default;
+            opacity: 0.95;
+        }
+        #feedback {
+            margin-top: 18px;
+            padding: 16px 20px;
+            border-radius: 12px;
+            background: #f8faff;
+            border-left: 6px solid #3e5f8a;
+            display: none;
+            font-size: 15px;
+            line-height: 1.5;
+        }
+        #feedback .fb-title {
+            font-weight: 700;
+            font-size: 16px;
+            margin-bottom: 4px;
+        }
+        #feedback .fb-text {
+            margin-top: 4px;
+        }
+        #navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 28px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        #nav-buttons {
+            display: flex;
+            gap: 12px;
+        }
+        button {
+            padding: 10px 24px;
+            background: #1a2b4a;
+            color: white;
+            border: none;
+            border-radius: 30px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.15s;
+            letter-spacing: 0.3px;
+        }
+        button:hover:not(:disabled) {
+            background: #2c4070;
+            transform: scale(1.02);
+        }
+        button:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            transform: none;
+        }
+        #progress {
+            font-size: 14px;
+            color: #3d4f6e;
+            background: #e9eef6;
+            padding: 6px 18px;
+            border-radius: 30px;
+            font-weight: 500;
+        }
+        #score-display {
+            font-size: 20px;
+            font-weight: 700;
+            color: #0b1e3a;
+            margin-top: 16px;
+            text-align: center;
+            padding: 12px;
+            background: #eef2f9;
+            border-radius: 16px;
+            border: 1px solid #d0dbe8;
+        }
+        .hidden {
+            display: none;
+        }
+        @media (max-width: 600px) {
+            #exam-container { padding: 18px 16px; }
+            #question-text { font-size: 16px; }
+            .option { padding: 12px 14px; }
+            button { padding: 8px 16px; font-size: 14px; }
+            #progress { font-size: 13px; padding: 4px 12px; }
+        }
+    </style>
+</head>
+<body>
+<div id="exam-container">
+    <h1>📊 Estadística descriptiva</h1>
+    <div class="subtitle">Rincón Solís, 2017 · Capítulo 2 · 50 preguntas</div>
+
+    <div id="question-area">
+        <div id="question-number"></div>
+        <div id="question-text"></div>
+        <div id="options-container"></div>
+        <div id="feedback"></div>
+        <div id="navigation">
+            <div id="nav-buttons">
+                <button id="prevBtn" disabled>◀ Anterior</button>
+                <button id="nextBtn">Siguiente ▶</button>
+            </div>
+            <div id="progress">Pregunta 1 / 50</div>
+        </div>
+        <div id="score-display"></div>
+    </div>
+</div>
+
+<script>
+    // ----------------------------------------------------------------
+    // BASE DE DATOS DE PREGUNTAS (50)
+    // Cada pregunta tiene: text, options (array de 4), correct (índice 0-3)
+    // Inicialmente la correcta está en la posición 0, pero luego se barajarán.
+    // ----------------------------------------------------------------
+    const rawQuestions = [
+        // 1
+        { text: "La media aritmética de un conjunto de datos $x_1, \\dots, x_n$ se define como:", options: [
+            "$\\frac{1}{n}\\sum_{i=1}^n x_i$",
+            "$\\frac{1}{n-1}\\sum_{i=1}^n (x_i - \\bar{x})^2$",
+            "$\\frac{1}{n}\\sum_{i=1}^n (x_i - \\bar{x})^2$",
+            "$\\frac{1}{n}\\sum_{i=1}^n |x_i - \\bar{x}|$"
+        ], correct: 0, feedback: "Correcto. La media aritmética es el cociente de la suma de los datos entre n (página 24)." },
+        // 2
+        { text: "La moda de un conjunto de datos es:", options: [
+            "El valor que aparece con mayor frecuencia, siempre que exista.",
+            "El valor central de los datos ordenados.",
+            "El promedio de todos los valores.",
+            "El valor que divide a los datos en dos partes iguales."
+        ], correct: 0, feedback: "Correcto. La moda es el valor más frecuente (página 27)." },
+        // 3
+        { text: "Para un número par de observaciones, la mediana se calcula como:", options: [
+            "El dato que queda en la posición central.",
+            "El promedio de los dos datos centrales.",
+            "El dato que se repite con mayor frecuencia.",
+            "El valor que minimiza la suma de las diferencias al cuadrado."
+        ], correct: 1, feedback: "Correcto. Para n par, la mediana es el promedio de los dos datos centrales (página 31)." },
+        // 4
+        { text: "Si a cada dato $x_i$ se le suma una constante $c$, la nueva media $\\bar{y}$ cumple:", options: [
+            "$\\bar{y} = \\bar{x} + c$",
+            "$\\bar{y} = \\bar{x}$",
+            "$\\bar{y} = \\bar{x} - c$",
+            "$\\bar{y} = c\\bar{x}$"
+        ], correct: 0, feedback: "Correcto. Propiedad de traslación de la media (página 26)." },
+        // 5
+        { text: "La varianza muestral (con denominador $n$) se define como:", options: [
+            "$\\frac{1}{n}\\sum_{i=1}^n (x_i - \\bar{x})^2$",
+            "$\\frac{1}{n-1}\\sum_{i=1}^n (x_i - \\bar{x})^2$",
+            "$\\frac{1}{n}\\sum_{i=1}^n |x_i - \\bar{x}|$",
+            "$\\frac{1}{n}\\sum_{i=1}^n x_i^2 - \\bar{x}^2$"
+        ], correct: 0, feedback: "Correcto. La varianza con denominador n es la definida en el texto (página 37)." },
+        // 6
+        { text: "La desviación estándar de un conjunto de datos se obtiene como:", options: [
+            "La raíz cuadrada de la varianza.",
+            "El promedio de las diferencias absolutas a la media.",
+            "El rango dividido entre el número de datos.",
+            "La varianza elevada al cuadrado."
+        ], correct: 0, feedback: "Correcto. La desviación estándar es la raíz cuadrada positiva de la varianza (página 40)." },
+        // 7
+        { text: "El rango de una colección de números $x_1, \\dots, x_n$ es:", options: [
+            "$x_{(n)} - x_{(1)}$",
+            "$\\frac{1}{n}\\sum_{i=1}^n (x_i - \\bar{x})^2$",
+            "$x_{(n)} + x_{(1)}$",
+            "$\\frac{x_{(n)} - x_{(1)}}{2}$"
+        ], correct: 0, feedback: "Correcto. El rango es la diferencia entre el máximo y el mínimo (página 43)." },
+        // 8
+        { text: "El coeficiente de variación se define como el cociente:", options: [
+            "$s/\\bar{x}$ (con $\\bar{x} \\neq 0$)",
+            "$\\bar{x}/s$",
+            "$s^2/\\bar{x}$",
+            "$\\bar{x}/s^2$"
+        ], correct: 0, feedback: "Correcto. Coeficiente de variación = $s/\\bar{x}$ (página 45)." },
+        // 9
+        { text: "El $k$-ésimo momento muestral $m'_k$ se calcula como:", options: [
+            "$\\frac{1}{n}\\sum_{i=1}^n x_i^k$",
+            "$\\frac{1}{n}\\sum_{i=1}^n (x_i - \\bar{x})^k$",
+            "$\\frac{1}{n}\\sum_{i=1}^n |x_i|^k$",
+            "$\\left(\\frac{1}{n}\\sum_{i=1}^n x_i\\right)^k$"
+        ], correct: 0, feedback: "Correcto. Momento muestral de orden k = promedio de las potencias k-ésimas (página 47)." },
+        // 10
+        { text: "El $k$-ésimo momento central $m_k$ se define como:", options: [
+            "$\\frac{1}{n}\\sum_{i=1}^n (x_i - \\bar{x})^k$",
+            "$\\frac{1}{n}\\sum_{i=1}^n x_i^k$",
+            "$\\frac{1}{n}\\sum_{i=1}^n |x_i - \\bar{x}|^k$",
+            "$\\left(\\frac{1}{n}\\sum_{i=1}^n (x_i - \\bar{x})\\right)^k$"
+        ], correct: 0, feedback: "Correcto. Momento central de orden k (página 47)." },
+        // 11
+        { text: "La frecuencia absoluta de una clase es:", options: [
+            "El número de veces que se observó esa clase.",
+            "El número de veces que se observó esa clase dividido entre el total de observaciones.",
+            "La suma de las frecuencias de las clases anteriores.",
+            "La frecuencia acumulada de la clase anterior."
+        ], correct: 0, feedback: "Correcto. Frecuencia absoluta = número de observaciones de la clase (página 50)." },
+        // 12
+        { text: "La frecuencia relativa de una clase se obtiene:", options: [
+            "Dividiendo la frecuencia absoluta entre el total de observaciones.",
+            "Multiplicando la frecuencia absoluta por 100.",
+            "Sumando las frecuencias absolutas de todas las clases.",
+            "Restando la frecuencia acumulada del total."
+        ], correct: 0, feedback: "Correcto. Frecuencia relativa = $f_i / n$ (página 56)." },
+        // 13
+        { text: "Las frecuencias relativas porcentuales se calculan como:", options: [
+            "$100 \\cdot (\\text{frecuencia absoluta} / n)$",
+            "$\\text{frecuencia absoluta} / n$",
+            "$100 \\cdot \\text{frecuencia absoluta}$",
+            "$\\text{frecuencia absoluta} / 100$"
+        ], correct: 0, feedback: "Correcto. Frecuencia porcentual = 100 × (f_i/n) (página 57)." },
+        // 14
+        { text: "La frecuencia acumulada de una clase $C_j$ es:", options: [
+            "$f_1 + f_2 + \\cdots + f_j$",
+            "$f_j / n$",
+            "$f_j - f_{j-1}$",
+            "$f_j + f_{j+1}$"
+        ], correct: 0, feedback: "Correcto. Frecuencia acumulada hasta j = suma de f_i para i ≤ j (página 53)." },
+        // 15
+        { text: "Un cuantil de orden $p$ (con $0 < p \\leq 1$) es un número $c$ tal que:", options: [
+            "Al menos el $100p\\%$ de los datos son menores o iguales a $c$ y al menos el $100(1-p)\\%$ son mayores o iguales a $c$.",
+            "Exactamente el $100p\\%$ de los datos son menores que $c$.",
+            "Al menos el $100p\\%$ de los datos son mayores que $c$.",
+            "Exactamente el $100(1-p)\\%$ son menores o iguales a $c$."
+        ], correct: 0, feedback: "Correcto. Definición formal de cuantil (página 62)." },
+        // 16
+        { text: "El cuantil de orden $p = 0.50$ se conoce como:", options: [
+            "Mediana.",
+            "Media.",
+            "Moda.",
+            "Primer cuartil."
+        ], correct: 0, feedback: "Correcto. El cuantil al 50% es la mediana (página 62)." },
+        // 17
+        { text: "Los cuartiles dividen al conjunto de datos en:", options: [
+            "Cuatro partes iguales (en número de observaciones).",
+            "Dos partes iguales.",
+            "Cien partes iguales.",
+            "Diez partes iguales."
+        ], correct: 0, feedback: "Correcto. Cuartiles: 4 partes iguales (página 62)." },
+        // 18
+        { text: "Los percentiles corresponden a valores de $p$ iguales a:", options: [
+            "0.01, 0.02, …, 0.99",
+            "0.1, 0.2, …, 0.9",
+            "0.25, 0.50, 0.75",
+            "0.05, 0.10, …, 0.95"
+        ], correct: 0, feedback: "Correcto. Percentiles: p = 0.01, 0.02, ..., 0.99 (página 63)." },
+        // 19
+        { text: "El coeficiente de asimetría (skewness) se define como:", options: [
+            "$\\frac{1}{s^3} \\frac{1}{n}\\sum_{i=1}^n (x_i - \\bar{x})^3$",
+            "$\\frac{1}{s^4} \\frac{1}{n}\\sum_{i=1}^n (x_i - \\bar{x})^4$",
+            "$\\frac{1}{s^2} \\frac{1}{n}\\sum_{i=1}^n (x_i - \\bar{x})^2$",
+            "$\\frac{1}{n}\\sum_{i=1}^n (x_i - \\bar{x})^3$"
+        ], correct: 0, feedback: "Correcto. Coeficiente de asimetría = tercer momento central estandarizado por s³ (página 70)." },
+        // 20
+        { text: "Un coeficiente de asimetría positivo indica que:", options: [
+            "La cola derecha de la distribución es más larga.",
+            "La cola izquierda es más larga.",
+            "La distribución es perfectamente simétrica.",
+            "La curtosis es negativa."
+        ], correct: 0, feedback: "Correcto. Asimetría positiva → cola derecha alargada (página 70)." },
+        // 21
+        { text: "La curtosis se calcula como:", options: [
+            "$\\frac{1}{s^4} \\frac{1}{n}\\sum_{i=1}^n (x_i - \\bar{x})^4$",
+            "$\\frac{1}{s^3} \\frac{1}{n}\\sum_{i=1}^n (x_i - \\bar{x})^3$",
+            "$\\frac{1}{s^2} \\frac{1}{n}\\sum_{i=1}^n (x_i - \\bar{x})^2$",
+            "$\\frac{1}{n}\\sum_{i=1}^n (x_i - \\bar{x})^4$"
+        ], correct: 0, feedback: "Correcto. Curtosis = cuarto momento central estandarizado por s⁴ (página 72)." },
+        // 22
+        { text: "Una distribución con curtosis mayor que 3 (o con $k_3 > 0$) se denomina:", options: [
+            "Leptocúrtica.",
+            "Mesocúrtica.",
+            "Platicúrtica.",
+            "Normal."
+        ], correct: 0, feedback: "Correcto. Leptocúrtica: $k_3 > 0$ (página 73)." },
+        // 23
+        { text: "La curtosis de una distribución normal estándar es igual a:", options: [
+            "3.",
+            "0.",
+            "1.",
+            "2."
+        ], correct: 0, feedback: "Correcto. Curtosis normal = 3 (página 73)." },
+        // 24
+        { text: "Si los datos se trasladan sumando una constante $c$, la varianza:", options: [
+            "No cambia.",
+            "Se multiplica por $c^2$.",
+            "Se incrementa en $c$.",
+            "Se reduce en $c$."
+        ], correct: 0, feedback: "Correcto. La varianza es invariante ante traslaciones (página 39)." },
+        // 25
+        { text: "Si los datos se multiplican por una constante $a$, la varianza se transforma como:", options: [
+            "$a^2 \\cdot s_x^2$",
+            "$a \\cdot s_x^2$",
+            "$s_x^2 + a^2$",
+            "$s_x^2 - a^2$"
+        ], correct: 0, feedback: "Correcto. Varianza de $ax$ = $a^2 s_x^2$ (página 39)." },
+        // 26
+        { text: "La desviación estándar de un conjunto de datos transformados $y_i = ax_i + c$ es:", options: [
+            "$|a| \\cdot s_x$",
+            "$a \\cdot s_x$",
+            "$s_x + |a|$",
+            "$s_x - |a|$"
+        ], correct: 0, feedback: "Correcto. $s_y = |a| s_x$ (página 41)." },
+        // 27
+        { text: "La desviación media al trasladar los datos por una constante $c$:", options: [
+            "No cambia.",
+            "Aumenta en $|c|$.",
+            "Disminuye en $|c|$.",
+            "Se multiplica por $|c|$."
+        ], correct: 0, feedback: "Correcto. La desviación media es invariante ante traslaciones (página 43)." },
+        // 28
+        { text: "El rango de un conjunto de datos trasladados $x_i + c$ es:", options: [
+            "Igual al rango original.",
+            "El rango original más $c$.",
+            "El rango original menos $c$.",
+            "El rango original multiplicado por $c$."
+        ], correct: 0, feedback: "Correcto. El rango no cambia al trasladar (página 44)." },
+        // 29
+        { text: "El coeficiente de variación es una medida útil para comparar la dispersión de dos conjuntos de datos porque:", options: [
+            "Es adimensional (no tiene unidades).",
+            "Se expresa en las mismas unidades que los datos.",
+            "Siempre es positivo.",
+            "No depende de la media."
+        ], correct: 0, feedback: "Correcto. El coeficiente de variación es adimensional (página 45)." },
+        // 30
+        { text: "El primer momento muestral ($k=1$) es igual a:", options: [
+            "La media.",
+            "La varianza.",
+            "La moda.",
+            "El rango."
+        ], correct: 0, feedback: "Correcto. $m'_1 = \\bar{x}$ (página 48)." },
+        // 31
+        { text: "El segundo momento central ($m_2$) es igual a:", options: [
+            "La varianza.",
+            "La desviación estándar.",
+            "La media.",
+            "El rango intercuartil."
+        ], correct: 0, feedback: "Correcto. $m_2 = s^2$ (página 49)." },
+        // 32
+        { text: "El primer momento central ($m_1$) es siempre:", options: [
+            "Cero.",
+            "Uno.",
+            "Igual a la media.",
+            "Igual a la varianza."
+        ], correct: 0, feedback: "Correcto. $m_1 = 0$ (página 49)." },
+        // 33
+        { text: "La función de distribución empírica $F(x)$ se define como:", options: [
+            "$\\frac{\\#\\{x_i : x_i \\le x\\}}{n}$",
+            "$\\frac{\\#\\{x_i : x_i \\ge x\\}}{n}$",
+            "$\\frac{\\#\\{x_i : x_i = x\\}}{n}$",
+            "$\\frac{\\#\\{x_i : x_i < x\\}}{n}$"
+        ], correct: 0, feedback: "Correcto. Definición de F(x) (página 117)." },
+        // 34
+        { text: "En una tabla de frecuencias para datos agrupados, la marca de clase es:", options: [
+            "Un valor representativo de cada clase.",
+            "La frecuencia acumulada de la clase.",
+            "El número de clases.",
+            "El punto medio del rango total."
+        ], correct: 0, feedback: "Correcto. Marca de clase = representante de la clase (página 12 y 75)." },
+        // 35
+        { text: "Si se tienen $k$ clases con frecuencias $f_1, \\dots, f_k$, la suma de las frecuencias absolutas es:", options: [
+            "$n$ (tamaño de la muestra).",
+            "$k$.",
+            "1.",
+            "100."
+        ], correct: 0, feedback: "Correcto. $\\sum f_i = n$ (página 50)." },
+        // 36
+        { text: "La suma de las frecuencias relativas de todas las clases es:", options: [
+            "1.",
+            "$n$.",
+            "100.",
+            "$k$."
+        ], correct: 0, feedback: "Correcto. Las frecuencias relativas suman 1 (página 56)." },
+        // 37
+        { text: "Las frecuencias relativas acumuladas se obtienen:", options: [
+            "Sumando las frecuencias relativas de las clases anteriores e incluyendo la actual.",
+            "Dividiendo cada frecuencia relativa entre $n$.",
+            "Multiplicando cada frecuencia relativa por 100.",
+            "Restando la frecuencia relativa actual de la anterior."
+        ], correct: 0, feedback: "Correcto. Definición de frecuencia relativa acumulada (página 59)." },
+        // 38
+        { text: "El segundo cuartil ($Q_{0.50}$) es equivalente a:", options: [
+            "La mediana.",
+            "La media.",
+            "La moda.",
+            "El rango."
+        ], correct: 0, feedback: "Correcto. $Q_{0.50} = $ mediana (página 62)." },
+        // 39
+        { text: "El rango intercuartil (RIC) se define como:", options: [
+            "$Q_{0.75} - Q_{0.25}$",
+            "$Q_{0.50} - Q_{0.25}$",
+            "$Q_{0.75} - Q_{0.50}$",
+            "$Q_{0.90} - Q_{0.10}$"
+        ], correct: 0, feedback: "Correcto. RIC = Q_{0.75} - Q_{0.25} (página 115)." },
+        // 40
+        { text: "Si un conjunto de datos es perfectamente simétrico, el coeficiente de asimetría es:", options: [
+            "Cero.",
+            "Positivo.",
+            "Negativo.",
+            "Indefinido."
+        ], correct: 0, feedback: "Correcto. Simetría perfecta → asimetría = 0 (página 70-71)." },
+        // 41
+        { text: "Al multiplicar todos los datos por una constante negativa $a$, el coeficiente de asimetría:", options: [
+            "Cambia de signo.",
+            "No cambia.",
+            "Se anula.",
+            "Se multiplica por $a^2$."
+        ], correct: 0, feedback: "Correcto. $sk(ax) = -sk(x)$ si $a<0$ (página 94)." },
+        // 42
+        { text: "La curtosis $k$ es siempre un número:", options: [
+            "Mayor o igual a cero.",
+            "Menor o igual a cero.",
+            "Estrictamente positivo.",
+            "Entre -1 y 1."
+        ], correct: 0, feedback: "Correcto. La curtosis es no negativa (página 72)." },
+        // 43
+        { text: "Una curva con $k_3 < 0$ se denomina platicúrtica y se caracteriza por:", options: [
+            "Colas más amplias y decaimiento lento.",
+            "Colas ligeras y decaimiento rápido.",
+            "Forma de campana normal.",
+            "Simetría perfecta."
+        ], correct: 0, feedback: "Correcto. Platicúrtica: colas amplias (página 73)." },
+        // 44
+        { text: "La mediana de un conjunto de datos con $n$ par se calcula como:", options: [
+            "$\\frac{x_{(n/2)} + x_{(n/2+1)}}{2}$",
+            "$x_{(n/2)}$",
+            "$x_{(n/2+1)}$",
+            "$\\frac{x_{(n/2)} + x_{(n/2-1)}}{2}$"
+        ], correct: 0, feedback: "Correcto. Para n par, promedio de los dos centrales (página 31)." },
+        // 45
+        { text: "La moda se preserva bajo transformaciones lineales de la forma $y_i = ax_i + c$ de la siguiente manera:", options: [
+            "$\\text{Moda}(y) = a \\cdot \\text{Moda}(x) + c$",
+            "$\\text{Moda}(y) = \\text{Moda}(x) + c$",
+            "$\\text{Moda}(y) = a \\cdot \\text{Moda}(x)$",
+            "$\\text{Moda}(y) = \\text{Moda}(x)$"
+        ], correct: 0, feedback: "Correcto. Propiedad de la moda ante transformación lineal (página 29)." },
+        // 46
+        { text: "La mediana, al igual que la moda, bajo una transformación lineal $y_i = ax_i + c$ cumple:", options: [
+            "$\\tilde{y} = a\\tilde{x} + c$",
+            "$\\tilde{y} = \\tilde{x} + c$",
+            "$\\tilde{y} = a\\tilde{x}$",
+            "$\\tilde{y} = \\tilde{x}$"
+        ], correct: 0, feedback: "Correcto. Propiedad de la mediana ante transformación lineal (página 34)." },
+        // 47
+        { text: "Si se tienen datos agrupados y se desea calcular la media, una aproximación consiste en:", options: [
+            "Usar marcas de clase y considerarlas con las frecuencias dadas.",
+            "Tomar el valor mínimo de cada clase.",
+            "Tomar el valor máximo de cada clase.",
+            "Usar la mediana de cada clase."
+        ], correct: 0, feedback: "Correcto. Se usan marcas de clase como representantes (página 75)." },
+        // 48
+        { text: "En el cálculo de la varianza para datos agrupados, la fórmula es:", options: [
+            "$\\frac{1}{n}\\sum_{i=1}^k (x_i - \\bar{x})^2 f_i$",
+            "$\\frac{1}{n}\\sum_{i=1}^n (x_i - \\bar{x})^2$",
+            "$\\frac{1}{n-1}\\sum_{i=1}^k (x_i - \\bar{x})^2 f_i$",
+            "$\\frac{1}{n}\\sum_{i=1}^k x_i f_i$"
+        ], correct: 0, feedback: "Correcto. Fórmula de varianza para datos agrupados con marcas de clase (página 40)." },
+        // 49
+        { text: "La frecuencia relativa acumulada de la última clase siempre es:", options: [
+            "1.",
+            "$n$.",
+            "100.",
+            "0."
+        ], correct: 0, feedback: "Correcto. La última frecuencia relativa acumulada es 1 (página 59)." },
+        // 50
+        { text: "El cuantil de orden $p$ se puede obtener gráficamente a partir de la función de distribución empírica:", options: [
+            "Localizando el valor de $p$ en el eje vertical y trazando una horizontal hasta la curva, luego bajando verticalmente.",
+            "Localizando el valor de $p$ en el eje horizontal y subiendo verticalmente.",
+            "Calculando la pendiente de la curva en el punto $p$.",
+            "Usando solo los valores extremos."
+        ], correct: 0, feedback: "Correcto. Procedimiento gráfico descrito en página 122." }
+    ];
+
+    // ----------------------------------------------------------------
+    // BARAJAMOS LAS OPCIONES DE CADA PREGUNTA
+    // ----------------------------------------------------------------
+    function shuffleArray(arr) {
+        for (let i = arr.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [arr[i], arr[j]] = [arr[j], arr[i]];
+        }
+        return arr;
+    }
+
+    // Creamos una copia y barajamos cada pregunta
+    const questions = rawQuestions.map(q => {
+        // Barajar opciones
+        const shuffled = q.options.map((opt, idx) => ({ text: opt, originalIdx: idx }));
+        shuffleArray(shuffled);
+        // Nuevo array de opciones
+        const newOptions = shuffled.map(item => item.text);
+        // Nuevo índice correcto
+        const newCorrect = shuffled.findIndex(item => item.originalIdx === q.correct);
+        return {
+            text: q.text,
+            options: newOptions,
+            correct: newCorrect,
+            feedback: q.feedback
+        };
+    });
+
+    // ----------------------------------------------------------------
+    // LÓGICA DEL EXAMEN
+    // ----------------------------------------------------------------
+    const totalQuestions = questions.length;
+    let currentIndex = 0;
+    let answers = new Array(totalQuestions).fill(null); // índice de opción seleccionada
+    let answered = new Array(totalQuestions).fill(false);
+    let score = 0;
+
+    const questionNumberEl = document.getElementById('question-number');
+    const questionTextEl = document.getElementById('question-text');
+    const optionsContainer = document.getElementById('options-container');
+    const feedbackEl = document.getElementById('feedback');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const progressEl = document.getElementById('progress');
+    const scoreDisplay = document.getElementById('score-display');
+
+    function renderQuestion(index) {
+        const q = questions[index];
+        questionNumberEl.textContent = `Pregunta ${index+1} de ${totalQuestions}`;
+        // Mostrar texto con formato (sustituir $...$ por cursiva)
+        questionTextEl.innerHTML = q.text.replace(/\$(.*?)\$/g, (match, p1) => `<span style="font-style:italic;">${p1}</span>`);
+
+        optionsContainer.innerHTML = '';
+        const letters = ['A', 'B', 'C', 'D'];
+        q.options.forEach((opt, idx) => {
+            const div = document.createElement('div');
+            div.className = 'option';
+            if (answered[index]) {
+                div.classList.add('disabled');
+                if (idx === q.correct) div.classList.add('correct-answer');
+                else if (answers[index] === idx && idx !== q.correct) div.classList.add('incorrect-answer');
+            } else {
+                div.style.cursor = 'pointer';
+            }
+            const radio = document.createElement('input');
+            radio.type = 'radio';
+            radio.name = 'question';
+            radio.value = idx;
+            if (answers[index] === idx) radio.checked = true;
+            radio.disabled = answered[index];
+            const label = document.createElement('label');
+            label.innerHTML = `${letters[idx]}) ${opt}`;
+            div.appendChild(radio);
+            div.appendChild(label);
+            if (!answered[index]) {
+                div.addEventListener('click', function(e) {
+                    if (answered[currentIndex]) return;
+                    const radioInside = this.querySelector('input[type="radio"]');
+                    radioInside.checked = true;
+                    handleOptionSelect(idx);
+                });
+            }
+            optionsContainer.appendChild(div);
+        });
+
+        // Feedback
+        if (answered[index]) {
+            const isCorrect = (answers[index] === q.correct);
+            const fb = q.feedback || (isCorrect ? 'Correcto.' : 'Incorrecto.');
+            feedbackEl.style.display = 'block';
+            feedbackEl.innerHTML = `
+                <div class="fb-title" style="color: ${isCorrect ? '#28a745' : '#dc3545'}">
+                    ${isCorrect ? '✅ Correcto' : '❌ Incorrecto'}
+                </div>
+                <div class="fb-text">${fb}</div>
+            `;
+        } else {
+            feedbackEl.style.display = 'none';
+        }
+
+        prevBtn.disabled = (index === 0);
+        nextBtn.disabled = false;
+        progressEl.textContent = `Pregunta ${index+1} / ${totalQuestions}`;
+
+        // Mostrar puntaje si ya terminó todo
+        if (answered.every(a => a === true)) {
+            const correctCount = answers.reduce((acc, ans, idx) => {
+                return acc + (ans === questions[idx].correct ? 1 : 0);
+            }, 0);
+            const percent = Math.round((correctCount / totalQuestions) * 100);
+            scoreDisplay.textContent = `✅ Calificación final: ${correctCount}/${totalQuestions} (${percent}%)`;
+        } else {
+            scoreDisplay.textContent = '';
+        }
+    }
+
+    function handleOptionSelect(selectedIdx) {
+        if (answered[currentIndex]) return;
+        const q = questions[currentIndex];
+        answers[currentIndex] = selectedIdx;
+        answered[currentIndex] = true;
+        renderQuestion(currentIndex);
+        if (currentIndex === totalQuestions - 1) {
+            const correctCount = answers.reduce((acc, ans, idx) => {
+                return acc + (ans === questions[idx].correct ? 1 : 0);
+            }, 0);
+            const percent = Math.round((correctCount / totalQuestions) * 100);
+            scoreDisplay.textContent = `✅ Calificación final: ${correctCount}/${totalQuestions} (${percent}%)`;
+        }
+    }
+
+    function goToPrev() {
+        if (currentIndex > 0) {
+            currentIndex--;
+            renderQuestion(currentIndex);
+        }
+    }
+
+    function goToNext() {
+        if (currentIndex < totalQuestions - 1) {
+            currentIndex++;
+            renderQuestion(currentIndex);
+        } else {
+            if (answered[currentIndex]) {
+                const correctCount = answers.reduce((acc, ans, idx) => {
+                    return acc + (ans === questions[idx].correct ? 1 : 0);
+                }, 0);
+                const percent = Math.round((correctCount / totalQuestions) * 100);
+                scoreDisplay.textContent = `✅ Calificación final: ${correctCount}/${totalQuestions} (${percent}%)`;
+            }
+        }
+    }
+
+    // Inicializar
+    renderQuestion(0);
+
+    prevBtn.addEventListener('click', goToPrev);
+    nextBtn.addEventListener('click', goToNext);
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowLeft') goToPrev();
+        else if (e.key === 'ArrowRight') goToNext();
+    });
+</script>
+</body>
+</html>
