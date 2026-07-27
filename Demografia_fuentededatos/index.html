@@ -1,1 +1,987 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demografía y fuentes de datos · CCP UCR</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+            background: #f0f4fa;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .container {
+            background: white;
+            max-width: 880px;
+            width: 100%;
+            border-radius: 28px;
+            box-shadow: 0 20px 40px -12px rgba(0,0,0,0.2);
+            padding: 30px 35px;
+            transition: 0.3s;
+        }
+        h1 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: #0a2a44;
+            border-left: 6px solid #005a8c;
+            padding-left: 18px;
+            margin-bottom: 4px;
+        }
+        .subtitle {
+            color: #2c3e50;
+            font-size: 0.95rem;
+            margin-bottom: 25px;
+            padding-left: 24px;
+            opacity: 0.8;
+        }
+        .progress-bar {
+            background: #e9ecf0;
+            height: 8px;
+            border-radius: 20px;
+            margin: 20px 0 25px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            background: #005a8c;
+            border-radius: 20px;
+            transition: width 0.4s ease;
+        }
+        .question-number {
+            font-weight: 600;
+            color: #1a4b6d;
+            font-size: 0.9rem;
+            letter-spacing: 0.3px;
+            margin-bottom: 6px;
+        }
+        .question-text {
+            font-size: 1.2rem;
+            font-weight: 500;
+            color: #0b1e2e;
+            line-height: 1.5;
+            margin-bottom: 25px;
+        }
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 30px;
+        }
+        .option {
+            background: #f8faff;
+            border: 1.5px solid #dde3ed;
+            border-radius: 14px;
+            padding: 14px 18px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.15s;
+            color: #1a2b3c;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .option:hover {
+            background: #edf3fc;
+            border-color: #8ab3d0;
+        }
+        .option.selected {
+            border-color: #005a8c;
+            background: #e1edf7;
+        }
+        .option.correct {
+            border-color: #1e8b4c;
+            background: #dff0e6;
+        }
+        .option.wrong {
+            border-color: #b13e3e;
+            background: #f7e3e3;
+        }
+        .option.disabled {
+            pointer-events: none;
+            opacity: 0.85;
+        }
+        .option-letter {
+            font-weight: 700;
+            color: #1f5a78;
+            min-width: 24px;
+        }
+        .feedback {
+            background: #f0f4fa;
+            border-radius: 16px;
+            padding: 18px 22px;
+            margin: 10px 0 25px;
+            border-left: 5px solid #005a8c;
+            display: none;
+        }
+        .feedback.correct {
+            border-left-color: #1e8b4c;
+            background: #eaf6ef;
+        }
+        .feedback.wrong {
+            border-left-color: #b13e3e;
+            background: #f7ecec;
+        }
+        .feedback-title {
+            font-weight: 600;
+            font-size: 1rem;
+            margin-bottom: 6px;
+        }
+        .feedback-detail {
+            font-size: 0.95rem;
+            line-height: 1.5;
+            color: #1f3345;
+        }
+        .feedback-detail strong {
+            color: #0a2a44;
+        }
+        .btn {
+            background: #005a8c;
+            border: none;
+            color: white;
+            font-weight: 600;
+            font-size: 1rem;
+            padding: 12px 28px;
+            border-radius: 40px;
+            cursor: pointer;
+            transition: 0.2s;
+            margin-top: 5px;
+            display: inline-block;
+        }
+        .btn:hover {
+            background: #00406a;
+            transform: scale(1.02);
+        }
+        .btn:disabled {
+            opacity: 0.5;
+            pointer-events: none;
+        }
+        .result-box {
+            text-align: center;
+            padding: 25px 10px;
+        }
+        .result-score {
+            font-size: 3.2rem;
+            font-weight: 700;
+            color: #0a2a44;
+        }
+        .result-msg {
+            font-size: 1.1rem;
+            color: #1e3b54;
+            margin-top: 8px;
+        }
+        .restart-btn {
+            margin-top: 25px;
+            background: #3d5f7a;
+        }
+        .hidden {
+            display: none;
+        }
+        @media (max-width: 550px) {
+            .container { padding: 20px; }
+            h1 { font-size: 1.4rem; }
+            .question-text { font-size: 1rem; }
+        }
+    </style>
+</head>
+<body>
+<div class="container" id="app">
+    <h1>📊 Demografía y fuentes de datos</h1>
+    <div class="subtitle">Centro Centroamericano de Población · UCR · Curso Análisis Demográfico</div>
 
+    <div class="progress-bar">
+        <div class="progress-fill" id="progressFill"></div>
+    </div>
+
+    <div id="questionArea">
+        <div class="question-number" id="qNumber">Pregunta 1 de 30</div>
+        <div class="question-text" id="qText">Cargando pregunta...</div>
+        <div class="options" id="optionsContainer"></div>
+        <div class="feedback" id="feedback">
+            <div class="feedback-title" id="fbTitle"></div>
+            <div class="feedback-detail" id="fbDetail"></div>
+        </div>
+        <button class="btn" id="nextBtn" disabled>Siguiente →</button>
+    </div>
+
+    <div id="resultArea" class="result-box hidden">
+        <div class="result-score" id="finalScore">0%</div>
+        <div class="result-msg" id="finalMsg"></div>
+        <button class="btn restart-btn" id="restartBtn">🔄 Reiniciar examen</button>
+    </div>
+</div>
+
+<script>
+    // ========== PREGUNTAS (30) ==========
+    // Basadas en Sesión 1 "La Demografía" y Sesión 2 "Fuentes de datos demográficos"
+    const questions = [
+        // ---- Sesión 1: La Demografía ----
+        {
+            type: 'opcion',
+            text: 'Según la sesión 1, la Demografía se distingue de otras ciencias sociales porque su objetivo principal es:',
+            options: [
+                'A) Estudiar el comportamiento social de los individuos.',
+                'B) Analizar los movimientos (estado y dinámica) de las poblaciones humanas.',
+                'C) Describir las culturas y tradiciones de los pueblos.',
+                'D) Explicar los procesos económicos de las sociedades.'
+            ],
+            correct: 1,
+            justification: 'El documento señala: "El objetivo de la Demografía consiste en estudiar los movimientos que se presentan en las poblaciones humanas. ... el área temática de la Demografía se concentra en el estado y la dinámica de estas poblaciones en el tiempo."',
+            distractors: [
+                'A) Es objeto de la Sociología, no específicamente de la Demografía.',
+                'C) Es objeto de la Antropología.',
+                'D) Es objeto de la Economía.'
+            ]
+        },
+        {
+            type: 'opcion',
+            text: 'El "estado" de una población hace referencia a:',
+            options: [
+                'A) Los procesos de entrada y salida de personas.',
+                'B) El tamaño, la distribución territorial y la estructura por edad, sexo u otros subgrupos.',
+                'C) Los determinantes sociales y culturales del cambio poblacional.',
+                'D) La tasa de crecimiento anual de la población.'
+            ],
+            correct: 1,
+            justification: 'El texto define: "El estado de la población hace referencia a su tamaño, distribución territorial y estructura por edad, sexo, u otros subgrupos de interés."',
+            distractors: [
+                'A) Eso corresponde a la dinámica.',
+                'C) Son determinantes, no el estado.',
+                'D) Es un indicador de movimiento, no el estado.'
+            ]
+        },
+        {
+            type: 'opcion',
+            text: 'Los componentes de la dinámica demográfica que provocan cambios en el estado de una población son:',
+            options: [
+                'A) La fecundidad, la mortalidad y la migración.',
+                'B) La edad, el sexo y la distribución territorial.',
+                'C) Los determinantes sociales, culturales y económicos.',
+                'D) Los censos, las estadísticas vitales y las encuestas.'
+            ],
+            correct: 0,
+            justification: 'El documento indica: "En este sentido, los componentes de mayor interés son la fecundidad, la mortalidad y la migración."',
+            distractors: [
+                'B) Son elementos del estado, no de la dinámica.',
+                'C) Son determinantes, no componentes directos.',
+                'D) Son fuentes de datos, no componentes demográficos.'
+            ]
+        },
+        {
+            type: 'opcion',
+            text: 'Los determinantes de la dinámica demográfica son de orden social, cultural, económico y biológico. Estos determinantes:',
+            options: [
+                'A) Son independientes de los cambios demográficos.',
+                'B) Afectan los procesos de entrada y salida, pero no son afectados por ellos.',
+                'C) Afectan los procesos de entrada y salida y, a su vez, son afectados por los cambios demográficos.',
+                'D) Son los únicos responsables del crecimiento poblacional.'
+            ],
+            correct: 2,
+            justification: 'El texto afirma: "Los determinantes de esta dinámica demográfica son de orden social, cultural, económico y biológico; pero los cambios ocurridos por la dinámica demográfica, producen a su vez efectos sobre estos determinantes."',
+            distractors: [
+                'A) Falso, hay interacción.',
+                'B) Falso, hay retroalimentación.',
+                'D) No son los únicos; también influyen otros factores.'
+            ]
+        },
+        {
+            type: 'opcion',
+            text: 'Los indicadores demográficos se clasifican en dos tipos: indicadores de estado e indicadores de movimiento. Los indicadores de movimiento cuantifican:',
+            options: [
+                'A) El tamaño y la estructura de la población.',
+                'B) Los procesos de entrada y salida que modifican la población.',
+                'C) La distribución territorial de la población.',
+                'D) La composición por edad y sexo.'
+            ],
+            correct: 1,
+            justification: 'El texto explica: "Existen dos tipos de indicadores según el comportamiento que se desee cuantificar: indicadores de estado e indicadores de movimiento." Los indicadores de movimiento se refieren a la dinámica (entradas y salidas).',
+            distractors: [
+                'A) Esos son indicadores de estado.',
+                'C) Es un aspecto del estado.',
+                'D) Es un aspecto del estado.'
+            ]
+        },
+        {
+            type: 'opcion',
+            text: 'En el ejemplo de la sesión 1, Suecia tiene una tasa bruta de mortalidad más alta que Honduras, a pesar de tener mejores condiciones de salud. Esto se debe a:',
+            options: [
+                'A) La mayor esperanza de vida en Suecia.',
+                'B) La estructura por edad: Suecia tiene una mayor proporción de personas de 65 años y más.',
+                'C) La mayor tasa de natalidad en Honduras.',
+                'D) El subregistro de defunciones en Honduras.'
+            ],
+            correct: 1,
+            justification: 'El texto explica: "Ello se debe a las estructuras por edades de las poblaciones. Así, en Suecia el 17% de la población tenía más de 65 años, razón por la cual está más propensa a la muerte que en Honduras, donde únicamente el 3% de la población supera los 65 años."',
+            distractors: [
+                'A) La esperanza de vida es un resultado, no la causa directa de la tasa bruta.',
+                'C) La natalidad no afecta directamente la tasa de mortalidad.',
+                'D) El subregistro podría influir, pero el texto atribuye la diferencia a la estructura por edad.'
+            ]
+        },
+        {
+            type: 'opcion',
+            text: 'La "transición demográfica" se refiere al cambio de altas tasas de natalidad y mortalidad a bajas tasas. En este proceso, típicamente:',
+            options: [
+                'A) La mortalidad y la fecundidad disminuyen simultáneamente.',
+                'B) La mortalidad disminuye primero, y la fecundidad disminuye después, causando un crecimiento acelerado.',
+                'C) La fecundidad disminuye primero, y la mortalidad después.',
+                'D) La mortalidad aumenta antes de disminuir.'
+            ],
+            correct: 1,
+            justification: 'El documento señala: "Los adelantos en medicina, la higiene en las viviendas, el desarrollo económico y el mejoramiento en la alimentación causan una fuerte baja en la mortalidad. Por otro lado, la evolución de la familia y sus costumbres hacen que también la fecundidad disminuya, pero a un ritmo mucho menor. De esta manera, se produce un desfase cronológico entre la disminución en la mortalidad y la fecundidad; a este desfase se le ha llamado transición demográfica."',
+            distractors: [
+                'A) No es simultáneo; hay desfase.',
+                'C) Es lo opuesto; la mortalidad baja primero.',
+                'D) La mortalidad no aumenta; disminuye.'
+            ]
+        },
+        {
+            type: 'opcion',
+            text: 'El crecimiento acelerado de la población mundial en la segunda mitad del siglo XX se debió principalmente a:',
+            options: [
+                'A) Un aumento de la fecundidad en los países desarrollados.',
+                'B) El descenso de la mortalidad en los países en desarrollo, mientras la fecundidad se mantuvo alta.',
+                'C) La migración masiva hacia los países desarrollados.',
+                'D) El aumento de la esperanza de vida en los países desarrollados.'
+            ],
+            correct: 1,
+            justification: 'El texto indica: "Este comportamiento de los países en desarrollo, originó un crecimiento acelerado en sus poblaciones... Entre 1950 y 1987 la población mundial pasa de 2500 a 5000 millones de habitantes." El desfase entre la caída de la mortalidad y la fecundidad fue la causa.',
+            distractors: [
+                'A) La fecundidad en los países desarrollados disminuyó, no aumentó.',
+                'C) La migración no fue el factor principal del crecimiento mundial.',
+                'D) La esperanza de vida aumentó como resultado del descenso de la mortalidad, no fue la causa del crecimiento acelerado.'
+            ]
+        },
+        {
+            type: 'opcion',
+            text: 'La importancia actual de la Demografía radica en que sus estudios son fundamentales para:',
+            options: [
+                'A) Comprender exclusivamente el comportamiento biológico de las personas.',
+                'B) Diseñar programas de desarrollo, distribuir recursos y planificar servicios públicos y privados.',
+                'C) Reemplazar a otras ciencias sociales en el análisis social.',
+                'D) Predecir el futuro de manera exacta.'
+            ],
+            correct: 1,
+            justification: 'El documento enumera varias áreas: planificación de programas, evaluación de impacto, distribución equitativa de recursos, identificación de problemas y necesidades, y desarrollo de estrategias de mercado, entre otras.',
+            distractors: [
+                'A) La Demografía no se limita al aspecto biológico.',
+                'C) La Demografía complementa, no reemplaza.',
+                'D) No predice exactamente, sino que proyecta bajo supuestos.'
+            ]
+        },
+        // ---- Sesión 2: Fuentes de datos demográficos ----
+        {
+            type: 'opcion',
+            text: 'Los datos demográficos se clasifican como primarios cuando:',
+            options: [
+                'A) Se utilizan sin haber sido recolectados en el contexto de la investigación.',
+                'B) Su recolección se llevó a cabo para satisfacer las necesidades de una investigación concreta.',
+                'C) Se obtienen por medio de operaciones matemáticas con fuertes supuestos.',
+                'D) Han sido sometidos a técnicas de suavizamiento y ajuste.'
+            ],
+            correct: 1,
+            justification: 'El texto define: "A un dato demográfico se le llama primario, si su recolección se llevó a cabo para satisfacer las necesidades u objetivos de una investigación concreta."',
+            distractors: [
+                'A) Esa es la definición de datos secundarios.',
+                'C) Esa es la definición de datos indirectos.',
+                'D) Esa es la definición de datos corregidos o refinados.'
+            ]
+        },
+        {
+            type: 'opcion',
+            text: 'Los datos indirectos se caracterizan por:',
+            options: [
+                'A) Ser obtenidos mediante operaciones matemáticas que requieren supuestos.',
+                'B) Tener un vínculo directo entre la investigación y la recolección.',
+                'C) Ser presentados sin desagregaciones ni ajustes.',
+                'D) Ser recolectados de manera simple, sin mayores supuestos.'
+            ],
+            correct: 0,
+            justification: 'El texto define: "Datos indirectos: Son obtenidos por medio de operaciones matemáticas y su aplicación requiere de fuertes supuestos."',
+            distractors: [
+                'B) Esa es la característica de los datos primarios.',
+                'C) Esa es la característica de los datos brutos.',
+                'D) Esa es la característica de los datos directos.'
+            ]
+        },
+        {
+            type: 'relacion',
+            text: 'Relacione cada tipo de dato con su definición según la sesión 2:',
+            options: [
+                'A) Datos brutos → sometidos a técnicas matemáticas; Datos corregidos → sin ajustes; Datos refinados → presentan una idea precisa.',
+                'B) Datos brutos → sin ajustes; Datos corregidos → suavizados y ajustados; Datos refinados → tratados para mostrar una idea precisa.',
+                'C) Datos brutos → suavizados; Datos corregidos → sin ajustes; Datos refinados → ajustados por supuestos.',
+                'D) Datos brutos → con ajustes; Datos corregidos → sin ajustes; Datos refinados → sin tratamiento.'
+            ],
+            correct: 1,
+            justification: 'El texto define: "Datos brutos: Son aquellos que se representan sin desagregaciones, ajustes o correcciones. Datos corregidos: Son los que se han sometido a técnicas matemáticas que permiten suavizar su comportamiento y ajustarlos a patrones lógicos. Datos refinados: Son aquellos datos que han sido previamente tratados con la intención de mostrar una idea precisa de lo que se pretende analizar."',
+            distractors: [
+                'A) Todas las definiciones están incorrectas.',
+                'C) Los datos brutos no están suavizados.',
+                'D) Los datos brutos no tienen ajustes.'
+            ]
+        },
+        {
+            type: 'completar',
+            text: 'La definición de censo de población de las Naciones Unidas establece que es un conjunto de operaciones que consiste en reunir, elaborar y publicar datos demográficos, económicos y sociales, correspondientes a todos los habitantes de un país o territorio definido y referido a ________.',
+            options: [
+                'A) un período de cinco años.',
+                'B) un momento determinado o a ciertos períodos de tiempo dados.',
+                'C) una muestra representativa.',
+                'D) un año calendario específico.'
+            ],
+            correct: 1,
+            justification: 'El texto cita: "Según las Naciones Unidas, un censo se define como 'Un conjunto de operaciones que consiste en reunir, elaborar y publicar datos demográficos, económicos y sociales, correspondientes a todos los habitantes de un país o territorio definido y referido a un momento determinado o a ciertos períodos de tiempo dados.'"',
+            distractors: [
+                'A) No es la definición de la ONU.',
+                'C) Un censo es universal, no una muestra.',
+                'D) No se limita a un año específico.'
+            ]
+        },
+        {
+            type: 'opcion',
+            text: 'Una de las características de los censos es la "simultaneidad", que significa que:',
+            options: [
+                'A) El censo debe realizarse al mismo tiempo en todos los países del mundo.',
+                'B) La población empadronada debe referirse a un momento preciso en el tiempo.',
+                'C) Todos los cuestionarios deben aplicarse el mismo día en todo el territorio.',
+                'D) La información debe recolectarse en un solo día.'
+            ],
+            correct: 1,
+            justification: 'El documento indica: "Simultaneidad: la población total empadronada debe referirse a un momento preciso en el tiempo. Por esta razón, los datos recolectados deben referirse a una fecha específica o a un período bien definido."',
+            distractors: [
+                'A) No es una característica; la simultaneidad es interna al país.',
+                'C) No necesariamente el mismo día; puede ser un período corto pero definido.',
+                'D) No se exige que sea en un solo día, aunque algunos censos lo hacen.'
+            ]
+        },
+        {
+            type: 'opcion',
+            text: 'En un censo de "jure" o de derecho, las personas se enumeran según:',
+            options: [
+                'A) El lugar donde se encuentren el día del censo.',
+                'B) Su lugar de residencia habitual, independientemente de su presencia el día del censo.',
+                'C) Su lugar de nacimiento.',
+                'D) El lugar donde trabajan.'
+            ],
+            correct: 1,
+            justification: 'El texto explica: "En el censo de jure o de derecho, se enumeran las personas según sea el lugar de residencia habitual, independientemente de su presencia o ausencia, el día del censo."',
+            distractors: [
+                'A) Esa es la definición de censo de facto.',
+                'C) El lugar de nacimiento no es el criterio para enumerar.',
+                'D) No es el criterio.'
+            ]
+        },
+        {
+            type: 'opcion',
+            text: 'La fase de postempadronamiento en un censo incluye:',
+            options: [
+                'A) La capacitación de enumeradores y la recolección de información.',
+                'B) La preparación cartográfica y el diseño del cuestionario.',
+                'C) La recepción de cuestionarios, revisión, codificación, digitación y publicación de resultados.',
+                'D) La selección de los temas de interés y el censo piloto.'
+            ],
+            correct: 2,
+            justification: 'El documento señala: "Postempadronamiento: Esta es la última etapa del censo; en ella se realizan las labores tendientes a la recepción de los cuestionarios, y los procesos de revisión, codificación, digitación, procesamiento estadístico y publicación de los resultados."',
+            distractors: [
+                'A) Esa es parte del empadronamiento.',
+                'B) Esa es parte del preempadronamiento.',
+                'D) Esa es parte del preempadronamiento.'
+            ]
+        },
+        {
+            type: 'opcion',
+            text: 'Los temas que corrientemente incluye un censo de población son: geográficos, demográficos, educación, actividad económica y:',
+            options: [
+                'A) Ingresos y gastos.',
+                'B) Religión, etnia, idiomas e impedimentos físicos.',
+                'C) Salud y morbilidad.',
+                'D) Opinión política.'
+            ],
+            correct: 1,
+            justification: 'El texto menciona: "Otras: Se acostumbra consultar sobre otras características tales como: etnia, religión, idiomas, impedimentos físicos, etc."',
+            distractors: [
+                'A) Los ingresos no son un tema estándar en los censos de población.',
+                'C) La salud y morbilidad suelen ser temas de encuestas especializadas.',
+                'D) La opinión política no es un tema censal.'
+            ]
+        },
+        {
+            type: 'opcion',
+            text: 'Las estadísticas vitales se derivan de los registros civiles. Una de sus características es la "instantaneidad", que significa:',
+            options: [
+                'A) Que el registro debe hacerse en el mismo momento en que ocurre el evento.',
+                'B) Que los datos deben publicarse inmediatamente después de la recolección.',
+                'C) Que el registro es obligatorio para todos los ciudadanos.',
+                'D) Que el registro se hace en forma continua y permanente.'
+            ],
+            correct: 0,
+            justification: 'El texto define: "Instantáneo: El registro de los eventos debe efectuarse inmediatamente después de ocurridos los hechos."',
+            distractors: [
+                'B) La publicación no es parte de la característica de instantaneidad.',
+                'C) Esa es la característica de universalidad.',
+                'D) Esa es la característica de continuidad.'
+            ]
+        },
+        {
+            type: 'opcion',
+            text: 'El principal problema de las estadísticas vitales en cuanto a cobertura es:',
+            options: [
+                'A) La sobre-enumeración de eventos.',
+                'B) El subregistro, especialmente en áreas rurales y de menor tamaño.',
+                'C) La duplicación de registros.',
+                'D) La falta de temas en el registro.'
+            ],
+            correct: 1,
+            justification: 'El documento indica: "El principal problema de las estadísticas vitales es el subregistro. ... Las áreas rurales y las áreas de menor tamaño son las más fuertemente impactadas por este problema."',
+            distractors: [
+                'A) La sobre-enumeración no es el principal problema; el subregistro es más común.',
+                'C) La duplicación no es el principal problema de cobertura.',
+                'D) Eso es un problema de contenido, no de cobertura.'
+            ]
+        },
+        {
+            type: 'opcion',
+            text: 'Los errores de contenido en las estadísticas vitales incluyen:',
+            options: [
+                'A) Omisión de áreas geográficas.',
+                'B) Subregistro y registro tardío.',
+                'C) No respuesta en algunas preguntas, falseamiento de respuestas y certificaciones no especializadas.',
+                'D) Errores en el diseño de la muestra.'
+            ],
+            correct: 2,
+            justification: 'El texto señala: "Con respecto a los errores de contenido se tienen problemas de no repuesta en algunas preguntas, falseamiento de las respuestas (por conveniencia), desconocimiento de respuestas, certificaciones no especializadas (nacimientos y defunciones), etc."',
+            distractors: [
+                'A) Es un error de cobertura, no de contenido.',
+                'B) Son errores de cobertura.',
+                'D) Son errores de encuestas, no de estadísticas vitales.'
+            ]
+        },
+        {
+            type: 'opcion',
+            text: 'Las encuestas demográficas se clasifican en prospectivas (o de visitas repetidas) y retrospectivas. Las encuestas prospectivas se caracterizan por:',
+            options: [
+                'A) Aplicar un cuestionario una sola vez y reconstruir la historia demográfica.',
+                'B) Registrar los hechos de la muestra en estudio en forma periódica durante algún tiempo.',
+                'C) Utilizar una muestra pequeña para inferir resultados a toda la población.',
+                'D) Ser realizadas únicamente por entes privados.'
+            ],
+            correct: 1,
+            justification: 'El texto define: "Prospectivas o de visitas repetidas: Registran los hechos de la muestra en estudio en forma periódica durante algún tiempo. De este modo, un mismo cuestionario es aplicado en forma reiterada a un mismo grupo de personas durante el tiempo que requiera el estudio."',
+            distractors: [
+                'A) Esa es la característica de las retrospectivas.',
+                'C) Es una característica general de las encuestas, no específica de las prospectivas.',
+                'D) Pueden ser estatales o privadas.'
+            ]
+        },
+        {
+            type: 'opcion',
+            text: 'Una ventaja de las encuestas demográficas sobre los censos es que:',
+            options: [
+                'A) Tienen cobertura universal.',
+                'B) Permiten incluir una mayor cantidad de preguntas y profundizar en temas complejos.',
+                'C) No tienen errores de muestreo.',
+                'D) Son más caras de realizar.'
+            ],
+            correct: 1,
+            justification: 'El documento indica: "Es posible incluir en el cuestionario una cantidad de preguntas mucho mayor que en la boleta censal, por lo que además de los temas demográficos también podrán aparecer interrogantes relacionadas con otras áreas que permiten determinar relaciones de interés."',
+            distractors: [
+                'A) Las encuestas no tienen cobertura universal; son muestras.',
+                'C) Sí tienen errores de muestreo.',
+                'D) Son más baratas, no más caras.'
+            ]
+        },
+        {
+            type: 'opcion',
+            text: 'Los errores de cobertura en las encuestas demográficas están asociados principalmente con:',
+            options: [
+                'A) La falta de capacitación de los encuestadores.',
+                'B) Problemas en el proceso de muestreo, como un marco muestral impreciso o una estrategia defectuosa.',
+                'C) La declaración errónea de la edad de los entrevistados.',
+                'D) El falseamiento de respuestas sobre actividad económica.'
+            ],
+            correct: 1,
+            justification: 'El texto señala: "En el caso de las encuestas demográficas, los errores de cobertura están asociados con errores en el proceso de muestreo. Un marco muestral impreciso, una estrategia defectuosa de muestreo, la falta de un planeamiento sistemático en el proceso de recolección de información, etc., pueden provocar graves errores en el proceso de muestreo."',
+            distractors: [
+                'A) Eso afecta la calidad del contenido, no la cobertura.',
+                'C) Eso es un error de contenido.',
+                'D) Eso es un error de contenido.'
+            ]
+        },
+        {
+            type: 'opcion',
+            text: 'En los censos, los errores de cobertura se refieren a:',
+            options: [
+                'A) La mala calidad de la información recolectada sobre las personas.',
+                'B) La sub o sobre-enumeración de personas debido a omisiones o duplicidades.',
+                'C) La falta de respuesta a preguntas específicas.',
+                'D) La codificación incorrecta de las ocupaciones.'
+            ],
+            correct: 1,
+            justification: 'El texto explica: "En el caso de los censos los errores de cobertura se relacionan con la sub o sobre-enumeración de personas. Estos errores se deben respectivamente a la omisión o a la duplicidad de información para ciertas personas en el momento de la enumeración."',
+            distractors: [
+                'A) Eso son errores de contenido.',
+                'C) Eso es un error de contenido (no respuesta).',
+                'D) Eso es un error de contenido (codificación).'
+            ]
+        },
+        {
+            type: 'completar',
+            text: 'En los registros vitales, se recomienda utilizar el registro según el lugar de residencia habitual para los análisis internos, porque el registro según el lugar de ocurrencia ________.',
+            options: [
+                'A) es más fácil de obtener',
+                'B) dificulta los análisis internos en las diferentes áreas geográficas',
+                'C) es menos costoso',
+                'D) es más preciso'
+            ],
+            correct: 1,
+            justification: 'El documento indica: "cuando el registro de un hecho vital se produce según el lugar de ocurrencia, dificulta los análisis internos en las diferentes áreas geográficas de un país. Por esta razón, se recomienda utilizar para este tipo de análisis, los registros según el lugar de residencia habitual."',
+            distractors: [
+                'A) No es la razón principal.',
+                'C) No se menciona el costo.',
+                'D) No es necesariamente más preciso.'
+            ]
+        },
+        {
+            type: 'opcion',
+            text: 'Los métodos de evaluación de la información demográfica mencionados en el documento incluyen: comparación con distribuciones esperadas, comparación con otros países, utilización de relaciones entre variables, repetición del proceso de recolección, y:',
+            options: [
+                'A) Aplicación de técnicas de corrección elaboradas para errores comunes.',
+                'B) Realización de análisis de regresión.',
+                'C) Utilización de modelos matemáticos complejos.',
+                'D) Consulta a expertos internacionales.'
+            ],
+            correct: 0,
+            justification: 'El texto enumera: "• Comparación de los datos observados con algún tipo de distribución esperada. • Comparación de la información con la correspondiente a otros países o regiones... • Utilización de relaciones entre las variables demográficas... • Comparar los datos que se tienen con otras fuentes de información... • Repetir el proceso de recolección... • Empleo de técnicas de corrección que se han elaborado para corregir errores comunes en información demográfica."',
+            distractors: [
+                'B) No se menciona el análisis de regresión.',
+                'C) No se mencionan modelos complejos.',
+                'D) No se menciona la consulta a expertos.'
+            ]
+        },
+        // Más preguntas para completar 30
+        {
+            type: 'opcion',
+            text: 'La fase de preempadronamiento del censo incluye actividades como la sanción legal, organización, cronograma, trabajo cartográfico, diseño del cuestionario y:',
+            options: [
+                'A) La capacitación de los enumeradores.',
+                'B) La prueba del cuestionario y el censo piloto.',
+                'C) La recolección de la información en el campo.',
+                'D) La codificación y digitación de los datos.'
+            ],
+            correct: 1,
+            justification: 'El texto indica: "Esta etapa culmina con la prueba del cuestionario y con el censo piloto en una zona específica; este paso es fundamental pues permite evaluar la calidad de las preguntas y estimar el tiempo de respuesta del instrumento."',
+            distractors: [
+                'A) Eso pertenece al empadronamiento.',
+                'C) Eso pertenece al empadronamiento.',
+                'D) Eso pertenece al postempadronamiento.'
+            ]
+        },
+        {
+            type: 'opcion',
+            text: 'Los usos de las estadísticas vitales incluyen: proporcionar información básica para el estudio de la mortalidad y la fecundidad, y:',
+            options: [
+                'A) Estimar la migración internacional.',
+                'B) Posibilitar el análisis de factores asociados con la mortalidad y la fecundidad, como educación y zona de residencia.',
+                'C) Determinar la estructura por edad de la población.',
+                'D) Evaluar la calidad de las encuestas.'
+            ],
+            correct: 1,
+            justification: 'El texto señala: "Proporcionan información básica para el estudio de la mortalidad y la fecundidad... Posibilita el análisis de factores asociados con la mortalidad y la fecundidad, tales como: nivel de educación, edad, zona de residencia, nivel socioeconómico, etc."',
+            distractors: [
+                'A) La migración no se deriva directamente de las estadísticas vitales.',
+                'C) La estructura por edad se obtiene de los censos, no de las estadísticas vitales.',
+                'D) Las estadísticas vitales no se usan para evaluar encuestas.'
+            ]
+        },
+        {
+            type: 'relacion',
+            text: 'Relacione el tipo de empadronamiento censal con su definición:',
+            options: [
+                'A) Censo de jure → se empadrona en el lugar de presencia; Censo de facto → se empadrona en el lugar de residencia habitual.',
+                'B) Censo de jure → se empadrona en el lugar de residencia habitual; Censo de facto → se empadrona en el lugar de presencia.',
+                'C) Censo de jure → se empadrona en el lugar de trabajo; Censo de facto → se empadrona en el lugar de nacimiento.',
+                'D) Censo de jure → se empadrona a todas las personas presentes; Censo de facto → se empadrona a los residentes ausentes.'
+            ],
+            correct: 1,
+            justification: 'El texto define: "En el censo de jure o de derecho, se enumeran las personas según sea el lugar de residencia habitual, independientemente de su presencia o ausencia, el día del censo. Mientras que en el censo de facto o de hecho, se empadronan las personas en el lugar donde se encuentran en el momento del censo."',
+            distractors: [
+                'A) Invierte las definiciones.',
+                'C) No es la definición correcta.',
+                'D) No es la definición correcta.'
+            ]
+        },
+        {
+            type: 'completar',
+            text: 'En los registros vitales, la información sobre defunciones debe incluir la fecha de ocurrencia, fecha de registro, lugar de ocurrencia, causa de la muerte, certificado médico, estado civil y ________.',
+            options: [
+                'A) lugar de residencia habitual antes de morir',
+                'B) número de hijos tenidos',
+                'C) nivel educativo del difunto',
+                'D) ocupación del difunto'
+            ],
+            correct: 0,
+            justification: 'El texto enumera: "Defunciones: Fecha de ocurrencia, Fecha de registro, Lugar de ocurrencia, Causa de la muerte, Certificado médico, Estado civil, Lugar de residencia habitual antes de morir, etc."',
+            distractors: [
+                'B) Eso es para nacimientos.',
+                'C) No se menciona como parte del registro estándar.',
+                'D) No se menciona como parte del registro estándar.'
+            ]
+        },
+        {
+            type: 'opcion',
+            text: 'Una de las características de los censos es la "periodicidad", que según la recomendación de la ONU debe ser:',
+            options: [
+                'A) Cada 5 años.',
+                'B) Cada 10 años, en años terminados en 0.',
+                'C) Cada 15 años.',
+                'D) Anual.'
+            ],
+            correct: 1,
+            justification: 'El documento indica: "Periodicidad: Los censos deben ser realizados periódicamente. La recomendación hecha por la División de Población de las Naciones Unidas, señala que el período entre un censo y otro sea de 10 años y que los años censales sean los terminados en 0."',
+            distractors: [
+                'A) No es la recomendación de la ONU.',
+                'C) No es la recomendación.',
+                'D) No es la recomendación.'
+            ]
+        },
+        {
+            type: 'opcion',
+            text: 'Los errores de contenido en los censos pueden deberse a defectos en la boleta, ineficiencia del enumerador, desconocimiento del entrevistado, o a:',
+            options: [
+                'A) Omisión de áreas geográficas.',
+                'B) Errores en el proceso de codificación o digitación de la información.',
+                'C) Subregistro de eventos.',
+                'D) Errores en el diseño de la muestra.'
+            ],
+            correct: 1,
+            justification: 'El texto señala: "También puede producirse por errores en el proceso de codificación o digitación de la información."',
+            distractors: [
+                'A) Eso es error de cobertura.',
+                'C) Eso es error de cobertura en estadísticas vitales.',
+                'D) Eso es error de cobertura en encuestas.'
+            ]
+        },
+        {
+            type: 'opcion',
+            text: 'Las encuestas retrospectivas son utilizadas para:',
+            options: [
+                'A) Registrar hechos demográficos en forma periódica.',
+                'B) Reconstruir la historia demográfica de los individuos a partir de una sola aplicación del cuestionario.',
+                'C) Evaluar la calidad de los censos mediante la comparación de registros.',
+                'D) Estimar la población actual a partir de proyecciones.'
+            ],
+            correct: 1,
+            justification: 'El texto define: "Retrospectivas: Un cuestionario se aplica una sola vez. Las respuestas permiten reconstruir la historia demográfica de los individuos entrevistados."',
+            distractors: [
+                'A) Esa es la definición de prospectivas.',
+                'C) No es su principal uso; las encuestas postcensales son para eso.',
+                'D) No es su función.'
+            ]
+        },
+        {
+            type: 'opcion',
+            text: 'El subregistro en las estadísticas vitales afecta de manera diferencial a:',
+            options: [
+                'A) Las áreas urbanas en mayor medida.',
+                'B) Las áreas rurales y las áreas de menor tamaño.',
+                'C) Las personas de mayor edad.',
+                'D) Los nacimientos de hijos legítimos.'
+            ],
+            correct: 1,
+            justification: 'El documento indica: "Las áreas rurales y las áreas de menor tamaño son las más fuertemente impactadas por este problema."',
+            distractors: [
+                'A) Es lo opuesto; las rurales son más afectadas.',
+                'C) No se menciona un diferencial por edad.',
+                'D) No se menciona un diferencial por legitimidad.'
+            ]
+        },
+        {
+            type: 'opcion',
+            text: 'Los censos de población permiten, mediante métodos indirectos, estimar:',
+            options: [
+                'A) La migración interna y la distribución territorial.',
+                'B) La fecundidad y la mortalidad.',
+                'C) La actividad económica y la educación.',
+                'D) La religión y la etnia.'
+            ],
+            correct: 1,
+            justification: 'El texto menciona como uso de los censos: "Permite por medio de métodos indirectos estimar la fecundidad y la mortalidad."',
+            distractors: [
+                'A) La migración se estudia directamente, no indirectamente.',
+                'C) Esos son temas censales, pero no se estiman indirectamente.',
+                'D) Esos son temas censales, pero no se estiman indirectamente.'
+            ]
+        },
+        {
+            type: 'completar',
+            text: 'Las encuestas demográficas se caracterizan por ser parciales (solo toman una muestra), pueden tener auspicio estatal o privado, pueden ser continuas o eventuales, y tienen ________.',
+            options: [
+                'A) costo muy elevado',
+                'B) amplitud temática, sin grandes limitaciones en el tipo de información',
+                'C) cobertura universal',
+                'D) periodicidad fija de 10 años'
+            ],
+            correct: 1,
+            justification: 'El documento enumera: "Características de las encuestas demográficas: • Parcial... • Auspicio estatal o privado... • Continuas o eventuales... • Amplitud temática: No tienen grandes limitaciones en el tipo de información que se puede recolectar."',
+            distractors: [
+                'A) No es una característica; son más baratas que los censos.',
+                'C) Es lo opuesto; son parciales.',
+                'D) No tienen una periodicidad fija como los censos.'
+            ]
+        }
+    ];
+
+    // ========== LÓGICA DEL EXAMEN ==========
+    let currentIndex = 0;
+    let score = 0;
+    let answered = false;
+    const totalQuestions = questions.length;
+
+    const qNumber = document.getElementById('qNumber');
+    const qText = document.getElementById('qText');
+    const optionsContainer = document.getElementById('optionsContainer');
+    const feedback = document.getElementById('feedback');
+    const fbTitle = document.getElementById('fbTitle');
+    const fbDetail = document.getElementById('fbDetail');
+    const nextBtn = document.getElementById('nextBtn');
+    const progressFill = document.getElementById('progressFill');
+    const questionArea = document.getElementById('questionArea');
+    const resultArea = document.getElementById('resultArea');
+    const finalScore = document.getElementById('finalScore');
+    const finalMsg = document.getElementById('finalMsg');
+    const restartBtn = document.getElementById('restartBtn');
+
+    // Mezclar opciones para cada pregunta (aleatorizar orden)
+    function shuffleOptions(q) {
+        const opts = q.options.map((text, index) => ({ text, index }));
+        for (let i = opts.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [opts[i], opts[j]] = [opts[j], opts[i]];
+        }
+        const newOptions = opts.map(item => item.text);
+        const newCorrect = opts.findIndex(item => item.index === q.correct);
+        return { options: newOptions, correct: newCorrect };
+    }
+
+    // Aplicar shuffle a todas las preguntas al cargar
+    const shuffledQuestions = questions.map(q => {
+        const shuffled = shuffleOptions(q);
+        return {
+            ...q,
+            options: shuffled.options,
+            correct: shuffled.correct
+        };
+    });
+
+    function renderQuestion(index) {
+        const q = shuffledQuestions[index];
+        qNumber.textContent = `Pregunta ${index+1} de ${totalQuestions}`;
+        qText.textContent = q.text;
+        optionsContainer.innerHTML = '';
+        feedback.className = 'feedback';
+        feedback.style.display = 'none';
+        nextBtn.disabled = true;
+        answered = false;
+
+        const letters = ['A', 'B', 'C', 'D'];
+        q.options.forEach((opt, i) => {
+            const div = document.createElement('div');
+            div.className = 'option';
+            div.dataset.index = i;
+            // Mostrar solo la opción sin la letra al inicio (ya la agregamos)
+            div.innerHTML = `<span class="option-letter">${letters[i]}</span> ${opt.substring(3)}`;
+            div.addEventListener('click', () => selectOption(i));
+            optionsContainer.appendChild(div);
+        });
+
+        updateProgress();
+    }
+
+    function selectOption(selected) {
+        if (answered) return;
+        const q = shuffledQuestions[currentIndex];
+        const options = document.querySelectorAll('.option');
+        options.forEach((el, i) => {
+            el.classList.add('disabled');
+            if (i === q.correct) el.classList.add('correct');
+            if (i === selected && i !== q.correct) el.classList.add('wrong');
+            if (i === selected) el.classList.add('selected');
+        });
+
+        const isCorrect = (selected === q.correct);
+        if (isCorrect) score++;
+
+        feedback.style.display = 'block';
+        if (isCorrect) {
+            feedback.className = 'feedback correct';
+            fbTitle.textContent = '✅ Correcto';
+        } else {
+            feedback.className = 'feedback wrong';
+            fbTitle.textContent = '❌ Incorrecto';
+        }
+        let detail = `<strong>Justificación:</strong> ${q.justification}<br><br>`;
+        detail += `<strong>Análisis de distractores:</strong><br>`;
+        q.distractors.forEach((d, i) => {
+            const letter = String.fromCharCode(65 + i);
+            detail += `• ${letter}: ${d}<br>`;
+        });
+        fbDetail.innerHTML = detail;
+
+        answered = true;
+        nextBtn.disabled = false;
+        updateProgress();
+    }
+
+    function nextQuestion() {
+        if (currentIndex < totalQuestions - 1) {
+            currentIndex++;
+            renderQuestion(currentIndex);
+        } else {
+            showResults();
+        }
+    }
+
+    function updateProgress() {
+        const pct = ((currentIndex + (answered ? 1 : 0)) / totalQuestions) * 100;
+        progressFill.style.width = `${Math.min(pct, 100)}%`;
+    }
+
+    function showResults() {
+        questionArea.classList.add('hidden');
+        resultArea.classList.remove('hidden');
+        const pct = Math.round((score / totalQuestions) * 100);
+        finalScore.textContent = `${pct}%`;
+        let msg = '';
+        if (pct === 100) msg = '🏆 ¡Excelente! Dominas los conceptos de demografía y fuentes de datos.';
+        else if (pct >= 80) msg = '🌟 Muy bien. Tienes un sólido entendimiento de los temas.';
+        else if (pct >= 60) msg = '📘 Buen esfuerzo. Revisa los temas donde fallaste para profundizar.';
+        else msg = '📖 Te recomendamos repasar las sesiones 1 y 2 y volver a intentarlo.';
+        finalMsg.textContent = msg;
+    }
+
+    function restart() {
+        currentIndex = 0;
+        score = 0;
+        answered = false;
+        questionArea.classList.remove('hidden');
+        resultArea.classList.add('hidden');
+        renderQuestion(0);
+    }
+
+    nextBtn.addEventListener('click', nextQuestion);
+    restartBtn.addEventListener('click', restart);
+
+    renderQuestion(0);
+</script>
+</body>
+</html>
