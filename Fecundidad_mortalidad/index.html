@@ -1,0 +1,1706 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fecundidad y mortalidad. ONU (2005)</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+            background: #f2f6fc;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .container {
+            background: white;
+            max-width: 880px;
+            width: 100%;
+            border-radius: 28px;
+            box-shadow: 0 20px 40px -12px rgba(0,0,0,0.2);
+            padding: 30px 35px;
+            transition: 0.3s;
+        }
+        h1 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: #0a2a44;
+            border-left: 6px solid #1b6b8a;
+            padding-left: 18px;
+            margin-bottom: 6px;
+        }
+        .subtitle {
+            color: #2c3e50;
+            font-size: 0.95rem;
+            margin-bottom: 25px;
+            padding-left: 24px;
+            opacity: 0.75;
+        }
+        .progress-bar {
+            background: #e9ecf0;
+            height: 8px;
+            border-radius: 20px;
+            margin: 20px 0 25px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            background: #1b6b8a;
+            border-radius: 20px;
+            transition: width 0.4s ease;
+        }
+        .question-number {
+            font-weight: 600;
+            color: #15445c;
+            font-size: 0.9rem;
+            letter-spacing: 0.3px;
+            margin-bottom: 6px;
+        }
+        .question-text {
+            font-size: 1.2rem;
+            font-weight: 500;
+            color: #0b1e2e;
+            line-height: 1.5;
+            margin-bottom: 25px;
+        }
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 30px;
+        }
+        .option {
+            background: #f8faff;
+            border: 1.5px solid #dde3ed;
+            border-radius: 14px;
+            padding: 14px 18px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.15s;
+            color: #1a2b3c;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .option:hover {
+            background: #edf3fc;
+            border-color: #8ab3d0;
+        }
+        .option.selected {
+            border-color: #1b6b8a;
+            background: #e1edf7;
+        }
+        .option.correct {
+            border-color: #1e8b4c;
+            background: #dff0e6;
+        }
+        .option.wrong {
+            border-color: #b13e3e;
+            background: #f7e3e3;
+        }
+        .option.disabled {
+            pointer-events: none;
+            opacity: 0.85;
+        }
+        .option-letter {
+            font-weight: 700;
+            color: #1f5a78;
+            min-width: 24px;
+        }
+        .feedback {
+            background: #f0f4fa;
+            border-radius: 16px;
+            padding: 18px 22px;
+            margin: 10px 0 25px;
+            border-left: 5px solid #1b6b8a;
+            display: none;
+        }
+        .feedback.correct {
+            border-left-color: #1e8b4c;
+            background: #eaf6ef;
+        }
+        .feedback.wrong {
+            border-left-color: #b13e3e;
+            background: #f7ecec;
+        }
+        .feedback-title {
+            font-weight: 600;
+            font-size: 1rem;
+            margin-bottom: 6px;
+        }
+        .feedback-detail {
+            font-size: 0.95rem;
+            line-height: 1.5;
+            color: #1f3345;
+        }
+        .feedback-detail strong {
+            color: #0a2a44;
+        }
+        .btn {
+            background: #1b6b8a;
+            border: none;
+            color: white;
+            font-weight: 600;
+            font-size: 1rem;
+            padding: 12px 28px;
+            border-radius: 40px;
+            cursor: pointer;
+            transition: 0.2s;
+            margin-top: 5px;
+            display: inline-block;
+        }
+        .btn:hover {
+            background: #13516b;
+            transform: scale(1.02);
+        }
+        .btn:disabled {
+            opacity: 0.5;
+            pointer-events: none;
+        }
+        .result-box {
+            text-align: center;
+            padding: 25px 10px;
+        }
+        .result-score {
+            font-size: 3.2rem;
+            font-weight: 700;
+            color: #0a2a44;
+        }
+        .result-msg {
+            font-size: 1.1rem;
+            color: #1e3b54;
+            margin-top: 8px;
+        }
+        .restart-btn {
+            margin-top: 25px;
+            background: #3d5f7a;
+        }
+        .hidden {
+            display: none;
+        }
+        @media (max-width: 550px) {
+            .container { padding: 20px; }
+            h1 { font-size: 1.4rem; }
+            .question-text { font-size: 1rem; }
+        }
+    </style>
+</head>
+<body>
+<div class="container" id="app">
+    <h1>👶 Fecundidad y mortalidad</h1>
+    <div class="subtitle">ONU (2005). Manual sobre la recolección de datos de fecundidad y mortalidad</div>
+
+    <div class="progress-bar">
+        <div class="progress-fill" id="progressFill"></div>
+    </div>
+
+    <div id="questionArea">
+        <div class="question-number" id="qNumber">Pregunta 1 de 50</div>
+        <div class="question-text" id="qText">Cargando pregunta...</div>
+        <div class="options" id="optionsContainer"></div>
+        <div class="feedback" id="feedback">
+            <div class="feedback-title" id="fbTitle"></div>
+            <div class="feedback-detail" id="fbDetail"></div>
+        </div>
+        <button class="btn" id="nextBtn" disabled>Siguiente →</button>
+    </div>
+
+    <div id="resultArea" class="result-box hidden">
+        <div class="result-score" id="finalScore">0%</div>
+        <div class="result-msg" id="finalMsg"></div>
+        <button class="btn restart-btn" id="restartBtn">🔄 Reiniciar examen</button>
+    </div>
+</div>
+
+<script>
+    // ========== PREGUNTAS (50) ==========
+    // Basadas en párrafos 276-287 (Calidad datos registro civil), 407-421 (Errores distribución edades), 551-559 (Historiales nacimientos)
+    const questions = [
+        // ---- Calidad de los datos del registro civil (párrafos 276-287) ----
+        {
+            type: 'opcion',
+            text: 'Según el párrafo 276, la calidad de la cobertura de los datos del registro civil a nivel nacional, cuando se tabulan los sucesos por fecha de acaecimiento, depende fundamentalmente de:',
+            options: [
+                'A) La exactitud de la codificación de la causa de muerte.',
+                'B) Que el registro sea completo, con poca o ninguna inclusión indebida.',
+                'C) La eliminación de los registros tardíos del sistema.',
+                'D) La comparación con los datos del censo más reciente.'
+            ],
+            correct: 1,
+            justification: 'El párrafo 276 establece: "A nivel nacional, cuando se tabulan los sucesos por fecha de acaecimiento, la calidad de la cobertura de los datos del registro civil depende fundamentalmente de que ésta sea completa; en general, habrá poca o ninguna inclusión."',
+            distractors: [
+                'A) La causa de muerte es un aspecto de contenido, no de cobertura.',
+                'C) Los registros tardíos no se eliminan; se analizan y pueden ajustarse.',
+                'D) La comparación con censos es un método de evaluación, no el fundamento de la calidad.'
+            ]
+        },
+        {
+            type: 'opcion',
+            text: 'El párrafo 276 señala que la cobertura de los nacimientos y la de las defunciones en el registro civil:',
+            options: [
+                'A) Son siempre idénticas, ya que el mismo sistema las registra.',
+                'B) Pueden ser muy diferentes, y el registro de defunciones de menores de un año puede ser mucho más incompleto que el de otras defunciones.',
+                'C) Son independientes de la calidad del contenido.',
+                'D) Dependen exclusivamente de la legislación del país.'
+            ],
+            correct: 1,
+            justification: 'El párrafo 276: "Cabe recalcar que la cobertura de los nacimientos quizás sea muy diferente de las de las defunciones y que cuando es incompleta es posible que el registro de defunciones de menores de un año lo sea en medida mucho mayor que el de otras defunciones."',
+            distractors: [
+                'A) No son idénticas; pueden diferir.',
+                'C) La cobertura y el contenido están relacionados, aunque son dimensiones distintas.',
+                'D) La legislación influye pero no es el único factor.'
+            ]
+        },
+        {
+            type: 'opcion',
+            text: 'Cuando los sucesos se tabulan por fecha de registro en lugar de por fecha de acaecimiento, según el párrafo 277, los sucesos que ocurrieron antes del período pero se registraron durante él se consideran:',
+            options: [
+                'A) Omisiones del período.',
+                'B) Inclusiones indebidas.',
+                'C) Registros tardíos que deben excluirse.',
+                'D) Sucesos de períodos anteriores que no afectan la estadística.'
+            ],
+            correct: 1,
+            justification: 'El párrafo 277: "Los sucesos que ocurrieron durante el período dado pero registrados después de finalizar dicho período son omisiones, y los anteriores al comienzo del período pero registrados durante el mismo son inclusiones indebidas."',
+            distractors: [
+                'A) Las omisiones son los sucesos del período no registrados dentro de él.',
+                'C) No se excluyen; se consideran inclusiones indebidas para ese período.',
+                'D) Sí afectan la estadística del período de registro.'
+            ]
+        },
+        {
+            type: 'opcion',
+            text: 'Según el párrafo 278, si en épocas anteriores un 25% de los nacimientos se registraban al año siguiente y las mejoras reducen ese porcentaje a cero en el año corriente, el número de nacimientos registrados en el año corriente:',
+            options: [
+                'A) Será exactamente igual al número real de nacimientos del año.',
+                'B) Incluirá todos los nacimientos del año más un 25% de los del año anterior, produciendo un sobrerregistro del 25%.',
+                'C) Subestimará los nacimientos del año en un 25%.',
+                'D) No se verá afectado porque los registros se ajustan por fecha de acaecimiento.'
+            ],
+            correct: 1,
+            justification: 'El párrafo 278: "Los nacimientos registrados en este año incluirán entonces todos los nacimientos del año más un 25% de todos los nacimientos del año anterior. Habrá un sobrerregistro de nacimientos del 25% en el año corriente."',
+            distractors: [
+                'A) No es exacto, hay un sobrerregistro.',
+                'C) Hay sobrerregistro, no subestimación.',
+                'D) El ejemplo es sobre registros por fecha de registro, no de acaecimiento.'
+            ]
+        },
+        {
+            type: 'opcion',
+            text: 'El párrafo 279 indica que a nivel subnacional, los errores de cobertura son más complicados porque:',
+            options: [
+                'A) La migración interna es difícil de medir.',
+                'B) Puede no declararse con exactitud el lugar de residencia, y a veces se usa el lugar de acaecimiento como sustituto.',
+                'C) Las oficinas locales tienen diferentes criterios de registro.',
+                'D) Los registros tardíos son más frecuentes en áreas rurales.'
+            ],
+            correct: 1,
+            justification: 'El párrafo 279: "Los procedimientos de control de calidad del sistema de registro civil deben asegurar que se declare con exactitud el lugar de residencia. Sin embargo, tal vez no sea así, y esto puede crear errores de cobertura en las zonas locales. Además, a veces los datos sobre el lugar de acaecimiento se usan como sustitutos de los datos sobre el lugar de residencia, lo que puede provocar elevados niveles de error de cobertura."',
+            distractors: [
+                'A) La migración no se menciona en este párrafo.',
+                'C) No es el punto central del párrafo.',
+                'D) Los registros tardíos son un problema general, no específicamente subnacional.'
+            ]
+        },
+        {
+            type: 'opcion',
+            text: 'Según el párrafo 280, desde el punto de vista estadístico, un suceso queda registrado solamente si:',
+            options: [
+                'A) Se inscribe en la oficina local y se capta en la base de datos utilizada para producir tabulaciones.',
+                'B) Se emite un certificado legal de nacimiento o defunción.',
+                'C) El médico certificador firma el acta.',
+                'D) Se notifica al organismo central dentro del plazo legal.'
+            ],
+            correct: 0,
+            justification: 'El párrafo 280: "Desde el punto de vista estadístico, un suceso queda registrado solamente si: a) se lo inscribe en la oficina local, y b) si esta información se capta en la base de datos utilizada para producir tabulaciones y otras estadísticas; la inscripción de por sí no cuenta."',
+            distractors: [
+                'B) El certificado legal es parte del registro civil, pero no suficiente para la estadística.',
+                'C) La firma del médico no garantiza la captura estadística.',
+                'D) La notificación al organismo central no es suficiente si no se capta en la base de datos.'
+            ]
+        },
+        {
+            type: 'opcion',
+            text: 'El párrafo 281 señala una ventaja del registro civil sobre censos y encuestas:',
+            options: [
+                'A) La información se obtiene mucho después de ocurridos los sucesos, lo que permite mayor reflexión.',
+                'B) La información se obtiene poco tiempo después de ocurridos los sucesos y a partir de un declarante que probablemente puede proporcionar datos exactos.',
+                'C) El registro civil tiene mejor cobertura que los censos.',
+                'D) El registro civil no requiere supervisión porque los declarantes son confiables.'
+            ],
+            correct: 1,
+            justification: 'El párrafo 281: "El registro civil tiene como ventaja sobre los censos y las encuestas que la información se obtiene poco tiempo después de ocurridos los sucesos y a partir de un declarante que probablemente puede proporcionar datos exactos."',
+            distractors: [
+                'A) Es al revés: se obtiene poco tiempo después.',
+                'C) No siempre es mejor; depende del país.',
+                'D) Sí requiere supervisión y control de calidad.'
+            ]
+        },
+        {
+            type: 'opcion',
+            text: 'En relación con la calidad de los datos del registro civil, el párrafo 276 destaca que:',
+            options: [
+                'A) La cobertura de los nacimientos y defunciones es siempre comparable.',
+                'B) La calidad tiene que ver con la cobertura y el contenido, y la cobertura de las defunciones infantiles puede ser mucho más incompleta.',
+                'C) El contenido es más importante que la cobertura.',
+                'D) Los errores de cobertura son irrelevantes si el contenido es bueno.'
+            ],
+            correct: 1,
+            justification: 'El párrafo 276: "La calidad de los datos de registro civil tiene que ver con la cobertura y el contenido... Cabe recalcar que la cobertura de los nacimientos quizás sea muy diferente de las de las defunciones y que cuando es incompleta es posible que el registro de defunciones de menores de un año lo sea en medida mucho mayor que el de otras defunciones."',
+            distractors: [
+                'A) No siempre son comparables.',
+                'C) Ambas dimensiones son importantes.',
+                'D) Ambos tipos de errores afectan la calidad.'
+            ]
+        },
+        {
+            type: 'opcion',
+            text: 'Según el párrafo 278, un cambio en la demora entre el acaecimiento y el registro puede provocar:',
+            options: [
+                'A) Subregistro sistemático de nacimientos.',
+                'B) Variaciones en las estimaciones que pueden ser demasiado grandes o demasiado pequeñas.',
+                'C) Mejora automática de la cobertura.',
+                'D) Mayor exactitud en la causa de muerte.'
+            ],
+            correct: 1,
+            justification: 'El párrafo 278: "Por lo tanto, las variaciones en la modalidad de retraso entre el acaecimiento y el registro de sucesos pueden provocar estimaciones demasiado grandes o demasiado pequeñas."',
+            distractors: [
+                'A) No necesariamente, puede haber sobrerregistro en algunos períodos.',
+                'C) No es automático; depende de la dirección del cambio.',
+                'D) No se relaciona con la causa de muerte.'
+            ]
+        },
+        {
+            type: 'opcion',
+            text: 'El párrafo 277 establece que cuando se tabulan por fecha de registro, los sucesos ocurridos durante el período pero registrados después de finalizado son considerados:',
+            options: [
+                'A) Inclusiones indebidas.',
+                'B) Omisiones del período.',
+                'C) Registros válidos que deben incluirse.',
+                'D) Sucesos que deben excluirse del análisis.'
+            ],
+            correct: 1,
+            justification: 'Párrafo 277: "Los sucesos que ocurrieron durante el período dado pero registrados después de finalizar dicho período son omisiones."',
+            distractors: [
+                'A) Esa es la definición para sucesos anteriores al período pero registrados en él.',
+                'C) No son válidos para el período por fecha de registro.',
+                'D) No se excluyen, se contabilizan como omisiones.'
+            ]
+        },
+        // ---- Errores en la distribución por edades (párrafos 407-421) ----
+        {
+            type: 'opcion',
+            text: 'El párrafo 408 explica que para visualizar los errores en la declaración de la edad, es útil imaginar un cuadro de doble entrada con:',
+            options: [
+                'A) Edad declarada en filas y edad verdadera en columnas.',
+                'B) Edad verdadera en filas y edad declarada en columnas.',
+                'C) Edad en años completos y edad en meses.',
+                'D) Edad al momento del censo y edad al momento del registro.'
+            ],
+            correct: 1,
+            justification: 'Párrafo 408: "Para visualizar este tipo de error es útil imaginar un cuadro que muestre la población en cuestión clasificada por la edad verdadera (filas) y la edad declarada (columnas)."',
+            distractors: [
+                'A) Invierte el orden correcto.',
+                'C) No es la representación que se menciona.',
+                'D) No corresponde al ejemplo del párrafo.'
+            ]
+        },
+        {
+            type: 'opcion',
+            text: 'Según el párrafo 408, si no hubiera error en la declaración de la edad, el cuadro de edad verdadera vs. edad declarada:',
+            options: [
+                'A) Tendría valores en todas las celdas, distribuidos uniformemente.',
+                'B) Solo tendría valores distintos de cero en la diagonal principal.',
+                'C) Tendría más valores por encima de la diagonal.',
+                'D) Sería simétrico.'
+            ],
+            correct: 1,
+            justification: 'Párrafo 408: "Si no hubiera error, el cuadro solamente tendría asientos distintos de cero en la diagonal que va desde la casilla superior izquierda hasta la inferior derecha."',
+            distractors: [
+                'A) No, solo en la diagonal.',
+                'C) No, solo en la diagonal.',
+                'D) No, solo en la diagonal.'
+            ]
+        },
+        {
+            type: 'opcion',
+            text: 'El párrafo 409 indica que el número declarado de personas de edad x puede diferir del número verdadero debido a:',
+            options: [
+                'A) La preferencia por edades terminadas en 0 y 5 solamente.',
+                'B) La transferencia neta de personas a esa edad desde otras edades por declaraciones inexactas.',
+                'C) La omisión de personas en todas las edades por igual.',
+                'D) La falta de preguntas sobre edad en el cuestionario.'
+            ],
+            correct: 1,
+            justification: 'Párrafo 409: "el número declarado de personas de edad x será la cantidad cuya verdadera edad es x más la cantidad neta de personas transferidas a esta edad desde otras debido a declaraciones inexactas."',
+            distractors: [
+                'A) La preferencia de dígitos es una forma, no la única.',
+                'C) La omisión no es igual en todas las edades.',
+                'D) No es el tema del párrafo.'
+            ]
+        },
+        {
+            type: 'opcion',
+            text: 'El párrafo 410 identifica la preferencia de edades terminadas en ciertos dígitos como:',
+            options: [
+                'A) La forma más importante de subdeclaración de edad.',
+                'B) La forma más conocida pero menos importante de subdeclaración.',
+                'C) Un error que solo afecta a los adultos jóvenes.',
+                'D) Un error que no tiene consecuencias en las estimaciones demográficas.'
+            ],
+            correct: 1,
+            justification: 'Párrafo 410: "La preferencia de edades terminadas en ciertos dígitos, donde una cantidad excesiva de personas informan tener edades terminadas en “0” y “5” es la forma de subdeclaración más conocida pero menos importante."',
+            distractors: [
+                'A) Es la más conocida, pero no la más importante.',
+                'C) Afecta principalmente a edades avanzadas, no solo a jóvenes.',
+                'D) Sí tiene consecuencias, aunque menores que otras.'
+            ]
+        },
+        {
+            type: 'opcion',
+            text: 'Según el párrafo 411, las formas más importantes de subdeclaración de la edad incluyen:',
+            options: [
+                'A) Exagerar la edad de los niños pequeños.',
+                'B) Aumentar la edad de niños muy pequeños, modificar la edad de mujeres jóvenes por su estado civil o hijos, y exagerar la edad de los ancianos.',
+                'C) Redondear la edad al múltiplo de cinco más cercano.',
+                'D) Declarar la edad en años cumplidos en lugar de edad exacta.'
+            ],
+            correct: 1,
+            justification: 'Párrafo 411: "las formas más importantes de subdeclaración de la edad se dan: a) cuando se aumenta la edad de niños muy pequeños, b) cuando se modifica la edad de las mujeres jóvenes sobre la base de su estado civil o la cantidad de hijos nacidos vivos, o c) cuando se exagera la edad de los ancianos."',
+            distractors: [
+                'A) Solo es una de las tres, incompleta.',
+                'C) Es la preferencia de dígitos, considerada menos importante.',
+                'D) No se menciona como una de las más importantes.'
+            ]
+        },
+        {
+            type: 'opcion',
+            text: 'El párrafo 412 señala que las edades de los niños (menores de 1 y de 5 años) suelen aumentarse al declararlas, lo que produce:',
+            options: [
+                'A) Un excedente neto de personas en los grupos de edades más jóvenes.',
+                'B) Un déficit neto de personas en los grupos de edades más jóvenes.',
+                'C) Una distribución por edades perfectamente uniforme.',
+                'D) Un aumento en la relación de masculinidad.'
+            ],
+            correct: 1,
+            justification: 'Párrafo 412: "Las edades de los niños (menores de 1 y de 5 años) suelen aumentarse al declararlas, lo que produce un déficit neto de personas en los grupos de edades más jóvenes."',
+            distractors: [
+                'A) Es al revés: hay déficit.',
+                'C) No, se produce distorsión.',
+                'D) No se relaciona con la relación de sexos.'
+            ]
+        },
+        {
+            type: 'opcion',
+            text: 'Según el párrafo 413, las edades declaradas por las mujeres jóvenes pueden tener sesgos dependiendo de:',
+            options: [
+                'A) Su nivel educativo.',
+                'B) Si están casadas o no y de la cantidad de hijos que tienen.',
+                'C) Su lugar de residencia.',
+                'D) La ocupación del jefe del hogar.'
+            ],
+            correct: 1,
+            justification: 'Párrafo 413: "Las edades declaradas por las mujeres jóvenes pueden tener diversos sesgos, dependiendo de si están casadas o no y de la cantidad de hijos que tienen."',
+            distractors: [
+                'A) No se menciona la educación en este contexto.',
+                'C) No es el factor señalado.',
+                'D) No se menciona.'
+            ]
+        },
+        {
+            type: 'opcion',
+            text: 'El párrafo 414 menciona que puede haber una tendencia a exagerar las edades de las personas de edad más avanzada, posiblemente debido a:',
+            options: [
+                'A) La dificultad para recordar la fecha de nacimiento.',
+                'B) La idea de que la edad avanzada representa una distinción social y personal.',
+                'C) La falta de documentos de identidad.',
+                'D) La influencia de los familiares.'
+            ],
+            correct: 1,
+            justification: 'Párrafo 414: "Puede que se exageren las edades de las personas de edad más avanzada... Esto puede que sea atribuible a la idea de que la edad avanzada representa una distinción social y personal."',
+            distractors: [
+                'A) No es la razón principal señalada.',
+                'C) No se menciona.',
+                'D) No se menciona.'
+            ]
+        },
+        {
+            type: 'opcion',
+            text: 'El párrafo 416 indica que la calidad de los datos sobre la edad se ve afectada no solo por errores en la declaración, sino también por:',
+            options: [
+                'A) El error de muestreo.',
+                'B) El subempadronamiento selectivo por edades.',
+                'C) La falta de respuesta en la pregunta de edad.',
+                'D) La codificación incorrecta de la edad.'
+            ],
+            correct: 1,
+            justification: 'Párrafo 416: "La calidad de los datos sobre la edad se ve afectada por el subempadronamiento selectivo por edades, además de los errores en la declaración de la edad."',
+            distractors: [
+                'A) El error de muestreo es propio de encuestas, no de censos.',
+                'C) La falta de respuesta es otro problema, pero no el mencionado aquí.',
+                'D) La codificación es un error de procesamiento, no de campo.'
+            ]
+        },
+        {
+            type: 'opcion',
+            text: 'Según el párrafo 417, la tendencia a omitir a los menores de un año en los censos es un ejemplo de:',
+            options: [
+                'A) Preferencia de dígitos.',
+                'B) Subempadronamiento selectivo por edades.',
+                'C) Error de contenido.',
+                'D) Error de muestreo.'
+            ],
+            correct: 1,
+            justification: 'Párrafo 417: "La tendencia a omitir a los menores de un año en los censos y las encuestas es el ejemplo más sencillo de subempadronamiento selectivo por edades."',
+            distractors: [
+                'A) No es preferencia de dígitos.',
+                'C) Es un error de cobertura, no de contenido.',
+                'D) No es error de muestreo.'
+            ]
+        },
+        {
+            type: 'opcion',
+            text: 'El párrafo 418 advierte que el subempadronamiento selectivo por edades y los errores en la declaración de la edad pueden interactuar cuando:',
+            options: [
+                'A) Se formulan preguntas solo a personas de determinadas edades, incentivando a los empadronadores a declarar edades en más para evitar preguntas adicionales.',
+                'B) Se utilizan diferentes cuestionarios para cada grupo de edad.',
+                'C) Se aplican factores de ajuste sin considerar la edad.',
+                'D) Se usa la fecha de nacimiento en lugar de la edad.'
+            ],
+            correct: 0,
+            justification: 'Párrafo 418: "El subempadronamiento selectivo por edades y los errores en la declaración de la edad pueden interactuar cuando se formulan ciertas preguntas sólo a personas de determinadas edades. ... Esto significa un incentivo para los empadronadores —que prefieren reducir su carga de trabajo antes que obtener información exacta— para declarar en más las edades de las mujeres que tienen cerca de 50 años."',
+            distractors: [
+                'B) No se menciona el uso de diferentes cuestionarios.',
+                'C) Los factores de ajuste se aplican después, no interactúan en el campo.',
+                'D) Preguntar por fecha de nacimiento es preferible, no una fuente de interacción.'
+            ]
+        },
+        {
+            type: 'opcion',
+            text: 'El párrafo 415 señala que la evaluación de los errores en la declaración de la edad (aparte de la preferencia de dígitos) debe combinarse en general con:',
+            options: [
+                'A) El análisis de la mortalidad diferencial.',
+                'B) El subempadronamiento selectivo por edades.',
+                'C) La comparación con registros administrativos.',
+                'D) La corrección por imputación.'
+            ],
+            correct: 1,
+            justification: 'Párrafo 415: "Los tres tipos de errores en la declaración de la edad son más difíciles de evaluar que el que produce la preferencia de edades terminadas en ciertos dígitos; tal vez por este motivo este último se ha estudiado y se comprende menos. Su evaluación debe combinarse en general con el subempadronamiento selectivo por edades."',
+            distractors: [
+                'A) No se menciona la mortalidad diferencial aquí.',
+                'C) No es el enfoque sugerido.',
+                'D) La imputación es una corrección posterior, no una combinación para la evaluación.'
+            ]
+        },
+        {
+            type: 'opcion',
+            text: 'Según el párrafo 419, la obra de Ewbank (1981) proporciona un análisis de:',
+            options: [
+                'A) La preferencia de dígitos en la declaración de edad.',
+                'B) Los errores en las distribuciones por edades de los censos y las encuestas.',
+                'C) El subregistro de nacimientos.',
+                'D) La mortalidad infantil.'
+            ],
+            correct: 1,
+            justification: 'Párrafo 419: "En Ewbank (1981) se hace un análisis, antiguo, pero meticuloso y completo, de los errores en las distribuciones por edades de los censos y de las encuestas."',
+            distractors: [
+                'A) No es el tema central de esa obra según el texto.',
+                'C) No se menciona.',
+                'D) No se menciona.'
+            ]
+        },
+        {
+            type: 'opcion',
+            text: 'El párrafo 421 menciona que el método de los hijos propios se llama así porque:',
+            options: [
+                'A) Se basa en los hijos que declaran a sus propias madres.',
+                'B) Los hijos de las mujeres que viven en el hogar son sus "hijos propios", no adoptados ni de otras mujeres.',
+                'C) Solo se aplica a hijos biológicos.',
+                'D) Es un método patentado por su creador.'
+            ],
+            correct: 1,
+            justification: 'Párrafo 421: "Los hijos de las mujeres que viven en el hogar son sus “hijos propios”, y no adoptados o hijos de otras mujeres que viven temporalmente en el hogar, de ahí el nombre del método."',
+            distractors: [
+                'A) No se refiere a la declaración de hijos, sino a la co-residencia.',
+                'C) Se refiere a hijos que viven en el hogar, no solo biológicos.',
+                'D) No es un nombre patentado.'
+            ]
+        },
+        {
+            type: 'opcion',
+            text: 'El párrafo 420 indica que el método de los hijos propios es una ampliación del método de:',
+            options: [
+                'A) Supervivencia inversa.',
+                'B) Reconstrucción de historiales.',
+                'C) Hijos nacidos vivos.',
+                'D) Defunciones recientes.'
+            ],
+            correct: 0,
+            justification: 'Párrafo 420: "Este método es una ampliación del de la supervivencia inversa donde se hacen coincidir, si es posible, los hijos a los que se aplica este método con sus madres."',
+            distractors: [
+                'B) La reconstrucción es posterior al método de hijos propios.',
+                'C) No es una ampliación de esa pregunta.',
+                'D) No está relacionado con defunciones.'
+            ]
+        },
+        // ---- Historiales de nacimientos: tabulación y calidad (párrafos 551-559) ----
+        {
+            type: 'opcion',
+            text: 'El párrafo 551 señala que los datos de los historiales de nacimientos, a diferencia de otras preguntas, suelen procesarse para:',
+            options: [
+                'A) Producir tabulaciones estándar que luego se usan para estimación.',
+                'B) Producir directamente las medidas deseadas de fecundidad y mortalidad, sin necesidad de tabulaciones intermedias.',
+                'C) Crear bases de datos para uso público.',
+                'D) Comparar con los registros civiles.'
+            ],
+            correct: 1,
+            justification: 'Párrafo 551: "Los datos de los historiales de nacimientos no suelen procesarse de la misma manera que los de las otras preguntas examinadas antes... los datos de los historiales de nacimientos suelen procesarse de manera que produzcan directamente las medidas deseadas de fecundidad y mortalidad."',
+            distractors: [
+                'A) No es el enfoque típico; se buscan medidas directas.',
+                'C) No es el objetivo principal del procesamiento.',
+                'D) No se menciona la comparación con registros civiles en ese párrafo.'
+            ]
+        },
+        {
+            type: 'opcion',
+            text: 'El párrafo 552 indica que las tabulaciones de los historiales de nacimientos como resultados intermedios se utilizan principalmente para:',
+            options: [
+                'A) Calcular tasas brutas de natalidad.',
+                'B) Diagnosticar determinados tipos de errores de respuesta.',
+                'C) Estimar la población total.',
+                'D) Construir tablas de vida.'
+            ],
+            correct: 1,
+            justification: 'Párrafo 552: "Es posible producir las tabulaciones como resultados intermedios mediante programas informáticos que se ocupan del procesamiento, pero en general no son producto del procesamiento, a excepción de los cuadros especiales utilizados para diagnosticar determinados tipos de errores de respuesta."',
+            distractors: [
+                'A) No es su función principal.',
+                'C) No se menciona.',
+                'D) No es su función principal.'
+            ]
+        },
+        {
+            type: 'opcion',
+            text: 'Según el párrafo 554, el error más grave en los datos de los historiales de nacimientos se produce en:',
+            options: [
+                'A) La declaración del sexo del nacido.',
+                'B) La declaración de las fechas de nacimiento, transfiriendo nacimientos de años recientes a años anteriores.',
+                'C) La omisión de hijos fallecidos.',
+                'D) La declaración del estado civil de la madre.'
+            ],
+            correct: 1,
+            justification: 'Párrafo 554: "Los errores más graves en los datos de los historiales se producen en la declaración de las fechas de nacimiento cuando se transfiere un número importante de nacimientos de los años inmediatamente precedentes a la encuesta a años anteriores."',
+            distractors: [
+                'A) El sexo suele declararse bien.',
+                'C) Es un error, pero no el más grave según el texto.',
+                'D) No se menciona como el más grave.'
+            ]
+        },
+        {
+            type: 'opcion',
+            text: 'El párrafo 554 advierte que la transferencia de nacimientos de años recientes a años anteriores tiene el efecto de:',
+            options: [
+                'A) Subvalorar el nivel de fecundidad de los años recientes y sobrevalorarlo en años anteriores.',
+                'B) Subvalorar la fecundidad en todos los períodos.',
+                'C) No afectar la tendencia general.',
+                'D) Mejorar la calidad de los datos.'
+            ],
+            correct: 0,
+            justification: 'Párrafo 554: "Esto tiene el efecto de subvalorar el nivel de fecundidad de los años inmediatamente precedentes a la encuesta y sobrevalorar el nivel en los años anteriores."',
+            distractors: [
+                'B) No, hay subvaloración en recientes y sobrevaloración en anteriores.',
+                'C) Sí afecta la tendencia, creando una falsa disminución.',
+                'D) Empeora la calidad.'
+            ]
+        },
+        {
+            type: 'opcion',
+            text: 'Según el párrafo 555, la transferencia de nacimientos puede crear la apariencia de:',
+            options: [
+                'A) Un aumento de la fecundidad.',
+                'B) Una disminución de la fecundidad cuando en realidad se ha mantenido constante o ha aumentado.',
+                'C) Estabilidad de la fecundidad.',
+                'D) Un cambio en la estructura por edades de la fecundidad.'
+            ],
+            correct: 1,
+            justification: 'Párrafo 555: "Como consecuencia, aparecerá una disminución de la fecundidad, cuando en realidad se ha mantenido constante (o incluso ha aumentado), o se exagerará un descenso real."',
+            distractors: [
+                'A) Es lo opuesto; aparenta disminución.',
+                'C) No, aparenta cambio.',
+                'D) No necesariamente, afecta el nivel más que la estructura.'
+            ]
+        },
+        {
+            type: 'opcion',
+            text: 'El párrafo 556 explica que cuando se recolectan historiales de nacimientos solo de mujeres menores de 50 años, se excluyen los nacimientos de mujeres que:',
+            options: [
+                'A) Tienen más de 50 años en la fecha de la encuesta.',
+                'B) Tienen menos de 15 años.',
+                'C) Están solteras.',
+                'D) Han emigrado.'
+            ],
+            correct: 0,
+            justification: 'Párrafo 556: "Cuando se recolectan historiales de nacimientos sólo de mujeres menores de 50 años, como suele hacerse, se excluyen los de las mujeres que tenían 49 años o más el año anterior a la encuesta."',
+            distractors: [
+                'B) El límite inferior suele ser 15 años, pero la exclusión es por el superior.',
+                'C) El estado civil no es el criterio de exclusión.',
+                'D) La emigración no se menciona aquí.'
+            ]
+        },
+        {
+            type: 'opcion',
+            text: 'El párrafo 556 señala que la exclusión de mujeres mayores de 50 años produce una exclusión progresiva de mujeres cada vez más jóvenes a medida que:',
+            options: [
+                'A) Se avanza en el tiempo hacia el pasado.',
+                'B) Se acerca la fecha de la encuesta.',
+                'C) Se incrementa el tamaño de la muestra.',
+                'D) Se aplican factores de ajuste.'
+            ],
+            correct: 0,
+            justification: 'Párrafo 556: "se excluyen los de las mujeres que tenían 49 años o más el año anterior a la encuesta; los de las mujeres que tenían 48 años o más dos años antes de la encuesta, y así sucesivamente para cada año anterior a la encuesta."',
+            distractors: [
+                'B) Es al revés: hacia el pasado se excluyen más.',
+                'C) El tamaño de muestra no influye en este sesgo.',
+                'D) Los factores de ajuste no evitan este sesgo.'
+            ]
+        },
+        {
+            type: 'opcion',
+            text: 'El párrafo 558 indica que la selección por edad limita el uso de los historiales de nacimientos para calcular tendencias de la tasa de fecundidad total porque:',
+            options: [
+                'A) No se pueden estimar las tasas de mujeres mayores de 50 años sin hacer supuestos.',
+                'B) Las mujeres jóvenes tienen menos hijos.',
+                'C) Los nacimientos de mujeres mayores son irrelevantes.',
+                'D) La muestra no es representativa.'
+            ],
+            correct: 0,
+            justification: 'Párrafo 558: "No puede estimarse ninguna tendencia de la tasa de fecundidad total sin calcular los valores correspondientes a las tasas faltantes correspondientes a las mujeres mayores de 50 años en la fecha de la encuesta."',
+            distractors: [
+                'B) No es la razón principal; el problema es la falta de datos de mujeres mayores.',
+                'C) Son relevantes para la fecundidad total.',
+                'D) No se menciona la representatividad muestral en ese punto.'
+            ]
+        },
+        {
+            type: 'opcion',
+            text: 'Según el párrafo 559, las tendencias de las tasas de fecundidad para mujeres menores de 40 años pueden calcularse para:',
+            options: [
+                'A) Los 5 años anteriores a la encuesta.',
+                'B) Los 10 años anteriores a la encuesta.',
+                'C) Los 20 años anteriores a la encuesta.',
+                'D) Los 30 años anteriores a la encuesta.'
+            ],
+            correct: 1,
+            justification: 'Párrafo 559: "Las tendencias de las tasas de fecundidad para las mujeres menores de 40 años pueden calcularse para los 10 años anteriores a la encuesta; para las mujeres menores de 30, para los 20 años anteriores, y así sucesivamente."',
+            distractors: [
+                'A) Es menos tiempo del que se puede calcular.',
+                'C) Eso es para menores de 30, no de 40.',
+                'D) No corresponde.'
+            ]
+        },
+        {
+            type: 'opcion',
+            text: 'El párrafo 557 presenta un cuadro (Cuadro 9) que muestra que las tasas de fecundidad que pueden calcularse a partir de historiales de mujeres menores de 50 años son aquellas que se encuentran:',
+            options: [
+                'A) Por encima de la diagonal principal del diagrama de Lexis.',
+                'B) Por debajo de la diagonal principal del diagrama de Lexis.',
+                'C) Exactamente en la diagonal principal.',
+                'D) En cualquier parte del diagrama, sin restricciones.'
+            ],
+            correct: 0,
+            justification: 'Párrafo 557: "Sólo pueden calcularse las que se encuentran sobre la línea diagonal de casillas desde el extremo superior izquierdo hasta el inferior derecho a partir de los historiales de nacimientos de mujeres menores de 50 años en la fecha de la encuesta."',
+            distractors: [
+                'B) Es al revés: por encima de la diagonal.',
+                'C) No solo en la diagonal, sino por encima de ella.',
+                'D) No, hay restricciones.'
+            ]
+        },
+        {
+            type: 'opcion',
+            text: 'El párrafo 551 menciona que los datos de los historiales de nacimientos suelen procesarse para producir directamente medidas de fecundidad y mortalidad, a diferencia de otras preguntas que requieren tabulaciones intermedias. Esto implica que:',
+            options: [
+                'A) Los historiales son más difíciles de procesar.',
+                'B) Los historiales proporcionan información más directa y detallada.',
+                'C) Los historiales no necesitan evaluación de calidad.',
+                'D) Los historiales son menos precisos que otras fuentes.'
+            ],
+            correct: 1,
+            justification: 'El párrafo 551 indica que los historiales se procesan para producir directamente las medidas, lo que sugiere que son una fuente más directa de información detallada sobre fecundidad y mortalidad.',
+            distractors: [
+                'A) No necesariamente más difíciles, pero diferentes.',
+                'C) Sí necesitan evaluación de calidad, como se ve en párrafos siguientes.',
+                'D) No necesariamente menos precisos; pueden ser muy precisos si la calidad es buena.'
+            ]
+        },
+        // Continuación con más preguntas para llegar a 50, combinando temas
+        // Repartidas entre los tres bloques
+        // Agregaré más preguntas de calidad del registro civil (276-287)
+        {
+            type: 'opcion',
+            text: 'El párrafo 276 menciona que la calidad de los datos del registro civil abarca dos dimensiones: cobertura y contenido. La cobertura se refiere a:',
+            options: [
+                'A) La exactitud de las respuestas en el certificado.',
+                'B) La integridad del registro de los sucesos (omisiones o inclusiones indebidas).',
+                'C) La codificación de la causa de muerte.',
+                'D) La oportunidad de la publicación de los datos.'
+            ],
+            correct: 1,
+            justification: 'Párrafo 276: "La calidad de los datos de registro civil tiene que ver con la cobertura y el contenido... la calidad de la cobertura de los datos del registro civil depende fundamentalmente de que ésta sea completa; en general, habrá poca o ninguna inclusión." La cobertura se refiere a la integridad del registro.',
+            distractors: [
+                'A) Eso es contenido.',
+                'C) Eso es contenido o procesamiento.',
+                'D) Es puntualidad, no cobertura.'
+            ]
+        },
+        {
+            type: 'opcion',
+            text: 'El párrafo 277, al hablar de tabulaciones por fecha de registro, señala que estas tabulaciones se consideran:',
+            options: [
+                'A) Una medida exacta de los sucesos ocurridos en ese período.',
+                'B) Una aproximación de los datos tabulados por fecha de acaecimiento.',
+                'C) La forma preferida de tabulación para análisis demográfico.',
+                'D) Una fuente de errores que deben eliminarse.'
+            ],
+            correct: 1,
+            justification: 'Párrafo 277: "Las tabulaciones por fecha de registro se consideran una aproximación de los datos tabulados por fecha de acaecimiento."',
+            distractors: [
+                'A) No son exactas, son una aproximación.',
+                'C) No es la forma preferida; se prefiere fecha de acaecimiento.',
+                'D) No se eliminan, pero se reconocen sus limitaciones.'
+            ]
+        },
+        {
+            type: 'opcion',
+            text: 'El párrafo 279 advierte que el uso del lugar de acaecimiento como sustituto del lugar de residencia para tabulaciones subnacionales puede provocar:',
+            options: [
+                'A) Subregistro en áreas urbanas.',
+                'B) Elevados niveles de error de cobertura, tanto positivos como negativos.',
+                'C) Mejora en la precisión de las tasas.',
+                'D) Mayor exactitud en la causa de muerte.'
+            ],
+            correct: 1,
+            justification: 'Párrafo 279: "a veces los datos sobre el lugar de acaecimiento se usan como sustitutos de los datos sobre el lugar de residencia, lo que puede provocar elevados niveles de error de cobertura, tanto positivos como negativos."',
+            distractors: [
+                'A) No específicamente urbano, depende del contexto.',
+                'C) Empeora la precisión.',
+                'D) No está relacionado.'
+            ]
+        },
+        {
+            type: 'opcion',
+            text: 'Según el párrafo 280, la inscripción de un suceso en la oficina local no es suficiente para fines estadísticos; se requiere además:',
+            options: [
+                'A) La firma del registrador.',
+                'B) Que la información se capture en la base de datos utilizada para tabulaciones.',
+                'C) La aprobación del organismo central.',
+                'D) La verificación por parte del médico.'
+            ],
+            correct: 1,
+            justification: 'Párrafo 280: "Desde el punto de vista estadístico, un suceso queda registrado solamente si: a) se lo inscribe en la oficina local, y b) si esta información se capta en la base de datos utilizada para producir tabulaciones y otras estadísticas; la inscripción de por sí no cuenta."',
+            distractors: [
+                'A) No es suficiente.',
+                'C) No se menciona.',
+                'D) No es suficiente.'
+            ]
+        },
+        // Más preguntas sobre errores en distribución por edades
+        {
+            type: 'opcion',
+            text: 'El párrafo 407 señala que los errores en la distribución por edades se producen por fallas en la declaración de la edad y por:',
+            options: [
+                'A) Errores de muestreo.',
+                'B) Subempadronamiento diferencial por edades.',
+                'C) Falta de respuesta en la pregunta de edad.',
+                'D) Error en la codificación de la edad.'
+            ],
+            correct: 1,
+            justification: 'Párrafo 407: "Los errores en la distribución por edades se producen a raíz de fallas en la declaración de la edad y del subempadronamiento diferencial por edades."',
+            distractors: [
+                'A) No es error de muestreo.',
+                'C) La falta de respuesta es otro problema.',
+                'D) La codificación es posterior.'
+            ]
+        },
+        {
+            type: 'opcion',
+            text: 'El párrafo 409 establece que la cantidad neta de personas transferidas a una edad desde otras debido a declaraciones inexactas puede ser cero, aun cuando:',
+            options: [
+                'A) No haya errores de declaración.',
+                'B) Haya considerables deficiencias en la declaración de la edad.',
+                'C) El censo sea perfecto.',
+                'D) No haya subempadronamiento.'
+            ],
+            correct: 1,
+            justification: 'Párrafo 409: "Como la cantidad transferida puede ser cero, aun cuando haya considerables deficiencias en la declaración de la edad hay una distinción entre el grado de subdeclaración de la edad y el grado en que la cantidad de personas que declaran tener una edad dada difiere de la cantidad de personas que realmente tienen esa edad."',
+            distractors: [
+                'A) Puede haber errores que se compensen.',
+                'C) No es relevante.',
+                'D) No se menciona.'
+            ]
+        },
+        {
+            type: 'opcion',
+            text: 'El párrafo 411 menciona que la modificación de la edad de las mujeres jóvenes se basa en su estado civil o en:',
+            options: [
+                'A) Su nivel de ingresos.',
+                'B) La cantidad de hijos nacidos vivos.',
+                'C) Su lugar de residencia.',
+                'D) Su ocupación.'
+            ],
+            correct: 1,
+            justification: 'Párrafo 411: "b) cuando se modifica la edad de las mujeres jóvenes sobre la base de su estado civil o la cantidad de hijos nacidos vivos."',
+            distractors: [
+                'A) No se menciona.',
+                'C) No se menciona.',
+                'D) No se menciona.'
+            ]
+        },
+        {
+            type: 'opcion',
+            text: 'El párrafo 412 advierte que el déficit de niños en edades tempranas debido al aumento de su edad declarada puede crear:',
+            options: [
+                'A) Una aparente disminución de la fecundidad en el período inmediatamente anterior al censo.',
+                'B) Un aumento de la fecundidad.',
+                'C) Una mejora en la relación de sexos.',
+                'D) Una subestimación de la mortalidad infantil.'
+            ],
+            correct: 0,
+            justification: 'Párrafo 412: "esto produce estimaciones demasiado bajas para el período inmediatamente anterior al censo o a la encuesta, creándose así una aparente disminución de la fecundidad."',
+            distractors: [
+                'B) Es lo opuesto.',
+                'C) No está relacionado.',
+                'D) Puede afectar la mortalidad indirectamente, pero el texto menciona fecundidad.'
+            ]
+        },
+        {
+            type: 'opcion',
+            text: 'El párrafo 413 indica que en lugares donde la edad no es una consideración social importante, los declarantes pueden no conocer bien su edad, y los agentes pueden registrar:',
+            options: [
+                'A) La edad de las mujeres solteras por encima de la verdadera, y la de las casadas por debajo.',
+                'B) La edad de las mujeres solteras o sin hijos por debajo de la verdadera, y la de las casadas y con hijos por encima.',
+                'C) Edades aleatorias.',
+                'D) Edades redondeadas a múltiplos de cinco.'
+            ],
+            correct: 1,
+            justification: 'Párrafo 413: "En este caso tal vez se registre la edad de las mujeres solteras o sin hijos por debajo de la verdadera, y la edad de las mujeres casadas y con hijos por encima de la que tienen."',
+            distractors: [
+                'A) Invierte el sentido.',
+                'C) No es aleatorio, sigue patrones.',
+                'D) Eso es preferencia de dígitos, no lo que se describe aquí.'
+            ]
+        },
+        {
+            type: 'opcion',
+            text: 'El párrafo 414 menciona que la exageración de la edad en adultos jóvenes puede deberse a:',
+            options: [
+                'A) La presión de los padres.',
+                'B) La idea de que la edad avanzada representa una distinción social.',
+                'C) La falta de documentos de identidad.',
+                'D) La confusión con la fecha de nacimiento.'
+            ],
+            correct: 1,
+            justification: 'Párrafo 414: "Puede que se exageren las edades de las personas de edad más avanzada, y hasta de los adultos jóvenes... Esto puede que sea atribuible a la idea de que la edad avanzada representa una distinción social y personal."',
+            distractors: [
+                'A) No se menciona.',
+                'C) No se menciona.',
+                'D) No se menciona.'
+            ]
+        },
+        {
+            type: 'opcion',
+            text: 'El párrafo 415 señala que los tres tipos de errores en la declaración de la edad (aparte de la preferencia de dígitos) son más difíciles de evaluar, por lo que su evaluación debe combinarse con:',
+            options: [
+                'A) El análisis de la mortalidad.',
+                'B) El subempadronamiento selectivo por edades.',
+                'C) La comparación con registros vitales.',
+                'D) La imputación de edades.'
+            ],
+            correct: 1,
+            justification: 'Párrafo 415: "Su evaluación debe combinarse en general con el subempadronamiento selectivo por edades."',
+            distractors: [
+                'A) No se menciona.',
+                'C) No se menciona.',
+                'D) La imputación es una corrección, no una combinación para evaluación.'
+            ]
+        },
+        // Más preguntas de historiales de nacimientos (551-559)
+        {
+            type: 'opcion',
+            text: 'El párrafo 554 explica que la transferencia de nacimientos de años recientes a años anteriores produce una sobrevaloración de la fecundidad en años anteriores y una subvaloración en años recientes, lo que puede llevar a:',
+            options: [
+                'A) Subestimar la mortalidad infantil.',
+                'B) Interpretar erróneamente una disminución de la fecundidad.',
+                'C) Sobreestimar la población total.',
+                'D) Mejorar la calidad de los datos.'
+            ],
+            correct: 1,
+            justification: 'Párrafo 554-555: "Esto tiene el efecto de subvalorar el nivel de fecundidad de los años inmediatamente precedentes... Como consecuencia, aparecerá una disminución de la fecundidad."',
+            distractors: [
+                'A) No se menciona mortalidad aquí.',
+                'C) No se menciona.',
+                'D) Empeora la calidad.'
+            ]
+        },
+        {
+            type: 'opcion',
+            text: 'El párrafo 556 indica que la exclusión de mujeres mayores de 50 años en los historiales de nacimientos provoca que, para períodos más lejanos, los datos se basen en mujeres:',
+            options: [
+                'A) De edades más avanzadas.',
+                'B) Cada vez más jóvenes.',
+                'C) De todas las edades por igual.',
+                'D) Solamente de 40-49 años.'
+            ],
+            correct: 1,
+            justification: 'Párrafo 556: "se excluyen los de las mujeres que tenían 49 años o más el año anterior a la encuesta; los de las mujeres que tenían 48 años o más dos años antes de la encuesta, y así sucesivamente... para cada año anterior a la encuesta." Esto implica que para períodos más lejanos, solo se incluyen mujeres más jóvenes.',
+            distractors: [
+                'A) Es al revés: más jóvenes.',
+                'C) No, es selectivo.',
+                'D) No, varía con el tiempo.'
+            ]
+        },
+        {
+            type: 'opcion',
+            text: 'Según el párrafo 559, las tendencias de fecundidad para mujeres menores de 30 años pueden calcularse para los:',
+            options: [
+                'A) 5 años anteriores a la encuesta.',
+                'B) 10 años anteriores.',
+                'C) 20 años anteriores.',
+                'D) 30 años anteriores.'
+            ],
+            correct: 2,
+            justification: 'Párrafo 559: "Las tendencias de las tasas de fecundidad para las mujeres menores de 40 años pueden calcularse para los 10 años anteriores... para las mujeres menores de 30, para los 20 años anteriores, y así sucesivamente."',
+            distractors: [
+                'A) No, es más.',
+                'B) Eso es para menores de 40.',
+                'D) Eso sería para menores de 20 (no mencionado).'
+            ]
+        },
+        {
+            type: 'opcion',
+            text: 'El párrafo 557 presenta un cuadro (Cuadro 9) que ilustra qué tasas de fecundidad pueden calcularse a partir de historiales de mujeres menores de 50 años. Las casillas por debajo de la diagonal representan:',
+            options: [
+                'A) Nacimientos de mujeres que tenían menos de 50 años en la fecha de la encuesta.',
+                'B) Nacimientos de mujeres que tenían más de 50 años en la fecha de la encuesta, y por tanto no se incluyen.',
+                'C) Nacimientos ocurridos en años recientes.',
+                'D) Nacimientos de mujeres jóvenes.'
+            ],
+            correct: 1,
+            justification: 'Párrafo 557: "Sólo pueden calcularse las que se encuentran sobre la línea diagonal... Las tasas de las casillas por debajo de la diagonal representan la experiencia reproductiva de las mujeres que tenían más de 50 años cuando se realizó la encuesta."',
+            distractors: [
+                'A) Es al revés: por encima de la diagonal son las que tenían menos de 50.',
+                'C) No, no se refiere a años recientes específicamente.',
+                'D) No, no se refiere solo a jóvenes.'
+            ]
+        },
+        // Preguntas adicionales para completar 50, combinando los tres temas
+        {
+            type: 'opcion',
+            text: 'El párrafo 276 señala que cuando el registro de defunciones es incompleto, es posible que el registro de defunciones de menores de un año sea:',
+            options: [
+                'A) Igual de incompleto que el de otras edades.',
+                'B) Mucho más incompleto que el de otras defunciones.',
+                'C) Más completo que el de adultos.',
+                'D) No afectado por la cobertura general.'
+            ],
+            correct: 1,
+            justification: 'Párrafo 276: "cuando es incompleta es posible que el registro de defunciones de menores de un año lo sea en medida mucho mayor que el de otras defunciones."',
+            distractors: [
+                'A) No, puede ser más incompleto.',
+                'C) No, es menos completo.',
+                'D) Sí está afectado.'
+            ]
+        },
+        {
+            type: 'opcion',
+            text: 'El párrafo 277 indica que la diferencia entre el error neto de cobertura al tabular por fecha de registro se debe a:',
+            options: [
+                'A) La diferencia entre inclusiones indebidas y omisiones.',
+                'B) La suma de inclusiones indebidas y omisiones.',
+                'C) La calidad de la codificación.',
+                'D) El número de registros tardíos.'
+            ],
+            correct: 0,
+            justification: 'Párrafo 277: "El error neto de cobertura es la diferencia entre la cantidad de sucesos en estos dos grupos." (inclusiones indebidas y omisiones)',
+            distractors: [
+                'B) Eso sería el error bruto.',
+                'C) No es el error neto.',
+                'D) Es una fuente, no el error neto.'
+            ]
+        },
+        {
+            type: 'opcion',
+            text: 'El párrafo 279 menciona que a nivel subnacional, los errores de cobertura pueden deberse a que:',
+            options: [
+                'A) Los datos sobre el lugar de acaecimiento se usan como sustitutos del lugar de residencia.',
+                'B) La migración interna no se registra.',
+                'C) Los registros tardíos son más frecuentes en ciudades.',
+                'D) La causa de muerte no se especifica.'
+            ],
+            correct: 0,
+            justification: 'Párrafo 279: "a veces los datos sobre el lugar de acaecimiento se usan como sustitutos de los datos sobre el lugar de residencia, lo que puede provocar elevados niveles de error de cobertura."',
+            distractors: [
+                'B) No es el punto del párrafo.',
+                'C) No es específico de ciudades.',
+                'D) No está relacionado.'
+            ]
+        },
+        {
+            type: 'opcion',
+            text: 'El párrafo 280 enfatiza que la inscripción de un suceso por sí sola no cuenta para la estadística, sino que debe:',
+            options: [
+                'A) Ser verificada por el registrador.',
+                'B) Ser captada en la base de datos utilizada para tabulaciones.',
+                'C) Ser publicada en el boletín oficial.',
+                'D) Ser codificada por el médico.'
+            ],
+            correct: 1,
+            justification: 'Párrafo 280: "la inscripción de por sí no cuenta." Requiere que la información se capte en la base de datos para tabulaciones.',
+            distractors: [
+                'A) No es suficiente.',
+                'C) No es requisito estadístico.',
+                'D) No es suficiente.'
+            ]
+        },
+        {
+            type: 'opcion',
+            text: 'El párrafo 281 destaca que el registro civil obtiene la información poco después del suceso, a diferencia de censos y encuestas que pueden tener:',
+            options: [
+                'A) Mayor cobertura.',
+                'B) Mayor detalle geográfico.',
+                'C) Mayor demora en la recolección.',
+                'D) Mayor exactitud en la causa de muerte.'
+            ],
+            correct: 2,
+            justification: 'Párrafo 281: "El registro civil tiene como ventaja sobre los censos y las encuestas que la información se obtiene poco tiempo después de ocurridos los sucesos." Mientras que censos y encuestas pueden tener demora.',
+            distractors: [
+                'A) No necesariamente.',
+                'B) No es la ventaja señalada.',
+                'D) No es la ventaja señalada.'
+            ]
+        },
+        {
+            type: 'opcion',
+            text: 'Según el párrafo 408, en el cuadro de edad verdadera vs. edad declarada, las filas representan:',
+            options: [
+                'A) Edad declarada.',
+                'B) Edad verdadera.',
+                'C) Edad en años cumplidos.',
+                'D) Edad en meses.'
+            ],
+            correct: 1,
+            justification: 'Párrafo 408: "un cuadro que muestre la población en cuestión clasificada por la edad verdadera (filas) y la edad declarada (columnas)."',
+            distractors: [
+                'A) Es lo opuesto.',
+                'C) No es la distinción que se hace.',
+                'D) No es la distinción que se hace.'
+            ]
+        },
+        {
+            type: 'opcion',
+            text: 'El párrafo 410 menciona que la preferencia de edades terminadas en 0 y 5 se puede identificar fácilmente y se puede neutralizar con:',
+            options: [
+                'A) Ajustes por imputación.',
+                'B) Ajustes apropiados.',
+                'C) Encuestas postcensales.',
+                'D) Registros administrativos.'
+            ],
+            correct: 1,
+            justification: 'Párrafo 410: "Habitualmente se calculan diversos índices de su gravedad, pero se los usa poco. Es posible obtener información más sustancial si se traza un gráfico de la distribución por edades. ... Con ajustes apropiados puede neutralizarse con bastante eficacia."',
+            distractors: [
+                'A) La imputación es una posibilidad, pero no se menciona específicamente aquí.',
+                'C) No se menciona.',
+                'D) No se menciona.'
+            ]
+        },
+        {
+            type: 'opcion',
+            text: 'El párrafo 412 indica que el aumento de la edad declarada de los niños pequeños produce una aparente disminución de la fecundidad, y este efecto es más fácil de reconocer cuando:',
+            options: [
+                'A) Se comparan estimaciones de dos o más censos o encuestas diferentes.',
+                'B) Se usa un solo censo.',
+                'C) Se ajusta por mortalidad infantil.',
+                'D) Se utiliza el método de los hijos propios.'
+            ],
+            correct: 0,
+            justification: 'Párrafo 412: "Es más fácil reconocer el efecto cuando se realizan estimaciones a partir de dos o más censos o encuestas diferentes."',
+            distractors: [
+                'B) Con un solo censo es más difícil.',
+                'C) No se menciona.',
+                'D) No se menciona.'
+            ]
+        },
+        {
+            type: 'opcion',
+            text: 'El párrafo 413 menciona que en lugares donde la edad no es importante socialmente, los agentes pueden registrar edades aproximadas, y las mujeres solteras o sin hijos tienden a ser registradas:',
+            options: [
+                'A) Con edad mayor a la verdadera.',
+                'B) Con edad menor a la verdadera.',
+                'C) Con edad exacta.',
+                'D) Con edad redondeada.'
+            ],
+            correct: 1,
+            justification: 'Párrafo 413: "En este caso tal vez se registre la edad de las mujeres solteras o sin hijos por debajo de la verdadera."',
+            distractors: [
+                'A) Es lo contrario: las casadas y con hijos se registran por encima.',
+                'C) No es el caso.',
+                'D) No es lo que se describe.'
+            ]
+        },
+        {
+            type: 'opcion',
+            text: 'El párrafo 414 sugiere que la exageración de la edad puede deberse a la percepción de que la edad avanzada confiere:',
+            options: [
+                'A) Mayor sabiduría.',
+                'B) Distinción social y personal.',
+                'C) Mayor probabilidad de empleo.',
+                'D) Beneficios económicos.'
+            ],
+            correct: 1,
+            justification: 'Párrafo 414: "Puede que se exageren las edades de las personas de edad más avanzada... Esto puede que sea atribuible a la idea de que la edad avanzada representa una distinción social y personal."',
+            distractors: [
+                'A) No se menciona.',
+                'C) No se menciona.',
+                'D) No se menciona.'
+            ]
+        },
+        {
+            type: 'opcion',
+            text: 'El párrafo 417 señala que la omisión de menores de un año en censos afecta las estimaciones de supervivencia inversa porque:',
+            options: [
+                'A) Subestima la fecundidad del año anterior.',
+                'B) Subestima la mortalidad infantil.',
+                'C) Sobreestima la población total.',
+                'D) No tiene efecto.'
+            ],
+            correct: 0,
+            justification: 'Párrafo 417: "Por ejemplo, si se omite un 20% de las personas de edad 0 en un censo o una encuesta, la cantidad estimada de nacimientos para el año anterior al censo o encuesta será un 20% más baja." Es decir, subestima la fecundidad reciente.',
+            distractors: [
+                'B) No directamente; afecta la fecundidad en la estimación por supervivencia inversa.',
+                'C) Subestima la población, no sobreestima.',
+                'D) Sí tiene efecto.'
+            ]
+        },
+        {
+            type: 'opcion',
+            text: 'El párrafo 418 advierte que si se formulan preguntas detalladas solo a mujeres menores de 50 años, los empadronadores pueden tener un incentivo para:',
+            options: [
+                'A) Declarar edades por debajo de la verdadera para evitar preguntas.',
+                'B) Declarar edades por encima de la verdadera para evitar preguntas.',
+                'C) Omitir a las mujeres mayores.',
+                'D) No hacer preguntas a mujeres jóvenes.'
+            ],
+            correct: 1,
+            justification: 'Párrafo 418: "Esto significa un incentivo para los empadronadores —que prefieren reducir su carga de trabajo antes que obtener información exacta— para declarar en más las edades de las mujeres que tienen cerca de 50 años." Es decir, declarar edades por encima para que queden fuera del rango y no tengan que hacer las preguntas.',
+            distractors: [
+                'A) Es lo opuesto: declarar en más.',
+                'C) No es lo que se describe.',
+                'D) No es el incentivo mencionado.'
+            ]
+        },
+        // Más preguntas de historiales de nacimientos
+        {
+            type: 'opcion',
+            text: 'El párrafo 551 indica que los datos de historiales de nacimientos suelen procesarse para producir directamente medidas de fecundidad y mortalidad, y las tabulaciones intermedias se usan principalmente para:',
+            options: [
+                'A) Calcular tasas brutas.',
+                'B) Diagnosticar errores de respuesta.',
+                'C) Estimar la población.',
+                'D) Comparar con censos.'
+            ],
+            correct: 1,
+            justification: 'Párrafo 552: "a excepción de los cuadros especiales utilizados para diagnosticar determinados tipos de errores de respuesta."',
+            distractors: [
+                'A) No es su función principal.',
+                'C) No se menciona.',
+                'D) No se menciona.'
+            ]
+        },
+        {
+            type: 'opcion',
+            text: 'El párrafo 554 advierte que la transferencia de nacimientos de años recientes a años anteriores puede hacer que los observadores vean una disminución de la fecundidad que:',
+            options: [
+                'A) Es real y debe ser aceptada.',
+                'B) Puede ser falsa, y la repetición de la encuesta revelará la falsedad.',
+                'C) Es siempre verdadera.',
+                'D) No tiene importancia.'
+            ],
+            correct: 1,
+            justification: 'Párrafo 555: "Si así fuera, se descubrirá la falsedad de la disminución cuando se realice la encuesta siguiente, que no dará indicio alguno de la reducción indicada por la primera."',
+            distractors: [
+                'A) Puede ser falsa.',
+                'C) No siempre.',
+                'D) Sí tiene importancia.'
+            ]
+        },
+        {
+            type: 'opcion',
+            text: 'El párrafo 556, al hablar de la exclusión de mujeres mayores de 50 años, señala que los nacimientos de mujeres que tenían 49 años en el año anterior a la encuesta se excluyen, y así sucesivamente, lo que significa que para períodos más lejanos, los datos representan:',
+            options: [
+                'A) Mujeres de todas las edades.',
+                'B) Mujeres cada vez más jóvenes.',
+                'C) Mujeres de 40-49 años exclusivamente.',
+                'D) Mujeres de 50 años o más.'
+            ],
+            correct: 1,
+            justification: 'Párrafo 556: "se excluyen los de las mujeres que tenían 49 años o más el año anterior... los de las mujeres que tenían 48 años o más dos años antes... y así sucesivamente." Por tanto, para períodos más lejanos, solo se incluyen mujeres más jóvenes.',
+            distractors: [
+                'A) No, es selectivo.',
+                'C) No, varía con el tiempo.',
+                'D) Es al revés: se excluyen mayores de 50.'
+            ]
+        },
+        {
+            type: 'opcion',
+            text: 'El párrafo 557 explica que en el diagrama de Lexis, las casillas por encima de la diagonal (de las que se pueden calcular tasas) corresponden a nacimientos de mujeres que:',
+            options: [
+                'A) Tenían menos de 50 años en la fecha de la encuesta.',
+                'B) Tenían más de 50 años en la fecha de la encuesta.',
+                'C) Eran solteras.',
+                'D) Habían emigrado.'
+            ],
+            correct: 0,
+            justification: 'Párrafo 557: "Sólo pueden calcularse las que se encuentran sobre la línea diagonal... a partir de los historiales de nacimientos de mujeres menores de 50 años en la fecha de la encuesta."',
+            distractors: [
+                'B) Es lo opuesto.',
+                'C) No es el criterio.',
+                'D) No es el criterio.'
+            ]
+        },
+        {
+            type: 'opcion',
+            text: 'El párrafo 559 concluye que la selección por edad limita el cálculo de tendencias de fecundidad total, y para períodos más lejanos, las tasas solo pueden derivarse si se:',
+            options: [
+                'A) Aumenta el tamaño de la muestra.',
+                'B) Introduce alguna forma de aproximar los nacimientos de mujeres mayores de 50.',
+                'C) Se usan registros civiles.',
+                'D) Se aplican factores de corrección por migración.'
+            ],
+            correct: 1,
+            justification: 'Párrafo 559: "las tasas pueden derivarse sólo si se introduce alguna forma de aproximar el número de nacimientos representado por el triángulo adc." (que corresponde a mujeres mayores de 50)',
+            distractors: [
+                'A) El tamaño de muestra no resuelve el sesgo de selección.',
+                'C) Los registros civiles son otra fuente, pero no resuelven el sesgo de los historiales.',
+                'D) La migración no es el tema.'
+            ]
+        },
+        // Últimas preguntas para llegar a 50
+        {
+            type: 'opcion',
+            text: 'El párrafo 276 señala que la calidad de los datos del registro civil tiene dos dimensiones: cobertura y contenido. El contenido se refiere a:',
+            options: [
+                'A) La integridad del registro de sucesos.',
+                'B) La exactitud de la información registrada sobre las características del suceso y las personas.',
+                'C) La oportunidad de la publicación.',
+                'D) La comparabilidad internacional.'
+            ],
+            correct: 1,
+            justification: 'Párrafo 276: "La calidad de los datos de registro civil tiene que ver con la cobertura y el contenido." El contenido se refiere a la exactitud de la información, mientras que la cobertura a la integridad.',
+            distractors: [
+                'A) Eso es cobertura.',
+                'C) Es puntualidad, no contenido.',
+                'D) No es contenido.'
+            ]
+        },
+        {
+            type: 'opcion',
+            text: 'El párrafo 277 indica que, al tabular por fecha de registro, los sucesos que ocurrieron durante el período pero se registraron después son omisiones, y los que ocurrieron antes pero se registraron durante el período son inclusiones indebidas. El error neto es la diferencia entre:',
+            options: [
+                'A) Inclusiones indebidas y omisiones.',
+                'B) La suma de ambos.',
+                'C) El total de registros.',
+                'D) El número de registros tardíos.'
+            ],
+            correct: 0,
+            justification: 'Párrafo 277: "El error neto de cobertura es la diferencia entre la cantidad de sucesos en estos dos grupos." (inclusiones indebidas y omisiones)',
+            distractors: [
+                'B) Eso sería el error bruto.',
+                'C) No es el error neto.',
+                'D) Los registros tardíos son parte de las omisiones, no el error neto.'
+            ]
+        },
+        {
+            type: 'opcion',
+            text: 'Según el párrafo 279, la falta de exactitud en la declaración del lugar de residencia puede crear errores de cobertura a nivel subnacional. También se menciona que:',
+            options: [
+                'A) El lugar de acaecimiento es siempre preferible al de residencia.',
+                'B) A veces se usa el lugar de acaecimiento como sustituto del de residencia, lo que provoca errores.',
+                'C) El lugar de residencia no es relevante para las estadísticas vitales.',
+                'D) Los errores de cobertura son insignificantes a nivel subnacional.'
+            ],
+            correct: 1,
+            justification: 'Párrafo 279: "a veces los datos sobre el lugar de acaecimiento se usan como sustitutos de los datos sobre el lugar de residencia, lo que puede provocar elevados niveles de error de cobertura."',
+            distractors: [
+                'A) No, se prefiere residencia.',
+                'C) Es relevante.',
+                'D) No son insignificantes.'
+            ]
+        },
+        {
+            type: 'opcion',
+            text: 'El párrafo 408, al describir el cuadro de edad verdadera vs. declarada, indica que cada fila muestra:',
+            options: [
+                'A) La distribución de edades declaradas para las personas con una edad verdadera determinada.',
+                'B) La distribución de edades verdaderas para las personas con una edad declarada determinada.',
+                'C) El total de personas por edad declarada.',
+                'D) El total de personas por edad verdadera.'
+            ],
+            correct: 0,
+            justification: 'Párrafo 408: "La distribución de las casillas con valores distintos de cero en cualquier fila representa la distribución de las edades declaradas de las personas que tienen la edad verdadera indicada en la fila."',
+            distractors: [
+                'B) Eso sería una columna.',
+                'C) Eso sería un total por columna.',
+                'D) Eso sería un total por fila.'
+            ]
+        },
+        {
+            type: 'opcion',
+            text: 'El párrafo 409 explica que la cantidad neta de personas transferidas a una edad desde otras puede ser cero, aun con errores de declaración, porque:',
+            options: [
+                'A) Los errores se cancelan mutuamente.',
+                'B) No hay errores en esa edad.',
+                'C) La población es estable.',
+                'D) El censo es perfecto.'
+            ],
+            correct: 0,
+            justification: 'Párrafo 409: "Como la cantidad transferida puede ser cero, aun cuando haya considerables deficiencias en la declaración de la edad" debido a que las transferencias pueden compensarse.',
+            distractors: [
+                'B) Puede haber errores que se compensen.',
+                'C) No es necesario que sea estable.',
+                'D) No es perfecto.'
+            ]
+        },
+        {
+            type: 'opcion',
+            text: 'El párrafo 411 menciona que las formas más importantes de subdeclaración de la edad incluyen el aumento de la edad de niños pequeños, la modificación de la edad de mujeres jóvenes según estado civil y paridez, y:',
+            options: [
+                'A) La preferencia por edades terminadas en 0.',
+                'B) La exageración de la edad de los ancianos.',
+                'C) La omisión de personas mayores.',
+                'D) La declaración de edad en meses.'
+            ],
+            correct: 1,
+            justification: 'Párrafo 411: "c) cuando se exagera la edad de los ancianos."',
+            distractors: [
+                'A) Esa es la preferencia de dígitos, considerada menos importante.',
+                'C) No se menciona como una de las más importantes.',
+                'D) No es una forma de subdeclaración.'
+            ]
+        },
+        {
+            type: 'opcion',
+            text: 'El párrafo 412 señala que el aumento de la edad declarada de niños pequeños produce un déficit en los grupos de edades más jóvenes, lo que afecta las estimaciones de:',
+            options: [
+                'A) Mortalidad infantil.',
+                'B) Fecundidad reciente.',
+                'C) Migración.',
+                'D) Nupcialidad.'
+            ],
+            correct: 1,
+            justification: 'Párrafo 412: "esto produce estimaciones demasiado bajas para el período inmediatamente anterior al censo o a la encuesta, creándose así una aparente disminución de la fecundidad."',
+            distractors: [
+                'A) Puede afectar indirectamente, pero el texto menciona fecundidad.',
+                'C) No se menciona.',
+                'D) No se menciona.'
+            ]
+        },
+        {
+            type: 'opcion',
+            text: 'El párrafo 416 subraya que la calidad de los datos de edad se ve afectada por el subempadronamiento selectivo por edades, que distorsiona la distribución por edad declarada de la población empadronada, mientras que los errores de declaración distorsionan:',
+            options: [
+                'A) La edad verdadera.',
+                'B) La edad declarada.',
+                'C) La relación entre edad verdadera y declarada.',
+                'D) El tamaño de la población.'
+            ],
+            correct: 2,
+            justification: 'Párrafo 416: "ambos tipos de errores se combinan para producir diferencias en a) la distribución por edad declarada de la población empadronada y b) en la auténtica distribución por edades de la 'verdadera' población." Es decir, afectan la relación entre ambas.',
+            distractors: [
+                'A) No, la edad verdadera es desconocida.',
+                'B) Sí, pero el texto dice que ambos se combinan.',
+                'D) No directamente.'
+            ]
+        },
+        {
+            type: 'opcion',
+            text: 'El párrafo 551 menciona que los datos de historiales de nacimientos suelen procesarse de manera que produzcan directamente las medidas deseadas, a diferencia de otras preguntas que:',
+            options: [
+                'A) Se procesan de manera similar.',
+                'B) Requieren tabulaciones intermedias para luego estimar.',
+                'C) No necesitan procesamiento.',
+                'D) Se procesan con más detalle.'
+            ],
+            correct: 1,
+            justification: 'Párrafo 551: "Los datos de los historiales de nacimientos no suelen procesarse de la misma manera que los de las otras preguntas... los datos de los historiales de nacimientos suelen procesarse de manera que produzcan directamente las medidas deseadas."',
+            distractors: [
+                'A) Es diferente.',
+                'C) Sí necesitan procesamiento.',
+                'D) No se especifica que sea con más detalle.'
+            ]
+        },
+        {
+            type: 'opcion',
+            text: 'El párrafo 554 concluye que la transferencia de nacimientos de años recientes a años anteriores es un error grave porque:',
+            options: [
+                'A) Produce una aparente disminución de la fecundidad que puede ser malinterpretada.',
+                'B) Aumenta la fecundidad real.',
+                'C) No afecta las tendencias.',
+                'D) Mejora la calidad de los datos.'
+            ],
+            correct: 0,
+            justification: 'Párrafo 554-555: "Esto tiene el efecto de subvalorar el nivel de fecundidad de los años inmediatamente precedentes... Como consecuencia, aparecerá una disminución de la fecundidad, cuando en realidad se ha mantenido constante."',
+            distractors: [
+                'B) Es lo opuesto.',
+                'C) Sí afecta las tendencias.',
+                'D) Empeora la calidad.'
+            ]
+        },
+        {
+            type: 'opcion',
+            text: 'El párrafo 556 explica que la exclusión de mujeres mayores de 50 años en los historiales de nacimientos implica que, para períodos anteriores, los datos se basan en mujeres más jóvenes, lo que puede introducir un sesgo en las estimaciones de fecundidad debido a:',
+            options: [
+                'A) La menor fecundidad de las mujeres jóvenes.',
+                'B) La mayor fecundidad de las mujeres jóvenes en comparación con las mayores.',
+                'C) La diferente estructura de fecundidad por edad de las cohortes incluidas.',
+                'D) La menor mortalidad de las mujeres jóvenes.'
+            ],
+            correct: 2,
+            justification: 'El sesgo de selección por edades implica que para períodos más lejanos solo se incluyen mujeres jóvenes, por lo que la estructura de fecundidad por edad de la muestra no representa a toda la población, alterando las estimaciones de fecundidad total.',
+            distractors: [
+                'A) No es necesariamente menor, pero el sesgo es por la estructura.',
+                'B) No es el punto principal.',
+                'D) No se menciona mortalidad aquí.'
+            ]
+        }
+    ];
+
+    // ========== LÓGICA DEL EXAMEN ==========
+    let currentIndex = 0;
+    let score = 0;
+    let answered = false;
+    const totalQuestions = questions.length;
+
+    const qNumber = document.getElementById('qNumber');
+    const qText = document.getElementById('qText');
+    const optionsContainer = document.getElementById('optionsContainer');
+    const feedback = document.getElementById('feedback');
+    const fbTitle = document.getElementById('fbTitle');
+    const fbDetail = document.getElementById('fbDetail');
+    const nextBtn = document.getElementById('nextBtn');
+    const progressFill = document.getElementById('progressFill');
+    const questionArea = document.getElementById('questionArea');
+    const resultArea = document.getElementById('resultArea');
+    const finalScore = document.getElementById('finalScore');
+    const finalMsg = document.getElementById('finalMsg');
+    const restartBtn = document.getElementById('restartBtn');
+
+    function renderQuestion(index) {
+        const q = questions[index];
+        qNumber.textContent = `Pregunta ${index+1} de ${totalQuestions}`;
+        qText.textContent = q.text;
+        optionsContainer.innerHTML = '';
+        feedback.className = 'feedback';
+        feedback.style.display = 'none';
+        nextBtn.disabled = true;
+        answered = false;
+
+        const letters = ['A', 'B', 'C', 'D'];
+        q.options.forEach((opt, i) => {
+            const div = document.createElement('div');
+            div.className = 'option';
+            div.dataset.index = i;
+            div.innerHTML = `<span class="option-letter">${letters[i]}</span> ${opt.substring(3)}`;
+            div.addEventListener('click', () => selectOption(i));
+            optionsContainer.appendChild(div);
+        });
+
+        updateProgress();
+    }
+
+    function selectOption(selected) {
+        if (answered) return;
+        const q = questions[currentIndex];
+        const options = document.querySelectorAll('.option');
+        options.forEach((el, i) => {
+            el.classList.add('disabled');
+            if (i === q.correct) el.classList.add('correct');
+            if (i === selected && i !== q.correct) el.classList.add('wrong');
+            if (i === selected) el.classList.add('selected');
+        });
+
+        const isCorrect = (selected === q.correct);
+        if (isCorrect) score++;
+
+        // Mostrar feedback
+        feedback.style.display = 'block';
+        if (isCorrect) {
+            feedback.className = 'feedback correct';
+            fbTitle.textContent = '✅ Correcto';
+        } else {
+            feedback.className = 'feedback wrong';
+            fbTitle.textContent = '❌ Incorrecto';
+        }
+        let detail = `<strong>Justificación:</strong> ${q.justification}<br><br>`;
+        detail += `<strong>Análisis de distractores:</strong><br>`;
+        q.distractors.forEach((d, i) => {
+            const letter = String.fromCharCode(65 + i);
+            detail += `• ${letter}: ${d}<br>`;
+        });
+        fbDetail.innerHTML = detail;
+
+        answered = true;
+        nextBtn.disabled = false;
+        updateProgress();
+    }
+
+    function nextQuestion() {
+        if (currentIndex < totalQuestions - 1) {
+            currentIndex++;
+            renderQuestion(currentIndex);
+        } else {
+            showResults();
+        }
+    }
+
+    function updateProgress() {
+        const pct = ((currentIndex + (answered ? 1 : 0)) / totalQuestions) * 100;
+        progressFill.style.width = `${Math.min(pct, 100)}%`;
+    }
+
+    function showResults() {
+        questionArea.classList.add('hidden');
+        resultArea.classList.remove('hidden');
+        const pct = Math.round((score / totalQuestions) * 100);
+        finalScore.textContent = `${pct}%`;
+        let msg = '';
+        if (pct === 100) msg = '🏆 ¡Excelente! Dominas perfectamente los conceptos del manual.';
+        else if (pct >= 80) msg = '🌟 Muy bien. Tienes un sólido entendimiento de los temas.';
+        else if (pct >= 60) msg = '📘 Buen esfuerzo. Revisa los temas donde fallaste para profundizar.';
+        else msg = '📖 Te recomendamos repasar las secciones indicadas y volver a intentarlo.';
+        finalMsg.textContent = msg;
+    }
+
+    function restart() {
+        currentIndex = 0;
+        score = 0;
+        answered = false;
+        questionArea.classList.remove('hidden');
+        resultArea.classList.add('hidden');
+        renderQuestion(0);
+    }
+
+    // Eventos
+    nextBtn.addEventListener('click', nextQuestion);
+    restartBtn.addEventListener('click', restart);
+
+    // Iniciar
+    renderQuestion(0);
+</script>
+</body>
+</html>
