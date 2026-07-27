@@ -5,192 +5,39 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Demografía y fuentes de datos · CCP UCR</title>
     <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-        body {
-            font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
-            background: #f0f4fa;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
-        .container {
-            background: white;
-            max-width: 880px;
-            width: 100%;
-            border-radius: 28px;
-            box-shadow: 0 20px 40px -12px rgba(0,0,0,0.2);
-            padding: 30px 35px;
-            transition: 0.3s;
-        }
-        h1 {
-            font-size: 1.8rem;
-            font-weight: 600;
-            color: #0a2a44;
-            border-left: 6px solid #005a8c;
-            padding-left: 18px;
-            margin-bottom: 4px;
-        }
-        .subtitle {
-            color: #2c3e50;
-            font-size: 0.95rem;
-            margin-bottom: 25px;
-            padding-left: 24px;
-            opacity: 0.8;
-        }
-        .progress-bar {
-            background: #e9ecf0;
-            height: 8px;
-            border-radius: 20px;
-            margin: 20px 0 25px;
-            overflow: hidden;
-        }
-        .progress-fill {
-            height: 100%;
-            width: 0%;
-            background: #005a8c;
-            border-radius: 20px;
-            transition: width 0.4s ease;
-        }
-        .question-number {
-            font-weight: 600;
-            color: #1a4b6d;
-            font-size: 0.9rem;
-            letter-spacing: 0.3px;
-            margin-bottom: 6px;
-        }
-        .question-text {
-            font-size: 1.2rem;
-            font-weight: 500;
-            color: #0b1e2e;
-            line-height: 1.5;
-            margin-bottom: 25px;
-        }
-        .options {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            margin-bottom: 30px;
-        }
-        .option {
-            background: #f8faff;
-            border: 1.5px solid #dde3ed;
-            border-radius: 14px;
-            padding: 14px 18px;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: all 0.15s;
-            color: #1a2b3c;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-        .option:hover {
-            background: #edf3fc;
-            border-color: #8ab3d0;
-        }
-        .option.selected {
-            border-color: #005a8c;
-            background: #e1edf7;
-        }
-        .option.correct {
-            border-color: #1e8b4c;
-            background: #dff0e6;
-        }
-        .option.wrong {
-            border-color: #b13e3e;
-            background: #f7e3e3;
-        }
-        .option.disabled {
-            pointer-events: none;
-            opacity: 0.85;
-        }
-        .option-letter {
-            font-weight: 700;
-            color: #1f5a78;
-            min-width: 24px;
-        }
-        .feedback {
-            background: #f0f4fa;
-            border-radius: 16px;
-            padding: 18px 22px;
-            margin: 10px 0 25px;
-            border-left: 5px solid #005a8c;
-            display: none;
-        }
-        .feedback.correct {
-            border-left-color: #1e8b4c;
-            background: #eaf6ef;
-        }
-        .feedback.wrong {
-            border-left-color: #b13e3e;
-            background: #f7ecec;
-        }
-        .feedback-title {
-            font-weight: 600;
-            font-size: 1rem;
-            margin-bottom: 6px;
-        }
-        .feedback-detail {
-            font-size: 0.95rem;
-            line-height: 1.5;
-            color: #1f3345;
-        }
-        .feedback-detail strong {
-            color: #0a2a44;
-        }
-        .btn {
-            background: #005a8c;
-            border: none;
-            color: white;
-            font-weight: 600;
-            font-size: 1rem;
-            padding: 12px 28px;
-            border-radius: 40px;
-            cursor: pointer;
-            transition: 0.2s;
-            margin-top: 5px;
-            display: inline-block;
-        }
-        .btn:hover {
-            background: #00406a;
-            transform: scale(1.02);
-        }
-        .btn:disabled {
-            opacity: 0.5;
-            pointer-events: none;
-        }
-        .result-box {
-            text-align: center;
-            padding: 25px 10px;
-        }
-        .result-score {
-            font-size: 3.2rem;
-            font-weight: 700;
-            color: #0a2a44;
-        }
-        .result-msg {
-            font-size: 1.1rem;
-            color: #1e3b54;
-            margin-top: 8px;
-        }
-        .restart-btn {
-            margin-top: 25px;
-            background: #3d5f7a;
-        }
-        .hidden {
-            display: none;
-        }
-        @media (max-width: 550px) {
-            .container { padding: 20px; }
-            h1 { font-size: 1.4rem; }
-            .question-text { font-size: 1rem; }
-        }
+        /* (Mismo CSS que antes, no lo repito por brevedad) */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', Roboto, system-ui, sans-serif; background: #f0f4fa; min-height: 100vh; display: flex; justify-content: center; align-items: center; padding: 20px; }
+        .container { background: white; max-width: 880px; width: 100%; border-radius: 28px; box-shadow: 0 20px 40px -12px rgba(0,0,0,0.2); padding: 30px 35px; }
+        h1 { font-size: 1.8rem; font-weight: 600; color: #0a2a44; border-left: 6px solid #005a8c; padding-left: 18px; margin-bottom: 4px; }
+        .subtitle { color: #2c3e50; font-size: 0.95rem; margin-bottom: 25px; padding-left: 24px; opacity: 0.8; }
+        .progress-bar { background: #e9ecf0; height: 8px; border-radius: 20px; margin: 20px 0 25px; overflow: hidden; }
+        .progress-fill { height: 100%; width: 0%; background: #005a8c; border-radius: 20px; transition: width 0.4s ease; }
+        .question-number { font-weight: 600; color: #1a4b6d; font-size: 0.9rem; letter-spacing: 0.3px; margin-bottom: 6px; }
+        .question-text { font-size: 1.2rem; font-weight: 500; color: #0b1e2e; line-height: 1.5; margin-bottom: 25px; }
+        .options { display: flex; flex-direction: column; gap: 12px; margin-bottom: 30px; }
+        .option { background: #f8faff; border: 1.5px solid #dde3ed; border-radius: 14px; padding: 14px 18px; font-size: 1rem; cursor: pointer; transition: all 0.15s; color: #1a2b3c; display: flex; align-items: center; gap: 12px; }
+        .option:hover { background: #edf3fc; border-color: #8ab3d0; }
+        .option.selected { border-color: #005a8c; background: #e1edf7; }
+        .option.correct { border-color: #1e8b4c; background: #dff0e6; }
+        .option.wrong { border-color: #b13e3e; background: #f7e3e3; }
+        .option.disabled { pointer-events: none; opacity: 0.85; }
+        .option-letter { font-weight: 700; color: #1f5a78; min-width: 24px; }
+        .feedback { background: #f0f4fa; border-radius: 16px; padding: 18px 22px; margin: 10px 0 25px; border-left: 5px solid #005a8c; display: none; }
+        .feedback.correct { border-left-color: #1e8b4c; background: #eaf6ef; }
+        .feedback.wrong { border-left-color: #b13e3e; background: #f7ecec; }
+        .feedback-title { font-weight: 600; font-size: 1rem; margin-bottom: 6px; }
+        .feedback-detail { font-size: 0.95rem; line-height: 1.5; color: #1f3345; }
+        .feedback-detail strong { color: #0a2a44; }
+        .btn { background: #005a8c; border: none; color: white; font-weight: 600; font-size: 1rem; padding: 12px 28px; border-radius: 40px; cursor: pointer; transition: 0.2s; margin-top: 5px; display: inline-block; }
+        .btn:hover { background: #00406a; transform: scale(1.02); }
+        .btn:disabled { opacity: 0.5; pointer-events: none; }
+        .result-box { text-align: center; padding: 25px 10px; }
+        .result-score { font-size: 3.2rem; font-weight: 700; color: #0a2a44; }
+        .result-msg { font-size: 1.1rem; color: #1e3b54; margin-top: 8px; }
+        .restart-btn { margin-top: 25px; background: #3d5f7a; }
+        .hidden { display: none; }
+        @media (max-width: 550px) { .container { padding: 20px; } h1 { font-size: 1.4rem; } .question-text { font-size: 1rem; } }
     </style>
 </head>
 <body>
@@ -198,9 +45,7 @@
     <h1>📊 Demografía y fuentes de datos</h1>
     <div class="subtitle">Centro Centroamericano de Población · UCR · Curso Análisis Demográfico</div>
 
-    <div class="progress-bar">
-        <div class="progress-fill" id="progressFill"></div>
-    </div>
+    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
 
     <div id="questionArea">
         <div class="question-number" id="qNumber">Pregunta 1 de 30</div>
@@ -221,8 +66,9 @@
 </div>
 
 <script>
-    // ========== PREGUNTAS (30) ==========
-    // Basadas en Sesión 1 "La Demografía" y Sesión 2 "Fuentes de datos demográficos"
+    // =================================================================
+    // PREGUNTAS (30) - basadas en Sesión 1 y 2 del curso
+    // =================================================================
     const questions = [
         // ---- Sesión 1: La Demografía ----
         {
@@ -841,7 +687,9 @@
         }
     ];
 
-    // ========== LÓGICA DEL EXAMEN ==========
+    // =================================================================
+    // LÓGICA DEL EXAMEN
+    // =================================================================
     let currentIndex = 0;
     let score = 0;
     let answered = false;
@@ -861,19 +709,20 @@
     const finalMsg = document.getElementById('finalMsg');
     const restartBtn = document.getElementById('restartBtn');
 
-    // Mezclar opciones para cada pregunta (aleatorizar orden)
+    // Mezcla el orden de las opciones dentro de cada pregunta
     function shuffleOptions(q) {
         const opts = q.options.map((text, index) => ({ text, index }));
         for (let i = opts.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
             [opts[i], opts[j]] = [opts[j], opts[i]];
         }
-        const newOptions = opts.map(item => item.text);
-        const newCorrect = opts.findIndex(item => item.index === q.correct);
-        return { options: newOptions, correct: newCorrect };
+        return {
+            options: opts.map(item => item.text),
+            correct: opts.findIndex(item => item.index === q.correct)
+        };
     }
 
-    // Aplicar shuffle a todas las preguntas al cargar
+    // Aplicar shuffle a todas las preguntas
     const shuffledQuestions = questions.map(q => {
         const shuffled = shuffleOptions(q);
         return {
@@ -884,27 +733,33 @@
     });
 
     function renderQuestion(index) {
-        const q = shuffledQuestions[index];
-        qNumber.textContent = `Pregunta ${index+1} de ${totalQuestions}`;
-        qText.textContent = q.text;
-        optionsContainer.innerHTML = '';
-        feedback.className = 'feedback';
-        feedback.style.display = 'none';
-        nextBtn.disabled = true;
-        answered = false;
+        try {
+            const q = shuffledQuestions[index];
+            qNumber.textContent = `Pregunta ${index+1} de ${totalQuestions}`;
+            qText.textContent = q.text;
+            optionsContainer.innerHTML = '';
+            feedback.className = 'feedback';
+            feedback.style.display = 'none';
+            nextBtn.disabled = true;
+            answered = false;
 
-        const letters = ['A', 'B', 'C', 'D'];
-        q.options.forEach((opt, i) => {
-            const div = document.createElement('div');
-            div.className = 'option';
-            div.dataset.index = i;
-            // Mostrar solo la opción sin la letra al inicio (ya la agregamos)
-            div.innerHTML = `<span class="option-letter">${letters[i]}</span> ${opt.substring(3)}`;
-            div.addEventListener('click', () => selectOption(i));
-            optionsContainer.appendChild(div);
-        });
+            const letters = ['A', 'B', 'C', 'D'];
+            q.options.forEach((opt, i) => {
+                const div = document.createElement('div');
+                div.className = 'option';
+                div.dataset.index = i;
+                // Eliminar la letra inicial (ej: "A) " o "A. ")
+                const cleanText = opt.replace(/^[A-D]\)\s*/, '');
+                div.innerHTML = `<span class="option-letter">${letters[i]}</span> ${cleanText}`;
+                div.addEventListener('click', () => selectOption(i));
+                optionsContainer.appendChild(div);
+            });
 
-        updateProgress();
+            updateProgress();
+        } catch (error) {
+            console.error('Error en renderQuestion:', error);
+            qText.textContent = '⚠️ Error al cargar la pregunta. Revisa la consola.';
+        }
     }
 
     function selectOption(selected) {
@@ -978,9 +833,11 @@
         renderQuestion(0);
     }
 
+    // Asignar eventos
     nextBtn.addEventListener('click', nextQuestion);
     restartBtn.addEventListener('click', restart);
 
+    // Iniciar el examen
     renderQuestion(0);
 </script>
 </body>
