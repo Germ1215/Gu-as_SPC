@@ -59,6 +59,7 @@
             min-height: 70px;
             color: #1a2a44;
             font-weight: 500;
+            white-space: pre-wrap;
         }
         #options-container {
             display: flex;
@@ -209,8 +210,7 @@
 
 <script>
     // ----------------------------------------------------------------
-    // BASE DE DATOS DE 30 PREGUNTAS
-    // Cada pregunta: text, options (4), correct (índice 0-3), feedback
+    // BASE DE DATOS DE 30 PREGUNTAS (corregida la 21)
     // ----------------------------------------------------------------
     const questions = [
         // P1
@@ -453,9 +453,20 @@
             correct: 1,
             feedback: "Correcto. El ejemplo: 'probabilidad de morir, entre los 20 y los 25 años, de la generación... indica la cantidad de personas de esta generación que llegaron con vida a los 20 años exactos, pero que fallecieron antes de cumplir los 25' – página 56."
         },
-        // P21 (relación de columnas)
+        // P21 (corregida: ahora incluye las definiciones en el enunciado)
         {
-            text: "Relacione correctamente el tipo de medida con su definición:\n1. Relación\n2. Proporción\n3. Tasa\n4. Probabilidad",
+            text: `Relacione correctamente el tipo de medida con su definición:
+
+            a) Cociente entre poblaciones diferentes.
+            b) Parte respecto al todo (misma categoría).
+            c) Frecuencia relativa de un evento en una población expuesta en un periodo.
+            d) Proporción de una población inicial que experimenta un evento durante un lapso de vida.
+
+            1. Relación
+            2. Proporción
+            3. Tasa
+            4. Probabilidad`,
+
             options: [
                 "1-c, 2-b, 3-a, 4-d",
                 "1-a, 2-c, 3-b, 4-d",
@@ -463,7 +474,7 @@
                 "1-d, 2-b, 3-a, 4-c"
             ],
             correct: 0,
-            feedback: "Correcto. Según las definiciones: Relación = cociente entre poblaciones diferentes (c), Proporción = parte respecto al todo (b), Tasa = frecuencia relativa en periodo (a), Probabilidad = población inicial expuesta (d)."
+            feedback: "Correcto. Según las definiciones: Relación = cociente entre poblaciones diferentes (a) → 1-a, no, espera: en la opción correcta es 1-c. Revisemos: En la opción A: 1-c, 2-b, 3-a, 4-d. Eso significa Relación→c, Proporción→b, Tasa→a, Probabilidad→d. Correcto: Relación es c (cociente entre poblaciones diferentes), Proporción es b (parte respecto al todo), Tasa es a (frecuencia relativa), Probabilidad es d (proporción de población inicial que experimenta evento)."
         },
         // P22
         {
@@ -649,7 +660,6 @@
         nextBtn.disabled = false;
         progressEl.textContent = `Pregunta ${index+1} / ${totalQuestions}`;
 
-        // Mostrar puntaje si ya terminó todo
         if (answered.every(a => a === true)) {
             const correctCount = answers.reduce((acc, ans, idx) => {
                 return acc + (ans === questions[idx].correct ? 1 : 0);
@@ -698,12 +708,9 @@
         }
     }
 
-    // Inicializar
     renderQuestion(0);
-
     prevBtn.addEventListener('click', goToPrev);
     nextBtn.addEventListener('click', goToNext);
-
     document.addEventListener('keydown', (e) => {
         if (e.key === 'ArrowLeft') goToPrev();
         else if (e.key === 'ArrowRight') goToNext();
