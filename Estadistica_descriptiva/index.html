@@ -4,12 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Estadística descriptiva (Rincón, 2017)</title>
+    <!-- MathJax para fórmulas -->
+    <script>
+        MathJax = {
+            tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
+            svg: { fontCache: 'global' }
+        };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" async></script>
     <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
             font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
             background: #f0f2f5;
@@ -99,22 +103,15 @@
             color: #1a2a44;
             font-weight: 450;
         }
-        .selected {
-            border-color: #2c6b9e;
-            background: #dce6f5;
+        /* MathJax dentro de label se ajusta */
+        .option label .math {
+            display: inline-block;
+            vertical-align: middle;
         }
-        .correct-answer {
-            background: #d4edda;
-            border-color: #28a745;
-        }
-        .incorrect-answer {
-            background: #f8d7da;
-            border-color: #dc3545;
-        }
-        .disabled {
-            cursor: default;
-            opacity: 0.95;
-        }
+        .selected { border-color: #2c6b9e; background: #dce6f5; }
+        .correct-answer { background: #d4edda; border-color: #28a745; }
+        .incorrect-answer { background: #f8d7da; border-color: #dc3545; }
+        .disabled { cursor: default; opacity: 0.95; }
         #feedback {
             margin-top: 18px;
             padding: 16px 20px;
@@ -125,14 +122,8 @@
             font-size: 15px;
             line-height: 1.5;
         }
-        #feedback .fb-title {
-            font-weight: 700;
-            font-size: 16px;
-            margin-bottom: 4px;
-        }
-        #feedback .fb-text {
-            margin-top: 4px;
-        }
+        #feedback .fb-title { font-weight: 700; font-size: 16px; margin-bottom: 4px; }
+        #feedback .fb-text { margin-top: 4px; }
         #navigation {
             display: flex;
             justify-content: space-between;
@@ -141,10 +132,7 @@
             flex-wrap: wrap;
             gap: 12px;
         }
-        #nav-buttons {
-            display: flex;
-            gap: 12px;
-        }
+        #nav-buttons { display: flex; gap: 12px; }
         button {
             padding: 10px 24px;
             background: #1a2b4a;
@@ -157,15 +145,8 @@
             transition: 0.15s;
             letter-spacing: 0.3px;
         }
-        button:hover:not(:disabled) {
-            background: #2c4070;
-            transform: scale(1.02);
-        }
-        button:disabled {
-            opacity: 0.4;
-            cursor: not-allowed;
-            transform: none;
-        }
+        button:hover:not(:disabled) { background: #2c4070; transform: scale(1.02); }
+        button:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
         #progress {
             font-size: 14px;
             color: #3d4f6e;
@@ -184,9 +165,6 @@
             background: #eef2f9;
             border-radius: 16px;
             border: 1px solid #d0dbe8;
-        }
-        .hidden {
-            display: none;
         }
         @media (max-width: 600px) {
             #exam-container { padding: 18px 16px; }
@@ -220,9 +198,9 @@
 
 <script>
     // ----------------------------------------------------------------
-    // BASE DE DATOS DE PREGUNTAS (50)
-    // Cada pregunta tiene: text, options (array de 4), correct (índice 0-3)
-    // Inicialmente la correcta está en la posición 0, pero luego se barajarán.
+    // BASE DE DATOS DE 50 PREGUNTAS (con fórmulas LaTeX)
+    // Cada pregunta: { text, options: [4 strings], correct: 0..3, feedback }
+    // Las opciones se barajarán al inicio para que la correcta caiga en A,B,C o D aleatoriamente.
     // ----------------------------------------------------------------
     const rawQuestions = [
         // 1
@@ -231,7 +209,7 @@
             "$\\frac{1}{n-1}\\sum_{i=1}^n (x_i - \\bar{x})^2$",
             "$\\frac{1}{n}\\sum_{i=1}^n (x_i - \\bar{x})^2$",
             "$\\frac{1}{n}\\sum_{i=1}^n |x_i - \\bar{x}|$"
-        ], correct: 0, feedback: "Correcto. La media aritmética es el cociente de la suma de los datos entre n (página 24)." },
+        ], correct: 0, feedback: "Correcto. La media aritmética es el cociente de la suma de los datos entre $n$ (página 24)." },
         // 2
         { text: "La moda de un conjunto de datos es:", options: [
             "El valor que aparece con mayor frecuencia, siempre que exista.",
@@ -245,7 +223,7 @@
             "El promedio de los dos datos centrales.",
             "El dato que se repite con mayor frecuencia.",
             "El valor que minimiza la suma de las diferencias al cuadrado."
-        ], correct: 1, feedback: "Correcto. Para n par, la mediana es el promedio de los dos datos centrales (página 31)." },
+        ], correct: 1, feedback: "Correcto. Para $n$ par, la mediana es el promedio de los dos datos centrales (página 31)." },
         // 4
         { text: "Si a cada dato $x_i$ se le suma una constante $c$, la nueva media $\\bar{y}$ cumple:", options: [
             "$\\bar{y} = \\bar{x} + c$",
@@ -259,7 +237,7 @@
             "$\\frac{1}{n-1}\\sum_{i=1}^n (x_i - \\bar{x})^2$",
             "$\\frac{1}{n}\\sum_{i=1}^n |x_i - \\bar{x}|$",
             "$\\frac{1}{n}\\sum_{i=1}^n x_i^2 - \\bar{x}^2$"
-        ], correct: 0, feedback: "Correcto. La varianza con denominador n es la definida en el texto (página 37)." },
+        ], correct: 0, feedback: "Correcto. La varianza con denominador $n$ es la definida en el texto (página 37)." },
         // 6
         { text: "La desviación estándar de un conjunto de datos se obtiene como:", options: [
             "La raíz cuadrada de la varianza.",
@@ -287,14 +265,14 @@
             "$\\frac{1}{n}\\sum_{i=1}^n (x_i - \\bar{x})^k$",
             "$\\frac{1}{n}\\sum_{i=1}^n |x_i|^k$",
             "$\\left(\\frac{1}{n}\\sum_{i=1}^n x_i\\right)^k$"
-        ], correct: 0, feedback: "Correcto. Momento muestral de orden k = promedio de las potencias k-ésimas (página 47)." },
+        ], correct: 0, feedback: "Correcto. Momento muestral de orden $k$ = promedio de las potencias $k$-ésimas (página 47)." },
         // 10
         { text: "El $k$-ésimo momento central $m_k$ se define como:", options: [
             "$\\frac{1}{n}\\sum_{i=1}^n (x_i - \\bar{x})^k$",
             "$\\frac{1}{n}\\sum_{i=1}^n x_i^k$",
             "$\\frac{1}{n}\\sum_{i=1}^n |x_i - \\bar{x}|^k$",
             "$\\left(\\frac{1}{n}\\sum_{i=1}^n (x_i - \\bar{x})\\right)^k$"
-        ], correct: 0, feedback: "Correcto. Momento central de orden k (página 47)." },
+        ], correct: 0, feedback: "Correcto. Momento central de orden $k$ (página 47)." },
         // 11
         { text: "La frecuencia absoluta de una clase es:", options: [
             "El número de veces que se observó esa clase.",
@@ -315,14 +293,14 @@
             "$\\text{frecuencia absoluta} / n$",
             "$100 \\cdot \\text{frecuencia absoluta}$",
             "$\\text{frecuencia absoluta} / 100$"
-        ], correct: 0, feedback: "Correcto. Frecuencia porcentual = 100 × (f_i/n) (página 57)." },
+        ], correct: 0, feedback: "Correcto. Frecuencia porcentual = $100 \\times (f_i/n)$ (página 57)." },
         // 14
         { text: "La frecuencia acumulada de una clase $C_j$ es:", options: [
             "$f_1 + f_2 + \\cdots + f_j$",
             "$f_j / n$",
             "$f_j - f_{j-1}$",
             "$f_j + f_{j+1}$"
-        ], correct: 0, feedback: "Correcto. Frecuencia acumulada hasta j = suma de f_i para i ≤ j (página 53)." },
+        ], correct: 0, feedback: "Correcto. Frecuencia acumulada hasta $j$ = suma de $f_i$ para $i \\le j$ (página 53)." },
         // 15
         { text: "Un cuantil de orden $p$ (con $0 < p \\leq 1$) es un número $c$ tal que:", options: [
             "Al menos el $100p\\%$ de los datos son menores o iguales a $c$ y al menos el $100(1-p)\\%$ son mayores o iguales a $c$.",
@@ -350,14 +328,14 @@
             "0.1, 0.2, …, 0.9",
             "0.25, 0.50, 0.75",
             "0.05, 0.10, …, 0.95"
-        ], correct: 0, feedback: "Correcto. Percentiles: p = 0.01, 0.02, ..., 0.99 (página 63)." },
+        ], correct: 0, feedback: "Correcto. Percentiles: $p = 0.01, 0.02, \\dots, 0.99$ (página 63)." },
         // 19
         { text: "El coeficiente de asimetría (skewness) se define como:", options: [
             "$\\frac{1}{s^3} \\frac{1}{n}\\sum_{i=1}^n (x_i - \\bar{x})^3$",
             "$\\frac{1}{s^4} \\frac{1}{n}\\sum_{i=1}^n (x_i - \\bar{x})^4$",
             "$\\frac{1}{s^2} \\frac{1}{n}\\sum_{i=1}^n (x_i - \\bar{x})^2$",
             "$\\frac{1}{n}\\sum_{i=1}^n (x_i - \\bar{x})^3$"
-        ], correct: 0, feedback: "Correcto. Coeficiente de asimetría = tercer momento central estandarizado por s³ (página 70)." },
+        ], correct: 0, feedback: "Correcto. Coeficiente de asimetría = tercer momento central estandarizado por $s^3$ (página 70)." },
         // 20
         { text: "Un coeficiente de asimetría positivo indica que:", options: [
             "La cola derecha de la distribución es más larga.",
@@ -371,7 +349,7 @@
             "$\\frac{1}{s^3} \\frac{1}{n}\\sum_{i=1}^n (x_i - \\bar{x})^3$",
             "$\\frac{1}{s^2} \\frac{1}{n}\\sum_{i=1}^n (x_i - \\bar{x})^2$",
             "$\\frac{1}{n}\\sum_{i=1}^n (x_i - \\bar{x})^4$"
-        ], correct: 0, feedback: "Correcto. Curtosis = cuarto momento central estandarizado por s⁴ (página 72)." },
+        ], correct: 0, feedback: "Correcto. Curtosis = cuarto momento central estandarizado por $s^4$ (página 72)." },
         // 22
         { text: "Una distribución con curtosis mayor que 3 (o con $k_3 > 0$) se denomina:", options: [
             "Leptocúrtica.",
@@ -455,7 +433,7 @@
             "$\\frac{\\#\\{x_i : x_i \\ge x\\}}{n}$",
             "$\\frac{\\#\\{x_i : x_i = x\\}}{n}$",
             "$\\frac{\\#\\{x_i : x_i < x\\}}{n}$"
-        ], correct: 0, feedback: "Correcto. Definición de F(x) (página 117)." },
+        ], correct: 0, feedback: "Correcto. Definición de $F(x)$ (página 117)." },
         // 34
         { text: "En una tabla de frecuencias para datos agrupados, la marca de clase es:", options: [
             "Un valor representativo de cada clase.",
@@ -490,14 +468,14 @@
             "La media.",
             "La moda.",
             "El rango."
-        ], correct: 0, feedback: "Correcto. $Q_{0.50} = $ mediana (página 62)." },
+        ], correct: 0, feedback: "Correcto. $Q_{0.50} =$ mediana (página 62)." },
         // 39
         { text: "El rango intercuartil (RIC) se define como:", options: [
             "$Q_{0.75} - Q_{0.25}$",
             "$Q_{0.50} - Q_{0.25}$",
             "$Q_{0.75} - Q_{0.50}$",
             "$Q_{0.90} - Q_{0.10}$"
-        ], correct: 0, feedback: "Correcto. RIC = Q_{0.75} - Q_{0.25} (página 115)." },
+        ], correct: 0, feedback: "Correcto. RIC = $Q_{0.75} - Q_{0.25}$ (página 115)." },
         // 40
         { text: "Si un conjunto de datos es perfectamente simétrico, el coeficiente de asimetría es:", options: [
             "Cero.",
@@ -532,7 +510,7 @@
             "$x_{(n/2)}$",
             "$x_{(n/2+1)}$",
             "$\\frac{x_{(n/2)} + x_{(n/2-1)}}{2}$"
-        ], correct: 0, feedback: "Correcto. Para n par, promedio de los dos centrales (página 31)." },
+        ], correct: 0, feedback: "Correcto. Para $n$ par, promedio de los dos centrales (página 31)." },
         // 45
         { text: "La moda se preserva bajo transformaciones lineales de la forma $y_i = ax_i + c$ de la siguiente manera:", options: [
             "$\\text{Moda}(y) = a \\cdot \\text{Moda}(x) + c$",
@@ -578,7 +556,7 @@
     ];
 
     // ----------------------------------------------------------------
-    // BARAJAMOS LAS OPCIONES DE CADA PREGUNTA
+    // BARAJAMOS LAS OPCIONES DE CADA PREGUNTA (distribuye la correcta)
     // ----------------------------------------------------------------
     function shuffleArray(arr) {
         for (let i = arr.length - 1; i > 0; i--) {
@@ -588,14 +566,11 @@
         return arr;
     }
 
-    // Creamos una copia y barajamos cada pregunta
     const questions = rawQuestions.map(q => {
-        // Barajar opciones
-        const shuffled = q.options.map((opt, idx) => ({ text: opt, originalIdx: idx }));
+        // Barajar las opciones y recordar la posición original de la correcta
+        const shuffled = q.options.map((text, idx) => ({ text, originalIdx: idx }));
         shuffleArray(shuffled);
-        // Nuevo array de opciones
         const newOptions = shuffled.map(item => item.text);
-        // Nuevo índice correcto
         const newCorrect = shuffled.findIndex(item => item.originalIdx === q.correct);
         return {
             text: q.text,
@@ -610,9 +585,8 @@
     // ----------------------------------------------------------------
     const totalQuestions = questions.length;
     let currentIndex = 0;
-    let answers = new Array(totalQuestions).fill(null); // índice de opción seleccionada
+    let answers = new Array(totalQuestions).fill(null);
     let answered = new Array(totalQuestions).fill(false);
-    let score = 0;
 
     const questionNumberEl = document.getElementById('question-number');
     const questionTextEl = document.getElementById('question-text');
@@ -626,8 +600,8 @@
     function renderQuestion(index) {
         const q = questions[index];
         questionNumberEl.textContent = `Pregunta ${index+1} de ${totalQuestions}`;
-        // Mostrar texto con formato (sustituir $...$ por cursiva)
-        questionTextEl.innerHTML = q.text.replace(/\$(.*?)\$/g, (match, p1) => `<span style="font-style:italic;">${p1}</span>`);
+        // El texto puede tener fórmulas, MathJax las procesará después
+        questionTextEl.innerHTML = q.text;
 
         optionsContainer.innerHTML = '';
         const letters = ['A', 'B', 'C', 'D'];
@@ -648,6 +622,7 @@
             if (answers[index] === idx) radio.checked = true;
             radio.disabled = answered[index];
             const label = document.createElement('label');
+            // Mostrar la opción con su letra y la fórmula (si la hay)
             label.innerHTML = `${letters[idx]}) ${opt}`;
             div.appendChild(radio);
             div.appendChild(label);
@@ -690,6 +665,11 @@
             scoreDisplay.textContent = `✅ Calificación final: ${correctCount}/${totalQuestions} (${percent}%)`;
         } else {
             scoreDisplay.textContent = '';
+        }
+
+        // Reprocesar MathJax para las nuevas fórmulas
+        if (window.MathJax && MathJax.typesetPromise) {
+            MathJax.typesetPromise();
         }
     }
 
