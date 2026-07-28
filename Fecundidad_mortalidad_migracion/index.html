@@ -286,721 +286,719 @@
         //  Tipos: a) distractores de confusión, b) relación, c) completar.
         //  La respuesta correcta (A,B,C,D) se distribuye aleatoriamente.
         // -------------------------------------------------------------
-        const questions = [{
-            // 1 (tipo c)
-            pregunta: 'La fecundidad se refiere al número de niños nacidos vivos a las mujeres, mientras que la ________ se refiere a la capacidad física de reproducción.',
-            opciones: {
-                A: 'fertilidad',
-                B: 'natalidad',
-                C: 'mortalidad',
-                D: 'nupcialidad'
-            },
-            correcta: 'A',
-            explicacion: '✅ Correcto. El documento establece: "La fecundidad se relaciona con el número de niños nacidos vivos a las mujeres. No es lo mismo que la fertilidad, que implica la capacidad física de reproducción de una mujer." (pág. 13)\n\n❌ B: natalidad es la frecuencia de nacimientos en la población. C: mortalidad son las muertes. D: nupcialidad es el matrimonio como fenómeno poblacional.'
-        }, {
-            // 2 (tipo a)
-            pregunta: '¿Cuál de las siguientes afirmaciones sobre la tasa global de fecundidad (TGF) es correcta según el texto?',
-            opciones: {
-                A: 'Es el número promedio de hijos que una mujer tendrá al final de sus años reproductivos si mantiene las tasas de fecundidad actuales a lo largo de su vida.',
-                B: 'Es el número total de hijos nacidos de una mujer durante toda su vida, medido al final de sus años reproductivos.',
-                C: 'Es el número de nacimientos por cada 1.000 mujeres en edad reproductiva en un año determinado.',
-                D: 'Es una medida que solo cuenta las hijas nacidas, no los hijos varones.'
-            },
-            correcta: 'A',
-            explicacion: '✅ Correcto. La TGF es "el número promedio de hijos que una mujer habría tenido al final de sus años reproductivos si la misma se hubiera ajustado a las tasas de fecundidad por edad específica durante cada año de su vida reproductiva" (pág. 15). Es una medida sintética, no el total real.\n\n❌ B: describe la tasa final de fecundidad, no la TGF. C: es la tasa general de fecundidad. D: es la tasa bruta de reproducción.'
-        }, {
-            // 3 (tipo b)
-            pregunta: 'Relacione cada medida con su definición correcta:\n1. Tasa bruta de reproducción (TBR)\n2. Tasa neta de reproducción (TNR)\n3. Razón de niños a mujeres',
-            opciones: {
-                A: '1-Número promedio de hijas que tendría una mujer si se ajusta a tasas de fecundidad; 2-Número promedio de hijas considerando la mortalidad; 3-Niños menores de 5 por 1.000 mujeres en edad reproductiva.',
-                B: '1-Número promedio de hijos totales que tendría una mujer; 2-Número promedio de hijas considerando mortalidad; 3-Niños menores de 1 año por 1.000 mujeres.',
-                C: '1-Número promedio de hijas que tendría una mujer; 2-Número promedio de hijos totales considerando mortalidad; 3-Niños menores de 5 por 1.000 mujeres solteras.',
-                D: '1-Número promedio de hijas que tendría una mujer sin considerar mortalidad; 2-Número promedio de hijas considerando solo mortalidad infantil; 3-Niños menores de 5 por 100 mujeres.'
-            },
-            correcta: 'A',
-            explicacion: '✅ Correcto. Según el texto: TBR = "número promedio de hijas que una mujer (o grupo de mujeres) tendría durante su vida si se ajustara a las tasas de fecundidad por edad específica" (pág. 17). TNR = "número promedio de hijas que nacerían de una mujer... si durante toda su vida, desde nacer, se ajustara a las tasas de fecundidad y mortalidad específicas" (pág. 17). Razón niños-mujeres = "número de niños menores de 5 años por 1.000 mujeres en edad reproductiva" (pág. 19).\n\n❌ B: confunde hijos totales con hijas. C: usa mujeres solteras incorrectamente. D: usa 100 en lugar de 1.000 y limita mortalidad a infantil.'
-        }, {
-            // 4 (tipo a)
-            pregunta: 'La fecundidad a nivel de reemplazo se alcanza cuando:',
-            opciones: {
-                A: 'la tasa neta de reproducción es igual a 1,00 y la población deja de crecer inmediatamente.',
-                B: 'la tasa global de fecundidad es exactamente 2,0 en todos los países.',
-                C: 'la tasa neta de reproducción es igual a 1,00, pero el crecimiento puede continuar debido al ímpetu demográfico.',
-                D: 'la tasa bruta de reproducción es igual a 1,00 y las mujeres tienen suficientes hijas para reemplazarse.'
-            },
-            correcta: 'C',
-            explicacion: '✅ Correcto. El texto dice: "Una tasa neta de reproducción de 1,00 es igual al nivel de reemplazo" y "Una vez se alcanza la fecundidad a nivel de reemplazo, los nacimientos alcanzarán gradualmente un equilibrio con las muertes... el tiempo que toma en realizarse este proceso varía ampliamente dependiendo de la estructura por edad" (pág. 19). Además, el ímpetu demográfico explica que la población puede seguir creciendo.\n\n❌ A: no es inmediato. B: la TGF de reemplazo varía; en países desarrollados es ~2,1, en desarrollo mayor. D: la TBR no considera mortalidad, por lo que no es suficiente.'
-        }, {
-            // 5 (tipo c)
-            pregunta: 'El ________ demográfico se refiere a la tendencia de una población a continuar creciendo después de alcanzar la fecundidad a nivel de reemplazo, debido a una concentración de personas jóvenes.',
-            opciones: {
-                A: 'crecimiento natural',
-                B: 'impulso',
-                C: 'ímpetu',
-                D: 'potencial'
-            },
-            correcta: 'C',
-            explicacion: '✅ Correcto. "El ímpetu demográfico se refiere a la tendencia de una población de continuar su crecimiento después de alcanzar su fecundidad a nivel de reemplazo" (pág. 19).\n\n❌ A: crecimiento natural es el superávit de nacimientos sobre muertes. B: "impulso" no es el término usado. D: "potencial" no aparece en esa definición.'
-        }, {
-            // 6 (tipo a)
-            pregunta: '¿Cuál de los siguientes NO es uno de los cuatro factores directos que afectan la fecundidad según el documento?',
-            opciones: {
-                A: 'Proporción de mujeres en relaciones de pareja',
-                B: 'Porcentaje de mujeres que usan anticonceptivos',
-                C: 'Nivel de ingresos per cápita',
-                D: 'Nivel de abortos provocados'
-            },
-            correcta: 'C',
-            explicacion: '✅ Correcto. El texto enumera los cuatro factores: "(1) la proporción de mujeres en relaciones de pareja; (2) el porcentaje de mujeres que usan métodos anticonceptivos; (3) la proporción de mujeres que actualmente no son fértiles (principalmente debido a que están amamantando); (4) el nivel de abortos provocados" (pág. 21). El nivel de ingresos no se menciona como factor directo.\n\n❌ A, B y D son los factores enumerados.'
-        }, {
-            // 7 (tipo b)
-            pregunta: 'Asocie cada tasa con su fórmula conceptual correcta:\n1. Tasa de natalidad (bruta)\n2. Tasa general de fecundidad\n3. Tasa de mortalidad infantil',
-            opciones: {
-                A: '1-Nacimientos / población total × 1.000; 2-Nacimientos / mujeres 15-49 × 1.000; 3-Muertes <1 año / nacidos vivos × 1.000.',
-                B: '1-Nacimientos / mujeres 15-49 × 1.000; 2-Nacimientos / población total × 1.000; 3-Muertes <1 año / población total × 1.000.',
-                C: '1-Nacimientos / población total × 100; 2-Nacimientos / mujeres 15-49 × 100; 3-Muertes <1 año / nacidos vivos × 100.',
-                D: '1-Nacimientos / hombres y mujeres × 1.000; 2-Nacimientos / mujeres 15-44 × 1.000; 3-Muertes <28 días / nacidos vivos × 1.000.'
-            },
-            correcta: 'A',
-            explicacion: '✅ Correcto. Tasa de natalidad = "número de nacimientos vivos por cada 1.000 habitantes" (pág. 13). Tasa general de fecundidad = "número de nacimientos vivos por cada grupo de 1.000 mujeres entre las edades de 15 a 49 años" (pág. 13). Tasa de mortalidad infantil = "número de niños menores de 1 año que fallece por cada 1.000 nacidos vivos" (pág. 27).\n\n❌ B: invierte las dos primeras. C: usa constante 100 en lugar de 1.000. D: usa 15-44 en lugar de 15-49 y <28 días para neonatal, no infantil.'
-        }, {
-            // 8 (tipo c)
-            pregunta: 'La tasa de prevalencia del uso de anticonceptivos se define como el número de mujeres en edad reproductiva que utilizan métodos anticonceptivos por cada ________ mujeres en edad reproductiva.',
-            opciones: {
-                A: '100',
-                B: '1.000',
-                C: '10.000',
-                D: '100.000'
-            },
-            correcta: 'A',
-            explicacion: '✅ Correcto. "La tasa de prevalencia del uso de anticonceptivos es el número de mujeres en edad reproductiva que están utilizando métodos anticonceptivos por cada 100 mujeres en edad reproductiva" (pág. 22).\n\n❌ B: 1.000 es para muchas tasas, pero no para esta. C y D no corresponden.'
-        }, {
-            // 9 (tipo a)
-            pregunta: 'La razón de abortos provocados y la tasa de abortos provocados se diferencian en que:',
-            opciones: {
-                A: 'la razón se expresa por 1.000 nacidos vivos, mientras que la tasa se expresa por 1.000 mujeres en edad reproductiva.',
-                B: 'la tasa se expresa por 1.000 nacidos vivos, mientras que la razón se expresa por 1.000 mujeres.',
-                C: 'ambas se expresan por 1.000 nacidos vivos, pero la tasa incluye abortos espontáneos.',
-                D: 'la razón es siempre más alta que la tasa porque incluye todos los abortos.'
-            },
-            correcta: 'A',
-            explicacion: '✅ Correcto. "Tasa de abortos provocados es el número de abortos provocados por cada 1.000 mujeres en edad reproductiva" (pág. 22). "Razón de abortos provocados es el número de abortos provocados por cada 1.000 nacidos vivos" (pág. 23).\n\n❌ B: invierte las definiciones. C: ninguna incluye espontáneos; son provocados. D: no necesariamente siempre más alta; depende del contexto.'
-        }, {
-            // 10 (tipo c)
-            pregunta: 'La tasa de abortos provocados en Hungría en 1996 fue de 34,8, lo que significa que hubo ________ por cada 1.000 mujeres de 15 a 49 años.',
-            opciones: {
-                A: '34,8 abortos provocados',
-                B: '34,8 nacidos vivos',
-                C: '34,8 embarazos',
-                D: '34,8 muertes maternas'
-            },
-            correcta: 'A',
-            explicacion: '✅ Correcto. La definición dice: "Tasa de abortos provocados es el número de abortos provocados por cada 1.000 mujeres en edad reproductiva" (pág. 22). El ejemplo de Hungría indica 34,8 abortos por 1.000 mujeres.\n\n❌ B: es abortos, no nacidos vivos. C: embarazos no es el término. D: muertes maternas es otro concepto.'
-        }, {
-            // 11 (tipo a)
-            pregunta: '¿Cuál de las siguientes afirmaciones sobre la tasa de mortalidad (bruta) es correcta según el texto?',
-            opciones: {
-                A: 'Es una medida precisa para comparar el nivel de salud entre países porque no se ve afectada por la estructura por edad.',
-                B: 'Se calcula como el número de muertes por cada 1.000 habitantes y siempre refleja condiciones de salud.',
-                C: 'Puede ser engañosa al comparar países porque la estructura por edad influye en el número de muertes.',
-                D: 'Es más alta en países jóvenes porque hay más niños que mueren.'
-            },
-            correcta: 'C',
-            explicacion: '✅ Correcto. El texto advierte: "Las tasas brutas de mortalidad se ven afectadas por muchas características de la población, especialmente la estructura por edad. Por lo tanto, al comparar las tasas de mortalidad de distintos países, es prudente ajustar las diferencias en composición por edad" (pág. 25). Ejemplo Suecia vs Panamá.\n\n❌ A: no es precisa; se ve afectada. B: no siempre refleja salud por el sesgo de edad. D: no necesariamente; los jóvenes tienen menor mortalidad, pero la tasa bruta puede ser baja en países jóvenes.'
-        }, {
-            // 12 (tipo b)
-            pregunta: 'Relacione los conceptos de mortalidad con su definición:\n1. Tasa de mortalidad por edad específica\n2. Tasa de mortalidad por causas específicas\n3. Tasa de mortalidad materna',
-            opciones: {
-                A: '1-Muertes de un grupo de edad / población de ese grupo × 1.000; 2-Muertes por causa específica / población total × 100.000; 3-Muertes maternas / nacidos vivos × 100.000.',
-                B: '1-Muertes totales / población total × 1.000; 2-Muertes por causa / población total × 1.000; 3-Muertes maternas / mujeres en edad fértil × 100.000.',
-                C: '1-Muertes de un grupo de edad / población total × 1.000; 2-Muertes por causa / población total × 100.000; 3-Muertes maternas / nacidos vivos × 1.000.',
-                D: '1-Muertes de un grupo de edad / población de ese grupo × 100.000; 2-Muertes por causa / población total × 100.000; 3-Muertes maternas / mujeres embarazadas × 100.000.'
-            },
-            correcta: 'A',
-            explicacion: '✅ Correcto. Tasa por edad específica: "Muertes de personas de 40 a 44 años de edad / Población total de 40 a 44 años de edad × 1.000" (pág. 26). Tasa por causas específicas: "expresadas normalmente por el número de muertes por cada 100.000 habitantes" (pág. 26). Razón de mortalidad materna: "número de mujeres que fallecen... por cada 100.000 nacidos vivos" (pág. 28).\n\n❌ B: la tasa por edad específica no usa población total; la materna no usa mujeres en edad fértil como denominador. C: la materna usa 100.000, no 1.000. D: la tasa por edad específica usa 1.000 no 100.000 y el denominador de materna no es mujeres embarazadas.'
-        }, {
-            // 13 (tipo a)
-            pregunta: 'La esperanza de vida al nacer en un país con alta mortalidad infantil, como Malaui (46 años en 1996), refleja que:',
-            opciones: {
-                A: 'los adultos en Malaui viven en promedio solo 46 años.',
-                B: 'si las tasas de mortalidad actuales se mantienen, un recién nacido viviría en promedio 46 años, pero los que sobreviven el primer año pueden esperar vivir más años.',
-                C: 'la esperanza de vida es una medida real del número de años que vive cada persona.',
-                D: 'la esperanza de vida es igual a la edad mediana de la población.'
-            },
-            correcta: 'B',
-            explicacion: '✅ Correcto. El texto explica que la esperanza de vida es una estimación hipotética basada en tasas actuales. Además: "las bajas esperanzas de vida de los países en desarrollo se deben en gran medida a las altas tasas de mortalidad infantil. Por ejemplo, en 1994, la esperanza de vida al nacer para las mujeres de Bangladesh era de 58 años, pero si una mujer de Bangladesh sobrevivía hasta cumplir 1 año, la misma podía esperar vivir hasta los 62" (pág. 29).\n\n❌ A: no es que los adultos vivan solo 46; es el promedio al nacer. C: no es real, es hipotética. D: no es lo mismo que la edad mediana.'
-        }, {
-            // 14 (tipo c)
-            pregunta: 'En una tabla de mortalidad, la columna que muestra el número total de "años-persona" que se vivirían durante un período de edad y todos los períodos siguientes se utiliza para calcular la ________.',
-            opciones: {
-                A: 'tasa de mortalidad',
-                B: 'esperanza de vida',
-                C: 'probabilidad de muerte',
-                D: 'morbilidad'
-            },
-            correcta: 'B',
-            explicacion: '✅ Correcto. En la tabla de mortalidad, la columna 5 (años-persona durante este y todos los períodos siguientes) dividida por la columna 2 (número en vida al comienzo) da la esperanza de vida (columna 6). El texto dice: "Si se divide el total de 'años-persona' vividos durante un período de edad dado, más los períodos siguientes, por el total de personas vivas al comienzo del período, se obtiene la esperanza de vida" (pág. 30).\n\n❌ A: la tasa de mortalidad se calcula de otra forma. C: la probabilidad de muerte es la columna 1. D: morbilidad es enfermedad, no muerte.'
-        }, {
-            // 15 (tipo b)
-            pregunta: 'Asocie cada término de morbilidad con su definición:\n1. Tasa de incidencia\n2. Tasa de prevalencia\n3. Tasa de letalidad',
-            opciones: {
-                A: '1-Personas que contraen enfermedad / población expuesta × 1.000; 2-Personas que padecen enfermedad en un punto / población × 1.000; 3-Personas que mueren de enfermedad / personas que la contraen × 100.',
-                B: '1-Personas que padecen enfermedad en un punto / población × 1.000; 2-Personas que contraen enfermedad / población expuesta × 1.000; 3-Personas que mueren de enfermedad / personas que la contraen × 100.',
-                C: '1-Personas que contraen enfermedad / población expuesta × 100.000; 2-Personas que padecen enfermedad en un punto / población × 100; 3-Personas que mueren de enfermedad / personas que la contraen × 1.000.',
-                D: '1-Casos reportados / población × 100.000; 2-Personas que padecen enfermedad en un punto / población × 1.000; 3-Personas que mueren de enfermedad / población total × 100.'
-            },
-            correcta: 'A',
-            explicacion: '✅ Correcto. Tasa de incidencia: "número de personas que contraen una enfermedad durante un determinado período de tiempo por cada 1.000 habitantes expuestos al riesgo" (pág. 31). Tasa de prevalencia: "número de personas que padecen de una enfermedad determinada en un punto determinado de tiempo por cada 1.000 habitantes" (pág. 31). Tasa de letalidad: "proporción de personas que contraen una enfermedad y mueren a causa de la misma durante un período determinado" (pág. 32).\n\n❌ B: invierte incidencia y prevalencia. C: las constantes son incorrectas (100.000 para incidencia no es la única, pero la definición general usa 1.000; la letalidad es proporción, no por 1.000). D: incidencia no es casos reportados (esos son tasa de casos).'
-        }, {
-            // 16 (tipo a)
-            pregunta: 'Según el documento, la tasa de casos se diferencia de la tasa de incidencia porque:',
-            opciones: {
-                A: 'la tasa de casos se basa en el número de casos reportados, que puede incluir reinfecciones, mientras que la incidencia cuenta personas que contraen la enfermedad por primera vez.',
-                B: 'la tasa de casos se expresa por 100.000 y la incidencia por 1.000.',
-                C: 'la tasa de incidencia solo se usa para enfermedades crónicas y la de casos para agudas.',
-                D: 'son exactamente lo mismo, solo cambia el nombre.'
-            },
-            correcta: 'A',
-            explicacion: '✅ Correcto. "Tasa de casos es el número de casos reportados de una enfermedad específica por 100.000 habitantes... se basa en el número de casos reportados, que no significa necesariamente el número de personas que contraen la enfermedad (es decir, es posible que algunas personas contraigan la enfermedad más de una vez)" (pág. 32).\n\n❌ B: ambas pueden usar 100.000; no es la diferencia esencial. C: no es correcto. D: son diferentes.'
-        }, {
-            // 17 (tipo c)
-            pregunta: 'La migración se define como el movimiento geográfico de personas a través de una frontera específica con fines de establecer una residencia ________.',
-            opciones: {
-                A: 'temporal',
-                B: 'permanente o semipermanente',
-                C: 'estacional',
-                D: 'permanente únicamente'
-            },
-            correcta: 'B',
-            explicacion: '✅ Correcto. "La migración es el movimiento geográfico de personas a través de una frontera específica con fines de establecer una residencia permanente o semipermanente" (pág. 35).\n\n❌ A: temporal no es el propósito. C: estacional no es migración según esta definición. D: excluye semipermanente.'
-        }, {
-            // 18 (tipo a)
-            pregunta: 'En 1996, Suecia tuvo una tasa de inmigración de 4,5 por 1.000 y una tasa de emigración de 3,8 por 1.000. La tasa neta de migración fue de +0,7. Esto significa que:',
-            opciones: {
-                A: 'la población de Suecia aumentó en 0,7 personas por cada 1.000 habitantes debido al movimiento migratorio.',
-                B: 'la población de Suecia disminuyó en 0,7 personas por cada 1.000 habitantes.',
-                C: 'hubo 0,7 inmigrantes más que emigrantes en total.',
-                D: 'la migración neta fue negativa porque la emigración superó a la inmigración.'
-            },
-            correcta: 'A',
-            explicacion: '✅ Correcto. "Tasa neta de migración muestra el efecto neto que tienen la inmigración y la emigración en la población de un área, expresado como el aumento o la disminución por cada 1.000 habitantes del área durante un año determinado" (pág. 36). El ejemplo: +0,7 significa aumento neto de 0,7 por 1.000.\n\n❌ B: es aumento, no disminución. C: no es 0,7 en total, sino por 1.000. D: es positiva porque inmigración > emigración.'
-        }, {
-            // 19 (tipo b)
-            pregunta: 'Relacione los conceptos migratorios con sus definiciones:\n1. Inmigración\n2. Emigración\n3. Migración interna',
-            opciones: {
-                A: '1-Llegada a un país; 2-Salida de un país; 3-Movimiento dentro del mismo país.',
-                B: '1-Salida de un país; 2-Llegada a un país; 3-Movimiento entre países.',
-                C: '1-Llegada a una región; 2-Salida de una región; 3-Movimiento entre regiones del mismo país.',
-                D: '1-Movimiento hacia áreas urbanas; 2-Movimiento hacia áreas rurales; 3-Movimiento estacional.'
-            },
-            correcta: 'A',
-            explicacion: '✅ Correcto. "Los términos 'inmigración' y 'emigración' se utilizan para denominar los movimientos entre los países (la migración internacional). Los términos paralelos 'migración hacia' y 'migración desde' se utilizan para clasificar los movimientos entre áreas de un país (denominados también migración interna)" (pág. 35).\n\n❌ B: invierte inmigración y emigración. C: no especifica país/región correctamente. D: no coincide con las definiciones.'
-        }, {
-            // 20 (tipo c)
-            pregunta: 'La ________ es el aumento de la proporción de la población que reside en zonas urbanas, o el proceso de traslado de personas hacia las ciudades.',
-            opciones: {
-                A: 'urbanización',
-                B: 'migración rural-urbana',
-                C: 'densificación',
-                D: 'metropolización'
-            },
-            correcta: 'A',
-            explicacion: '✅ Correcto. "La urbanización es el aumento de la proporción de la población que reside en zonas urbanas, o el proceso de traslado de personas hacia las ciudades u otras áreas densamente pobladas" (pág. 41).\n\n❌ B: migración rural-urbana es un tipo de migración interna, no la definición general de urbanización. C: densificación no se usa en el texto. D: metropolización no es el término.'
-        }, {
-            // 21 (tipo a)
-            pregunta: 'En la ecuación compensadora, P2 = P1 + (N - M) + (I - E), ¿qué representan I y E?',
-            opciones: {
-                A: 'I = inmigración, E = emigración',
-                B: 'I = emigración, E = inmigración',
-                C: 'I = ingresos, E = egresos',
-                D: 'I = nacimientos, E = muertes'
-            },
-            correcta: 'A',
-            explicacion: '✅ Correcto. "I es la inmigración (o migración interna) y E es la emigración (o migración externa)" (pág. 43).\n\n❌ B: invierte los términos. C: no son ingresos/egresos en el sentido económico. D: nacimientos y muertes son N y M.'
-        }, {
-            // 22 (tipo c)
-            pregunta: 'El crecimiento natural de una población se calcula como ________.',
-            opciones: {
-                A: 'Nacimientos - Muertes',
-                B: 'Nacimientos + Muertes',
-                C: 'Inmigración - Emigración',
-                D: 'Nacimientos - Muertes + Inmigración - Emigración'
-            },
-            correcta: 'A',
-            explicacion: '✅ Correcto. "CN = N - M, donde CN es el crecimiento natural durante un período, y N es el número de nacimientos y M es el número de muertes" (pág. 43).\n\n❌ B: no es suma. C: eso es migración neta. D: eso es el cambio total (ecuación compensadora).'
-        }, {
-            // 23 (tipo a)
-            pregunta: 'La tasa de crecimiento de una población se diferencia de la tasa de natalidad en que:',
-            opciones: {
-                A: 'la tasa de crecimiento incluye nacimientos, muertes y migración; la natalidad solo incluye nacimientos.',
-                B: 'la tasa de crecimiento es siempre mayor que la tasa de natalidad.',
-                C: 'la tasa de natalidad incluye muertes y migración, mientras que el crecimiento no.',
-                D: 'son sinónimos y se usan indistintamente.'
-            },
-            correcta: 'A',
-            explicacion: '✅ Correcto. "La tasa de crecimiento toma en cuenta todos los componentes de crecimiento de la población: nacimientos, muertes y migración. Nunca debe confundirse con la tasa de natalidad" (pág. 44).\n\n❌ B: no siempre; puede ser menor si la migración neta es negativa. C: al revés. D: no son sinónimos.'
-        }, {
-            // 24 (tipo b)
-            pregunta: 'Asocie cada concepto con su fórmula de aproximación según el documento:\n1. Tiempo de duplicación\n2. Tasa de crecimiento natural (aproximada a partir de tasas)\n3. Tasa de crecimiento (a partir de tasa de crecimiento natural y migración)',
-            opciones: {
-                A: '1-70 / tasa de crecimiento (%); 2-Tasa de natalidad - tasa de mortalidad; 3-Tasa de crecimiento natural + tasa neta de migración.',
-                B: '1-70 / tasa de crecimiento; 2-Tasa de mortalidad - tasa de natalidad; 3-Tasa de crecimiento natural - tasa neta de migración.',
-                C: '1-70 × tasa de crecimiento; 2-Tasa de natalidad + tasa de mortalidad; 3-Tasa de crecimiento natural / tasa neta de migración.',
-                D: '1-100 / tasa de crecimiento; 2-Tasa de natalidad - tasa de mortalidad; 3-Tasa de crecimiento natural + tasa de inmigración.'
-            },
-            correcta: 'A',
-            explicacion: '✅ Correcto. Tiempo de duplicación: "Una manera rápida de aproximar el período de duplicación es dividir 70 por la tasa de crecimiento expresada como un porcentaje" (pág. 45). Tasa de crecimiento natural: "Nacimientos - muertes / población total × 100" o a partir de tasas: tasa de natalidad - tasa de mortalidad (pág. 44). Tasa de crecimiento: tasa de aumento natural + migración neta (pág. 44).\n\n❌ B: invierte el signo en crecimiento natural. C: operaciones incorrectas. D: usa 100 en lugar de 70 y tasa de inmigración en lugar de neta.'
-        }, {
-            // 25 (tipo c)
-            pregunta: 'La transición demográfica describe el cambio de ________ a ________ en las tasas de natalidad y mortalidad.',
-            opciones: {
-                A: 'altas a bajas',
-                B: 'bajas a altas',
-                C: 'estables a fluctuantes',
-                D: 'altas a muy bajas en natalidad y bajas a altas en mortalidad'
-            },
-            correcta: 'A',
-            explicacion: '✅ Correcto. "La transición demográfica se refiere al cambio que experimentan las poblaciones de altas tasas de natalidad y mortalidad a bajas tasas de natalidad y mortalidad" (pág. 46).\n\n❌ B: es al revés. C: no se ajusta. D: no describe el cambio general.'
-        }, {
-            // 26 (tipo a)
-            pregunta: '¿Cuál de las siguientes afirmaciones sobre la quinta etapa de la transición demográfica es correcta?',
-            opciones: {
-                A: 'Se caracteriza por un crecimiento negativo cuando la fecundidad desciende por debajo del nivel de reemplazo y se mantiene así.',
-                B: 'Es una etapa opcional en la que la mortalidad vuelve a aumentar.',
-                C: 'Solo ocurre en países en desarrollo con alta fecundidad.',
-                D: 'Se caracteriza por un crecimiento rápido debido a la disminución de la mortalidad.'
-            },
-            correcta: 'A',
-            explicacion: '✅ Correcto. "La transición demográfica tiene una quinta etapa. Cuando la fecundidad desciende a niveles demasiado bajos y permanece a ese nivel por un período prolongado, una tasa lenta de crecimiento de la población puede convertirse en una tasa negativa" (pág. 46).\n\n❌ B: no es opcional ni se debe a aumento de mortalidad. C: ocurre en países desarrollados, no en desarrollo. D: es crecimiento lento o negativo, no rápido.'
-        }, {
-            // 27 (tipo b)
-            pregunta: 'Relacione las etapas de la transición demográfica con sus características (según el ejemplo de Finlandia):\n1. Etapa I\n2. Etapa II\n3. Etapa IV',
-            opciones: {
-                A: '1-Alta natalidad, alta mortalidad, poco crecimiento; 2-Alta natalidad, mortalidad en descenso, alto crecimiento; 3-Baja natalidad, baja mortalidad, crecimiento muy lento.',
-                B: '1-Baja natalidad, baja mortalidad, crecimiento lento; 2-Alta natalidad, alta mortalidad, poco crecimiento; 3-Alta natalidad, mortalidad en descenso, alto crecimiento.',
-                C: '1-Alta natalidad, baja mortalidad, alto crecimiento; 2-Baja natalidad, alta mortalidad, decrecimiento; 3-Baja natalidad, baja mortalidad, crecimiento cero.',
-                D: '1-Alta natalidad, alta mortalidad, poco crecimiento; 2-Baja natalidad, baja mortalidad, crecimiento lento; 3-Alta natalidad, mortalidad en descenso, alto crecimiento.'
-            },
-            correcta: 'A',
-            explicacion: '✅ Correcto. Según el cuadro 3 (pág. 47): Etapa I: alta natalidad, alta mortalidad, poco crecimiento. Etapa II: alta natalidad, mortalidad en descenso, alto crecimiento. Etapa IV: baja natalidad, baja mortalidad, crecimiento muy lento.\n\n❌ B, C, D: invierten o combinan incorrectamente las características.'
-        }, {
-            // 28 (tipo a)
-            pregunta: 'El ímpetu demográfico implica que una población puede seguir creciendo incluso después de alcanzar la fecundidad de reemplazo porque:',
-            opciones: {
-                A: 'la gran proporción de jóvenes eventualmente tendrá hijos, y los nacimientos seguirán superando a las muertes hasta que esa cohorte envejezca.',
-                B: 'la mortalidad disminuye drásticamente en las edades jóvenes.',
-                C: 'la inmigración aumenta automáticamente cuando se alcanza el reemplazo.',
-                D: 'las tasas de fecundidad aumentan nuevamente después del reemplazo.'
-            },
-            correcta: 'A',
-            explicacion: '✅ Correcto. "el ímpetu demográfico... debido a que la fecundidad alta en el pasado conduce a una gran concentración de personas en las edades más tempranas. El total de nacimientos continúa excediendo el total de muertes a medida que estos jóvenes se convierten en padres" (pág. 19).\n\n❌ B: no es por disminución de mortalidad. C: no está relacionado con inmigración. D: no es que aumente la fecundidad.'
-        }, {
-            // 29 (tipo c)
-            pregunta: 'La razón de dependencia por edad se calcula como (Población menor de 15 + Población mayor de 64) / ________ × 100.',
-            opciones: {
-                A: 'Población de 15 a 64 años',
-                B: 'Población total',
-                C: 'Población económicamente activa',
-                D: 'Población mayor de 65'
-            },
-            correcta: 'A',
-            explicacion: '✅ Correcto. "La razón de dependencia por edad es la razón de personas en edades en las que 'dependen' (generalmente personas menores de 15 y mayores de 64 años de edad) de personas en edades 'económicamente productivas' (entre 15 y 64 años de edad) en una población" (pág. 10). La fórmula usa población de 15 a 64 como denominador.\n\n❌ B: no es población total. C: "económicamente activa" no es el término usado en la fórmula, aunque se aproxima, el texto usa 15-64. D: no es solo mayores de 65.'
-        }, {
-            // 30 (tipo a)
-            pregunta: 'Según el documento, la edad mediana es:',
-            opciones: {
-                A: 'la edad que divide a la población en dos grupos numéricamente iguales.',
-                B: 'el promedio de edad de todos los miembros de una población.',
-                C: 'la edad a la que se casan la mayoría de las personas.',
-                D: 'la edad a la que la mitad de las mujeres han tenido su primer hijo.'
-            },
-            correcta: 'A',
-            explicacion: '✅ Correcto. "La edad mediana es la edad que indica exactamente que la mitad de la población es mayor y la otra mitad es menor" (pág. 9).\n\n❌ B: eso es edad promedio. C: eso es edad mediana al primer matrimonio. D: no es la definición.'
-        }, {
-            // 31 (tipo b)
-            pregunta: 'Asocie cada tipo de pirámide de población con su descripción:\n1. Crecimiento rápido\n2. Crecimiento lento\n3. Crecimiento nulo o negativo',
-            opciones: {
-                A: '1-Base amplia, altos porcentajes de jóvenes; 2-Proporción más pequeña de jóvenes; 3-Números aproximadamente iguales en todas las edades, disminuyendo en las avanzadas.',
-                B: '1-Proporción más pequeña de jóvenes; 2-Base amplia; 3-Números iguales en todas las edades.',
-                C: '1-Números iguales en todas las edades; 2-Base amplia; 3-Proporción más pequeña de jóvenes.',
-                D: '1-Base amplia; 2-Números iguales en todas las edades; 3-Proporción más pequeña de jóvenes.'
-            },
-            correcta: 'A',
-            explicacion: '✅ Correcto. El texto describe: "1. El crecimiento rápido de una población se indica mediante una pirámide que contiene altos porcentajes de personas en las edades menores. 2. El crecimiento lento se refleja en una pirámide que contiene una proporción más pequeña de la población en las edades menores. 3. El crecimiento nulo o negativo... se indica mediante números aproximadamente iguales de personas en todas las categorías de edad, con una disminución gradual en las edades más avanzadas" (pág. 11).\n\n❌ B, C, D: asignan incorrectamente las descripciones.'
-        }, {
-            // 32 (tipo a)
-            pregunta: '¿Cuál de las siguientes afirmaciones sobre la razón de sexo es correcta?',
-            opciones: {
-                A: 'La razón de sexo al nacer es típicamente de 105 o 106 hombres por cada 100 mujeres.',
-                B: 'La razón de sexo al nacer es típicamente de 100 hombres por cada 105 mujeres.',
-                C: 'La razón de sexo es siempre mayor para las mujeres que para los hombres en todos los grupos de edad.',
-                D: 'La razón de sexo no varía a lo largo de la vida de la población.'
-            },
-            correcta: 'A',
-            explicacion: '✅ Correcto. "En la mayoría de los países, la razón por sexo al nacer es de 105 ó 106 hombres por cada 100 mujeres" (pág. 10).\n\n❌ B: es al revés. C: no siempre; en edades jóvenes hay más hombres, y en edades avanzadas más mujeres. D: sí varía por mortalidad y migración.'
-        }, {
-            // 33 (tipo c)
-            pregunta: 'La ________ es el superávit (o déficit) de nacimientos en comparación con las muertes dentro de una población en un período determinado.',
-            opciones: {
-                A: 'migración neta',
-                B: 'crecimiento natural',
-                C: 'tasa de crecimiento',
-                D: 'tasa de natalidad'
-            },
-            correcta: 'B',
-            explicacion: '✅ Correcto. "El crecimiento natural es el superávit (o déficit) de nacimientos en comparación con las muertes dentro de una población en un período determinado" (pág. 43).\n\n❌ A: migración neta es diferencia entre inmigración y emigración. C: tasa de crecimiento incluye migración. D: tasa de natalidad es solo nacimientos por 1.000.'
-        }, {
-            // 34 (tipo a)
-            pregunta: 'Según el documento, ¿por qué la tasa general de fecundidad es una medida más precisa que la tasa de natalidad?',
-            opciones: {
-                A: 'Porque relaciona los nacimientos solo con las mujeres en edad reproductiva, eliminando distorsiones por estructura de edad y sexo.',
-                B: 'Porque incluye los nacimientos de todas las mujeres, incluidas las menores de 15 y mayores de 49.',
-                C: 'Porque se expresa por 1.000 mujeres totales, no por población total.',
-                D: 'Porque mide la fertilidad en lugar de la fecundidad.'
-            },
-            correcta: 'A',
-            explicacion: '✅ Correcto. "La tasa general de fecundidad es una medida un poco más precisa que la tasa de natalidad porque la misma relaciona los nacimientos al grupo clasificado según la edad y el sexo con las mayores probabilidades de dar a luz (definido normalmente como mujeres de 15 a 49 años de edad). Esta precisión permite eliminar las distorsiones que pueden resultar debido a distintos niveles de distribución por edad y sexo entre poblaciones" (pág. 14).\n\n❌ B: excluye a las menores de 15 y mayores de 49. C: se expresa por 1.000 mujeres de 15-49, no mujeres totales. D: mide fecundidad, no fertilidad.'
-        }, {
-            // 35 (tipo b)
-            pregunta: 'Relacione cada medida de fecundidad con su descripción:\n1. Tasa general de fecundidad\n2. Tasa global de fecundidad\n3. Tasa neta de reproducción',
-            opciones: {
-                A: '1-Nacimientos / mujeres 15-49 × 1.000; 2-Promedio de hijos por mujer al final de su vida reproductiva según tasas actuales; 3-Promedio de hijas por mujer considerando mortalidad.',
-                B: '1-Promedio de hijos por mujer; 2-Nacimientos / mujeres 15-49 × 1.000; 3-Promedio de hijas sin considerar mortalidad.',
-                C: '1-Nacimientos / mujeres 15-49 × 1.000; 2-Promedio de hijas por mujer; 3-Promedio de hijos por mujer considerando mortalidad.',
-                D: '1-Nacimientos / población total × 1.000; 2-Promedio de hijos por mujer; 3-Promedio de hijas por mujer sin mortalidad.'
-            },
-            correcta: 'A',
-            explicacion: '✅ Correcto. Tasa general de fecundidad: nacimientos por 1.000 mujeres 15-49 (pág. 13). TGF: promedio de hijos que una mujer tendría al final de sus años reproductivos si se ajusta a tasas actuales (pág. 15). TNR: promedio de hijas considerando mortalidad (pág. 17).\n\n❌ B: invierte TGF y general. C: TGF no es promedio de hijas, sino de hijos totales. D: tasa general no usa población total.'
-        }, {
-            // 36 (tipo a)
-            pregunta: 'La tasa de prevalencia del VIH/SIDA en Zimbabwe a finales de 1997 era de 25,8 por 100 habitantes. Esto indica que:',
-            opciones: {
-                A: 'el 25,8% de los adultos de 15 a 49 años vivían con VIH/SIDA en ese momento.',
-                B: 'el 25,8% de la población total tenía VIH/SIDA.',
-                C: 'hubo 25,8 nuevos casos de VIH por cada 100 habitantes durante 1997.',
-                D: 'el 25,8% de las personas con VIH murieron durante ese año.'
-            },
-            correcta: 'A',
-            explicacion: '✅ Correcto. El texto dice: "La prevalencia de VIH/SIDA entre adultos (de 15 a 49 años de edad) en Zimbabwe a finales de 1997 era de 25,8 personas por cada 100 habitantes" (pág. 32). La tasa de prevalencia mide los casos existentes en un punto del tiempo, no nuevos (incidencia) ni letalidad.\n\n❌ B: es entre adultos, no población total. C: eso sería incidencia. D: eso sería letalidad.'
-        }, {
-            // 37 (tipo c)
-            pregunta: 'En una tabla de mortalidad, la columna que muestra el número de personas vivas al comienzo de cada período de edad comienza con ________ nacidos.',
-            opciones: {
-                A: '1.000',
-                B: '10.000',
-                C: '100.000',
-                D: '1.000.000'
-            },
-            correcta: 'C',
-            explicacion: '✅ Correcto. "tomando las tasas de mortalidad por edad específica de una población y aplicándolas a una población hipotética de 100.000 personas nacidas en esa misma época" (pág. 29).\n\n❌ A, B, D: no son los usados en el ejemplo del texto.'
-        }, {
-            // 38 (tipo a)
-            pregunta: 'Según el documento, la esperanza de vida aumenta con la edad. Esto significa que:',
-            opciones: {
-                A: 'una persona que sobrevive a una edad avanzada puede esperar vivir más años adicionales que los que predijo la esperanza de vida al nacer.',
-                B: 'las personas mayores tienen una esperanza de vida total mayor que los jóvenes.',
-                C: 'la esperanza de vida al nacer es siempre más alta que a cualquier otra edad.',
-                D: 'la esperanza de vida es una medida que no cambia a medida que la persona envejece.'
-            },
-            correcta: 'A',
-            explicacion: '✅ Correcto. "la esperanza de vida aumenta con la edad; es decir, se obtiene una 'bonificación' por haber sobrevivido. Los 59.464 hombres malayos que llegaron a los 70 años de edad, por ejemplo, pueden esperar vivir más de 10 años adicionales, mucho más que sus 69 años de esperanza de vida al nacer" (pág. 30).\n\n❌ B: no es que tengan mayor esperanza de vida total, sino que los años adicionales esperados desde esa edad son mayores que lo que se predijo al nacer. C: no siempre, la esperanza de vida a edades avanzadas puede ser mayor que la al nacer. D: sí cambia con la edad.'
-        }, {
-            // 39 (tipo b)
-            pregunta: 'Asocie cada concepto de migración con su definición:\n1. Tasa de inmigración\n2. Tasa de emigración\n3. Migración neta',
-            opciones: {
-                A: '1-Inmigrantes / población en destino × 1.000; 2-Emigrantes / población en origen × 1.000; 3-Inmigrantes - Emigrantes.',
-                B: '1-Emigrantes / población en destino × 1.000; 2-Inmigrantes / población en origen × 1.000; 3-Emigrantes - Inmigrantes.',
-                C: '1-Inmigrantes / población total × 1.000; 2-Emigrantes / población total × 1.000; 3-Inmigrantes + Emigrantes.',
-                D: '1-Inmigrantes / población en origen × 1.000; 2-Emigrantes / población en destino × 1.000; 3-Inmigrantes - Emigrantes.'
-            },
-            correcta: 'A',
-            explicacion: '✅ Correcto. Tasa de inmigración: "número de inmigrantes que llegan a un destino por cada 1.000 habitantes en ese destino" (pág. 35). Tasa de emigración: "número de emigrantes que abandonan las áreas de donde provienen por cada 1.000 habitantes de esa área de donde provienen" (pág. 35). Migración neta: "efecto neto que tienen la inmigración y la emigración... (aumento o disminución)" (pág. 36), es decir Inmigrantes - Emigrantes.\n\n❌ B: invierte términos y signos. C: usa población total y suma. D: usa denominadores incorrectos.'
-        }, {
-            // 40 (tipo a)
-            pregunta: '¿Cuál de las siguientes afirmaciones sobre el crecimiento nulo de la población es correcta?',
-            opciones: {
-                A: 'Ocurre cuando los nacimientos más la inmigración equivalen a las muertes más la emigración.',
-                B: 'Ocurre cuando la fecundidad alcanza el nivel de reemplazo y la población deja de crecer inmediatamente.',
-                C: 'Es lo mismo que la fecundidad a nivel de reemplazo.',
-                D: 'Significa que no hay nacimientos ni muertes en la población.'
-            },
-            correcta: 'A',
-            explicacion: '✅ Correcto. "El crecimiento nulo de la población sucede cuando los nacimientos más la inmigración equivalen a las muertes más la emigración" (pág. 47).\n\n❌ B: no es inmediato; el ímpetu demográfico puede causar crecimiento continuo. C: no es lo mismo; el reemplazo es una condición de fecundidad, no de crecimiento nulo. D: no significa ausencia de nacimientos/muertes.'
-        }, {
-            // 41 (tipo c)
-            pregunta: 'La proporción de mujeres que amamantan es útil para calcular el número de mujeres que corren el riesgo de quedar embarazadas, porque amamantar exclusivamente puede prolongar el período antes de reanudarse la ________.',
-            opciones: {
-                A: 'ovulación',
-                B: 'menstruación',
-                C: 'fecundidad',
-                D: 'fertilidad'
-            },
-            correcta: 'B',
-            explicacion: '✅ Correcto. "amamantar exclusivamente a un bebé puede prolongar el período antes de reanudarse la menstruación" (pág. 21).\n\n❌ A: ovulación no es el término usado. C: fecundidad es el resultado, no el proceso. D: fertilidad es capacidad, no se menciona en ese contexto.'
-        }, {
-            // 42 (tipo a)
-            pregunta: 'La tasa de mortalidad infantil se considera un buen índice de las condiciones de salud de una población porque:',
-            opciones: {
-                A: 'refleja la salud de la madre, el acceso a atención médica y las condiciones sanitarias, siendo sensible a cambios en el bienestar.',
-                B: 'mide directamente la esperanza de vida de los adultos.',
-                C: 'es la única medida de mortalidad disponible en todos los países.',
-                D: 'no se ve afectada por la estructura por edad.'
-            },
-            correcta: 'A',
-            explicacion: '✅ Correcto. El texto dice: "La tasa de mortalidad infantil se considera un buen índice de las condiciones de salud de una población" (pág. 28). Aunque no da una explicación extensa, es un indicador sensible. La opción A es la más completa y coherente con la demografía.\n\n❌ B: no mide esperanza de vida adulta. C: no es la única. D: aunque menos afectada que la bruta, no es la razón principal.'
-        }, {
-            // 43 (tipo b)
-            pregunta: 'Relacione los términos de mortalidad materna con su definición según el documento:\n1. Razón de mortalidad materna\n2. Definición de muerte materna',
-            opciones: {
-                A: '1-Muertes maternas / nacidos vivos × 100.000; 2-Muerte de una mujer durante el embarazo o dentro de 42 días de terminado, por causas relacionadas o agravadas por el embarazo, excepto accidentales.',
-                B: '1-Muertes maternas / mujeres en edad fértil × 100.000; 2-Muerte de una mujer durante el embarazo o dentro de 42 días, por cualquier causa incluyendo accidentes.',
-                C: '1-Muertes maternas / nacidos vivos × 1.000; 2-Muerte de una mujer durante el parto únicamente.',
-                D: '1-Muertes maternas / embarazos × 100.000; 2-Muerte de una mujer dentro del año posterior al parto.'
-            },
-            correcta: 'A',
-            explicacion: '✅ Correcto. Razón de mortalidad materna: "número de mujeres que fallecen... por cada 100.000 nacidos vivos" (pág. 28). Definición: "una muerte materna se define como la muerte de una mujer mientras está embarazada o dentro de un plazo de 42 días de haber terminado el embarazo debido a cualquier causa relacionada o empeorada por el embarazo o su administración, pero no debido a causas accidentales o incidentales" (pág. 28).\n\n❌ B: incluye accidentes, lo cual no es correcto. C: usa 1.000 en lugar de 100.000 y solo parto. D: usa embarazos como denominador y plazo de un año.'
-        }, {
-            // 44 (tipo c)
-            pregunta: 'La ________ es una estimación del número promedio de años de vida adicionales que una persona podría esperar vivir si las tasas de mortalidad por edad específica para un año determinado permanecieran durante el resto de su vida.',
-            opciones: {
-                A: 'esperanza de vida',
-                B: 'longevidad',
-                C: 'edad mediana',
-                D: 'probabilidad de supervivencia'
-            },
-            correcta: 'A',
-            explicacion: '✅ Correcto. "La esperanza de vida es una estimación del número promedio de años de vida adicionales que una persona podría esperar vivir si las tasas de mortalidad por edad específica para un año determinado permanecieran durante el resto de su vida" (pág. 28).\n\n❌ B: longevidad es la edad máxima posible. C: edad mediana es otra cosa. D: probabilidad de supervivencia es la proporción que sobrevive a un intervalo.'
-        }, {
-            // 45 (tipo a)
-            pregunta: 'Según el documento, ¿cuál de los siguientes NO es un componente del cambio de población?',
-            opciones: {
-                A: 'Nacimientos',
-                B: 'Muertes',
-                C: 'Migración',
-                D: 'Matrimonios'
-            },
-            correcta: 'D',
-            explicacion: '✅ Correcto. "El cambio en una población tiene tres componentes: nacimientos, muertes y migración" (pág. 43). Los matrimonios no son un componente del cambio poblacional, aunque afectan la fecundidad.\n\n❌ A, B, C son los componentes explícitos.'
-        }, {
-            // 46 (tipo b)
-            pregunta: 'Asocie cada tasa con su constante estándar (según el texto):\n1. Tasa de mortalidad por causas específicas\n2. Tasa de abortos provocados\n3. Razón de mortalidad materna',
-            opciones: {
-                A: '1-100.000; 2-1.000; 3-100.000',
-                B: '1-1.000; 2-1.000; 3-100.000',
-                C: '1-100.000; 2-100.000; 3-1.000',
-                D: '1-100.000; 2-1.000; 3-1.000'
-            },
-            correcta: 'A',
-            explicacion: '✅ Correcto. Tasa de mortalidad por causas específicas: "expresadas normalmente por el número de muertes por cada 100.000 habitantes" (pág. 26). Tasa de abortos provocados: "número de abortos provocados por cada 1.000 mujeres en edad reproductiva" (pág. 22). Razón de mortalidad materna: "por cada 100.000 nacidos vivos" (pág. 28).\n\n❌ B: mortalidad por causas no usa 1.000. C: abortos no usa 100.000. D: materna no usa 1.000.'
-        }, {
-            // 47 (tipo a)
-            pregunta: 'La tasa de fecundidad conyugal se define como el número de nacidos vivos legítimos por 1.000 mujeres casadas de 15 a 49 años. ¿Qué implica una alta tasa de fecundidad conyugal en comparación con la tasa general de fecundidad?',
-            opciones: {
-                A: 'Que la mayoría de los nacimientos ocurren dentro del matrimonio, y que la fecundidad fuera del matrimonio es baja.',
-                B: 'Que las mujeres casadas tienen más hijos que las solteras, pero no da información sobre el total de nacimientos.',
-                C: 'Que la tasa de natalidad es alta porque hay muchas mujeres casadas.',
-                D: 'Que la fecundidad general es necesariamente alta.'
-            },
-            correcta: 'B',
-            explicacion: '✅ Correcto. La tasa de fecundidad conyugal mide la fecundidad entre mujeres casadas. Si es alta, indica que las casadas tienen muchos hijos, pero la tasa general de fecundidad puede ser baja si hay pocas casadas. El documento no da una definición explícita de esta tasa, pero aparece en el glosario (pág. 65). La opción B es la interpretación más ajustada.\n\n❌ A: no necesariamente; puede haber nacimientos fuera del matrimonio. C: no es una consecuencia directa. D: no siempre, depende de la proporción de casadas.'
-        }, {
-            // 48 (tipo c)
-            pregunta: 'En la transición demográfica, el descenso de la mortalidad normalmente ________ al descenso de la fecundidad, lo que resulta en un crecimiento rápido durante el período de transición.',
-            opciones: {
-                A: 'precede',
-                B: 'sigue',
-                C: 'ocurre simultáneamente con',
-                D: 'es independiente de'
-            },
-            correcta: 'A',
-            explicacion: '✅ Correcto. "La disminución de la mortalidad normalmente precede a la reducción de la fecundidad, lo que resulta en un crecimiento de la población durante el período de transición" (pág. 46).\n\n❌ B: al revés. C: no es simultáneo. D: no es independiente.'
-        }, {
-            // 49 (tipo a)
-            pregunta: 'La población nacida en el extranjero se define como las personas nacidas en el exterior de las fronteras de un país. ¿Qué información proporciona esta medida?',
-            opciones: {
-                A: 'El número de inmigrantes que residen actualmente en el país, independientemente de su estatus migratorio.',
-                B: 'El número de personas que han inmigrado durante el último año.',
-                C: 'La proporción de la población que tiene ciudadanía extranjera.',
-                D: 'El número de emigrantes que han salido del país.'
-            },
-            correcta: 'A',
-            explicacion: '✅ Correcto. "La población nacida en el extranjero representa las personas nacidas en el exterior de las fronteras o territorios de un país" (pág. 38). Es un stock, no un flujo, e incluye a todos los nacidos fuera, independientemente de cuándo llegaron.\n\n❌ B: es un flujo, no un stock. C: no es ciudadanía, es lugar de nacimiento. D: son emigrantes, no residentes.'
-        }, {
-            // 50 (tipo b)
-            pregunta: 'Relacione los conceptos de urbanización:\n1. Porcentaje urbano\n2. Crecimiento urbano\n3. Área metropolitana',
-            opciones: {
-                A: '1-Población urbana / total × 100; 2-Aumento del tamaño físico de una zona urbana; 3-Concentración de 100.000 o más con núcleo y áreas integradas.',
-                B: '1-Población urbana / total × 100; 2-Aumento de la población urbana; 3-Ciudad con más de 50.000 habitantes.',
-                C: '1-Población en ciudades / población rural × 100; 2-Crecimiento de la población total; 3-Área con alta densidad.',
-                D: '1-Población urbana / total × 100; 2-Aumento de la proporción urbana; 3-Área con más de 1 millón de habitantes.'
-            },
-            correcta: 'A',
-            explicacion: '✅ Correcto. Porcentaje urbano: "población que reside en zonas urbanas puede expresarse como un porcentaje de la población total" (pág. 41). Crecimiento urbano: "aumento del tamaño físico de una zona urbana" (pág. 41). Área metropolitana: "concentración grande de población, normalmente un área de 100.000 o más residentes con una ciudad importante como su núcleo, además de áreas suburbanas y 'extraurbanas' que rodean la ciudad y que están integradas social y económicamente a la misma" (pág. 42).\n\n❌ B: crecimiento urbano no es aumento de población, sino físico. C: porcentaje no es relación con rural. D: metropolitana no es solo 1 millón.'
-        }];
+const questions = [{
+    // 1 (tipo c)
+    pregunta: 'La fecundidad se refiere al número de niños nacidos vivos a las mujeres, mientras que la ________ se refiere a la capacidad física de reproducción.',
+    opciones: {
+        A: 'fertilidad',
+        B: 'natalidad',
+        C: 'mortalidad',
+        D: 'nupcialidad'
+    },
+    correcta: 'A',
+    explicacion: '✅ Correcto. El documento establece: "La fecundidad se relaciona con el número de niños nacidos vivos a las mujeres. No es lo mismo que la fertilidad, que implica la capacidad física de reproducción de una mujer." (pág. 13)\n\n❌ B: natalidad es la frecuencia de nacimientos en la población. C: mortalidad son las muertes. D: nupcialidad es el matrimonio como fenómeno poblacional.'
+}, {
+    // 2 (tipo a)
+    pregunta: '¿Cuál de las siguientes afirmaciones sobre la tasa global de fecundidad (TGF) es correcta según el texto?',
+    opciones: {
+        A: 'Es el número promedio de hijos que una mujer tendrá al final de sus años reproductivos si mantiene las tasas de fecundidad actuales a lo largo de su vida.',
+        B: 'Es el número total de hijos nacidos de una mujer durante toda su vida, medido al final de sus años reproductivos.',
+        C: 'Es el número de nacimientos por cada 1.000 mujeres en edad reproductiva en un año determinado.',
+        D: 'Es una medida que solo cuenta las hijas nacidas, no los hijos varones.'
+    },
+    correcta: 'A',
+    explicacion: '✅ Correcto. La TGF es "el número promedio de hijos que una mujer habría tenido al final de sus años reproductivos si la misma se hubiera ajustado a las tasas de fecundidad por edad específica durante cada año de su vida reproductiva" (pág. 15). Es una medida sintética, no el total real.\n\n❌ B: describe la tasa final de fecundidad, no la TGF. C: es la tasa general de fecundidad. D: es la tasa bruta de reproducción.'
+}, {
+    // 3 (tipo b)
+    pregunta: 'Relacione cada medida con su definición correcta:\n1. Tasa bruta de reproducción (TBR)\n2. Tasa neta de reproducción (TNR)\n3. Razón de niños a mujeres',
+    opciones: {
+        A: '1-Número promedio de hijas que tendría una mujer si se ajusta a tasas de fecundidad; 2-Número promedio de hijas considerando la mortalidad; 3-Niños menores de 5 por 1.000 mujeres en edad reproductiva.',
+        B: '1-Número promedio de hijos totales que tendría una mujer; 2-Número promedio de hijas considerando mortalidad; 3-Niños menores de 1 año por 1.000 mujeres.',
+        C: '1-Número promedio de hijas que tendría una mujer; 2-Número promedio de hijos totales considerando mortalidad; 3-Niños menores de 5 por 1.000 mujeres solteras.',
+        D: '1-Número promedio de hijas que tendría una mujer sin considerar mortalidad; 2-Número promedio de hijas considerando solo mortalidad infantil; 3-Niños menores de 5 por 100 mujeres.'
+    },
+    correcta: 'A',
+    explicacion: '✅ Correcto. Según el texto: TBR = "número promedio de hijas que una mujer (o grupo de mujeres) tendría durante su vida si se ajustara a las tasas de fecundidad por edad específica" (pág. 17). TNR = "número promedio de hijas que nacerían de una mujer... si durante toda su vida, desde nacer, se ajustara a las tasas de fecundidad y mortalidad específicas" (pág. 17). Razón niños-mujeres = "número de niños menores de 5 años por 1.000 mujeres en edad reproductiva" (pág. 19).\n\n❌ B: confunde hijos totales con hijas. C: usa mujeres solteras incorrectamente. D: usa 100 en lugar de 1.000 y limita mortalidad a infantil.'
+}, {
+    // 4 (tipo a)
+    pregunta: 'La fecundidad a nivel de reemplazo se alcanza cuando:',
+    opciones: {
+        A: 'la tasa neta de reproducción es igual a 1,00 y la población deja de crecer inmediatamente.',
+        B: 'la tasa global de fecundidad es exactamente 2,0 en todos los países.',
+        C: 'la tasa neta de reproducción es igual a 1,00, pero el crecimiento puede continuar debido al ímpetu demográfico.',
+        D: 'la tasa bruta de reproducción es igual a 1,00 y las mujeres tienen suficientes hijas para reemplazarse.'
+    },
+    correcta: 'C',
+    explicacion: '✅ Correcto. El texto dice: "Una tasa neta de reproducción de 1,00 es igual al nivel de reemplazo" y "Una vez se alcanza la fecundidad a nivel de reemplazo, los nacimientos alcanzarán gradualmente un equilibrio con las muertes... el tiempo que toma en realizarse este proceso varía ampliamente dependiendo de la estructura por edad" (pág. 19). Además, el ímpetu demográfico explica que la población puede seguir creciendo.\n\n❌ A: no es inmediato. B: la TGF de reemplazo varía; en países desarrollados es ~2,1, en desarrollo mayor. D: la TBR no considera mortalidad, por lo que no es suficiente.'
+}, {
+    // 5 (tipo c)
+    pregunta: 'El ________ demográfico se refiere a la tendencia de una población a continuar creciendo después de alcanzar la fecundidad a nivel de reemplazo, debido a una concentración de personas jóvenes.',
+    opciones: {
+        A: 'crecimiento natural',
+        B: 'impulso',
+        C: 'ímpetu',
+        D: 'potencial'
+    },
+    correcta: 'C',
+    explicacion: '✅ Correcto. "El ímpetu demográfico se refiere a la tendencia de una población de continuar su crecimiento después de alcanzar su fecundidad a nivel de reemplazo" (pág. 19).\n\n❌ A: crecimiento natural es el superávit de nacimientos sobre muertes. B: "impulso" no es el término usado. D: "potencial" no aparece en esa definición.'
+}, {
+    // 6 (tipo a)
+    pregunta: '¿Cuál de los siguientes NO es uno de los cuatro factores directos que afectan la fecundidad según el documento?',
+    opciones: {
+        A: 'Proporción de mujeres en relaciones de pareja',
+        B: 'Porcentaje de mujeres que usan anticonceptivos',
+        C: 'Nivel de ingresos per cápita',
+        D: 'Nivel de abortos provocados'
+    },
+    correcta: 'C',
+    explicacion: '✅ Correcto. El texto enumera los cuatro factores: "(1) la proporción de mujeres en relaciones de pareja; (2) el porcentaje de mujeres que usan métodos anticonceptivos; (3) la proporción de mujeres que actualmente no son fértiles (principalmente debido a que están amamantando); (4) el nivel de abortos provocados" (pág. 21). El nivel de ingresos no se menciona como factor directo.\n\n❌ A, B y D son los factores enumerados.'
+}, {
+    // 7 (tipo b)
+    pregunta: 'Asocie cada tasa con su fórmula conceptual correcta:\n1. Tasa de natalidad (bruta)\n2. Tasa general de fecundidad\n3. Tasa de mortalidad infantil',
+    opciones: {
+        A: '1-Nacimientos / población total × 1.000; 2-Nacimientos / mujeres 15-49 × 1.000; 3-Muertes <1 año / nacidos vivos × 1.000.',
+        B: '1-Nacimientos / mujeres 15-49 × 1.000; 2-Nacimientos / población total × 1.000; 3-Muertes <1 año / población total × 1.000.',
+        C: '1-Nacimientos / población total × 100; 2-Nacimientos / mujeres 15-49 × 100; 3-Muertes <1 año / nacidos vivos × 100.',
+        D: '1-Nacimientos / hombres y mujeres × 1.000; 2-Nacimientos / mujeres 15-44 × 1.000; 3-Muertes <28 días / nacidos vivos × 1.000.'
+    },
+    correcta: 'A',
+    explicacion: '✅ Correcto. Tasa de natalidad = "número de nacimientos vivos por cada 1.000 habitantes" (pág. 13). Tasa general de fecundidad = "número de nacimientos vivos por cada grupo de 1.000 mujeres entre las edades de 15 a 49 años" (pág. 13). Tasa de mortalidad infantil = "número de niños menores de 1 año que fallece por cada 1.000 nacidos vivos" (pág. 27).\n\n❌ B: invierte las dos primeras. C: usa constante 100 en lugar de 1.000. D: usa 15-44 en lugar de 15-49 y <28 días para neonatal, no infantil.'
+}, {
+    // 8 (tipo c)
+    pregunta: 'La tasa de prevalencia del uso de anticonceptivos se define como el número de mujeres en edad reproductiva que utilizan métodos anticonceptivos por cada ________ mujeres en edad reproductiva.',
+    opciones: {
+        A: '100',
+        B: '1.000',
+        C: '10.000',
+        D: '100.000'
+    },
+    correcta: 'A',
+    explicacion: '✅ Correcto. "La tasa de prevalencia del uso de anticonceptivos es el número de mujeres en edad reproductiva que están utilizando métodos anticonceptivos por cada 100 mujeres en edad reproductiva" (pág. 22).\n\n❌ B: 1.000 es para muchas tasas, pero no para esta. C y D no corresponden.'
+}, {
+    // 9 (tipo a)
+    pregunta: 'La razón de abortos provocados y la tasa de abortos provocados se diferencian en que:',
+    opciones: {
+        A: 'la razón se expresa por 1.000 nacidos vivos, mientras que la tasa se expresa por 1.000 mujeres en edad reproductiva.',
+        B: 'la tasa se expresa por 1.000 nacidos vivos, mientras que la razón se expresa por 1.000 mujeres.',
+        C: 'ambas se expresan por 1.000 nacidos vivos, pero la tasa incluye abortos espontáneos.',
+        D: 'la razón es siempre más alta que la tasa porque incluye todos los abortos.'
+    },
+    correcta: 'A',
+    explicacion: '✅ Correcto. "Tasa de abortos provocados es el número de abortos provocados por cada 1.000 mujeres en edad reproductiva" (pág. 22). "Razón de abortos provocados es el número de abortos provocados por cada 1.000 nacidos vivos" (pág. 23).\n\n❌ B: invierte las definiciones. C: ninguna incluye espontáneos; son provocados. D: no necesariamente siempre más alta; depende del contexto.'
+}, {
+    // 10 (tipo c)
+    pregunta: 'La tasa de abortos provocados en Hungría en 1996 fue de 34,8, lo que significa que hubo ________ por cada 1.000 mujeres de 15 a 49 años.',
+    opciones: {
+        A: '34,8 abortos provocados',
+        B: '34,8 nacidos vivos',
+        C: '34,8 embarazos',
+        D: '34,8 muertes maternas'
+    },
+    correcta: 'A',
+    explicacion: '✅ Correcto. La definición dice: "Tasa de abortos provocados es el número de abortos provocados por cada 1.000 mujeres en edad reproductiva" (pág. 22). El ejemplo de Hungría indica 34,8 abortos por 1.000 mujeres.\n\n❌ B: es abortos, no nacidos vivos. C: embarazos no es el término. D: muertes maternas es otro concepto.'
+}, {
+    // 11 (tipo a)
+    pregunta: '¿Cuál de las siguientes afirmaciones sobre la tasa de mortalidad (bruta) es correcta según el texto?',
+    opciones: {
+        A: 'Es una medida precisa para comparar el nivel de salud entre países porque no se ve afectada por la estructura por edad.',
+        B: 'Se calcula como el número de muertes por cada 1.000 habitantes y siempre refleja condiciones de salud.',
+        C: 'Puede ser engañosa al comparar países porque la estructura por edad influye en el número de muertes.',
+        D: 'Es más alta en países jóvenes porque hay más niños que mueren.'
+    },
+    correcta: 'C',
+    explicacion: '✅ Correcto. El texto advierte: "Las tasas brutas de mortalidad se ven afectadas por muchas características de la población, especialmente la estructura por edad. Por lo tanto, al comparar las tasas de mortalidad de distintos países, es prudente ajustar las diferencias en composición por edad" (pág. 25). Ejemplo Suecia vs Panamá.\n\n❌ A: no es precisa; se ve afectada. B: no siempre refleja salud por el sesgo de edad. D: no necesariamente; los jóvenes tienen menor mortalidad, pero la tasa bruta puede ser baja en países jóvenes.'
+}, {
+    // 12 (tipo b)
+    pregunta: 'Relacione los conceptos de mortalidad con su definición:\n1. Tasa de mortalidad por edad específica\n2. Tasa de mortalidad por causas específicas\n3. Tasa de mortalidad materna',
+    opciones: {
+        A: '1-Muertes de un grupo de edad / población de ese grupo × 1.000; 2-Muertes por causa específica / población total × 100.000; 3-Muertes maternas / nacidos vivos × 100.000.',
+        B: '1-Muertes totales / población total × 1.000; 2-Muertes por causa / población total × 1.000; 3-Muertes maternas / mujeres en edad fértil × 100.000.',
+        C: '1-Muertes de un grupo de edad / población total × 1.000; 2-Muertes por causa / población total × 100.000; 3-Muertes maternas / nacidos vivos × 1.000.',
+        D: '1-Muertes de un grupo de edad / población de ese grupo × 100.000; 2-Muertes por causa / población total × 100.000; 3-Muertes maternas / mujeres embarazadas × 100.000.'
+    },
+    correcta: 'A',
+    explicacion: '✅ Correcto. Tasa por edad específica: "Muertes de personas de 40 a 44 años de edad / Población total de 40 a 44 años de edad × 1.000" (pág. 26). Tasa por causas específicas: "expresadas normalmente por el número de muertes por cada 100.000 habitantes" (pág. 26). Razón de mortalidad materna: "número de mujeres que fallecen... por cada 100.000 nacidos vivos" (pág. 28).\n\n❌ B: la tasa por edad específica no usa población total; la materna no usa mujeres en edad fértil como denominador. C: la materna usa 100.000, no 1.000. D: la tasa por edad específica usa 1.000 no 100.000 y el denominador de materna no es mujeres embarazadas.'
+}, {
+    // 13 (tipo a)
+    pregunta: 'La esperanza de vida al nacer en un país con alta mortalidad infantil, como Malaui (46 años en 1996), refleja que:',
+    opciones: {
+        A: 'los adultos en Malaui viven en promedio solo 46 años.',
+        B: 'si las tasas de mortalidad actuales se mantienen, un recién nacido viviría en promedio 46 años, pero los que sobreviven el primer año pueden esperar vivir más años.',
+        C: 'la esperanza de vida es una medida real del número de años que vive cada persona.',
+        D: 'la esperanza de vida es igual a la edad mediana de la población.'
+    },
+    correcta: 'B',
+    explicacion: '✅ Correcto. El texto explica que la esperanza de vida es una estimación hipotética basada en tasas actuales. Además: "las bajas esperanzas de vida de los países en desarrollo se deben en gran medida a las altas tasas de mortalidad infantil. Por ejemplo, en 1994, la esperanza de vida al nacer para las mujeres de Bangladesh era de 58 años, pero si una mujer de Bangladesh sobrevivía hasta cumplir 1 año, la misma podía esperar vivir hasta los 62" (pág. 29).\n\n❌ A: no es que los adultos vivan solo 46; es el promedio al nacer. C: no es real, es hipotética. D: no es lo mismo que la edad mediana.'
+}, {
+    // 14 (tipo c)
+    pregunta: 'En una tabla de mortalidad, la columna que muestra el número total de "años-persona" que se vivirían durante un período de edad y todos los períodos siguientes se utiliza para calcular la ________.',
+    opciones: {
+        A: 'tasa de mortalidad',
+        B: 'esperanza de vida',
+        C: 'probabilidad de muerte',
+        D: 'morbilidad'
+    },
+    correcta: 'B',
+    explicacion: '✅ Correcto. En la tabla de mortalidad, la columna 5 (años-persona durante este y todos los períodos siguientes) dividida por la columna 2 (número en vida al comienzo) da la esperanza de vida (columna 6). El texto dice: "Si se divide el total de \'años-persona\' vividos durante un período de edad dado, más los períodos siguientes, por el total de personas vivas al comienzo del período, se obtiene la esperanza de vida" (pág. 30).\n\n❌ A: la tasa de mortalidad se calcula de otra forma. C: la probabilidad de muerte es la columna 1. D: morbilidad es enfermedad, no muerte.'
+}, {
+    // 15 (tipo b)
+    pregunta: 'Asocie cada término de morbilidad con su definición:\n1. Tasa de incidencia\n2. Tasa de prevalencia\n3. Tasa de letalidad',
+    opciones: {
+        A: '1-Personas que contraen enfermedad / población expuesta × 1.000; 2-Personas que padecen enfermedad en un punto / población × 1.000; 3-Personas que mueren de enfermedad / personas que la contraen × 100.',
+        B: '1-Personas que padecen enfermedad en un punto / población × 1.000; 2-Personas que contraen enfermedad / población expuesta × 1.000; 3-Personas que mueren de enfermedad / personas que la contraen × 100.',
+        C: '1-Personas que contraen enfermedad / población expuesta × 100.000; 2-Personas que padecen enfermedad en un punto / población × 100; 3-Personas que mueren de enfermedad / personas que la contraen × 1.000.',
+        D: '1-Casos reportados / población × 100.000; 2-Personas que padecen enfermedad en un punto / población × 1.000; 3-Personas que mueren de enfermedad / población total × 100.'
+    },
+    correcta: 'A',
+    explicacion: '✅ Correcto. Tasa de incidencia: "número de personas que contraen una enfermedad durante un determinado período de tiempo por cada 1.000 habitantes expuestos al riesgo" (pág. 31). Tasa de prevalencia: "número de personas que padecen de una enfermedad determinada en un punto determinado de tiempo por cada 1.000 habitantes" (pág. 31). Tasa de letalidad: "proporción de personas que contraen una enfermedad y mueren a causa de la misma durante un período determinado" (pág. 32).\n\n❌ B: invierte incidencia y prevalencia. C: las constantes son incorrectas (100.000 para incidencia no es la única, pero la definición general usa 1.000; la letalidad es proporción, no por 1.000). D: incidencia no es casos reportados (esos son tasa de casos).'
+}, {
+    // 16 (tipo a)
+    pregunta: 'Según el documento, la tasa de casos se diferencia de la tasa de incidencia porque:',
+    opciones: {
+        A: 'la tasa de casos se basa en el número de casos reportados, que puede incluir reinfecciones, mientras que la incidencia cuenta personas que contraen la enfermedad por primera vez.',
+        B: 'la tasa de casos se expresa por 100.000 y la incidencia por 1.000.',
+        C: 'la tasa de incidencia solo se usa para enfermedades crónicas y la de casos para agudas.',
+        D: 'son exactamente lo mismo, solo cambia el nombre.'
+    },
+    correcta: 'A',
+    explicacion: '✅ Correcto. "Tasa de casos es el número de casos reportados de una enfermedad específica por 100.000 habitantes... se basa en el número de casos reportados, que no significa necesariamente el número de personas que contraen la enfermedad (es decir, es posible que algunas personas contraigan la enfermedad más de una vez)" (pág. 32).\n\n❌ B: ambas pueden usar 100.000; no es la diferencia esencial. C: no es correcto. D: son diferentes.'
+}, {
+    // 17 (tipo c)
+    pregunta: 'La migración se define como el movimiento geográfico de personas a través de una frontera específica con fines de establecer una residencia ________.',
+    opciones: {
+        A: 'temporal',
+        B: 'permanente o semipermanente',
+        C: 'estacional',
+        D: 'permanente únicamente'
+    },
+    correcta: 'B',
+    explicacion: '✅ Correcto. "La migración es el movimiento geográfico de personas a través de una frontera específica con fines de establecer una residencia permanente o semipermanente" (pág. 35).\n\n❌ A: temporal no es el propósito. C: estacional no es migración según esta definición. D: excluye semipermanente.'
+}, {
+    // 18 (tipo a)
+    pregunta: 'En 1996, Suecia tuvo una tasa de inmigración de 4,5 por 1.000 y una tasa de emigración de 3,8 por 1.000. La tasa neta de migración fue de +0,7. Esto significa que:',
+    opciones: {
+        A: 'la población de Suecia aumentó en 0,7 personas por cada 1.000 habitantes debido al movimiento migratorio.',
+        B: 'la población de Suecia disminuyó en 0,7 personas por cada 1.000 habitantes.',
+        C: 'hubo 0,7 inmigrantes más que emigrantes en total.',
+        D: 'la migración neta fue negativa porque la emigración superó a la inmigración.'
+    },
+    correcta: 'A',
+    explicacion: '✅ Correcto. "Tasa neta de migración muestra el efecto neto que tienen la inmigración y la emigración en la población de un área, expresado como el aumento o la disminución por cada 1.000 habitantes del área durante un año determinado" (pág. 36). El ejemplo: +0,7 significa aumento neto de 0,7 por 1.000.\n\n❌ B: es aumento, no disminución. C: no es 0,7 en total, sino por 1.000. D: es positiva porque inmigración > emigración.'
+}, {
+    // 19 (tipo b)
+    pregunta: 'Relacione los conceptos migratorios con sus definiciones:\n1. Inmigración\n2. Emigración\n3. Migración interna',
+    opciones: {
+        A: '1-Llegada a un país; 2-Salida de un país; 3-Movimiento dentro del mismo país.',
+        B: '1-Salida de un país; 2-Llegada a un país; 3-Movimiento entre países.',
+        C: '1-Llegada a una región; 2-Salida de una región; 3-Movimiento entre regiones del mismo país.',
+        D: '1-Movimiento hacia áreas urbanas; 2-Movimiento hacia áreas rurales; 3-Movimiento estacional.'
+    },
+    correcta: 'A',
+    explicacion: '✅ Correcto. "Los términos \'inmigración\' y \'emigración\' se utilizan para denominar los movimientos entre los países (la migración internacional). Los términos paralelos \'migración hacia\' y \'migración desde\' se utilizan para clasificar los movimientos entre áreas de un país (denominados también migración interna)" (pág. 35).\n\n❌ B: invierte inmigración y emigración. C: no especifica país/región correctamente. D: no coincide con las definiciones.'
+}, {
+    // 20 (tipo c)
+    pregunta: 'La ________ es el aumento de la proporción de la población que reside en zonas urbanas, o el proceso de traslado de personas hacia las ciudades.',
+    opciones: {
+        A: 'urbanización',
+        B: 'migración rural-urbana',
+        C: 'densificación',
+        D: 'metropolización'
+    },
+    correcta: 'A',
+    explicacion: '✅ Correcto. "La urbanización es el aumento de la proporción de la población que reside en zonas urbanas, o el proceso de traslado de personas hacia las ciudades u otras áreas densamente pobladas" (pág. 41).\n\n❌ B: migración rural-urbana es un tipo de migración interna, no la definición general de urbanización. C: densificación no se usa en el texto. D: metropolización no es el término.'
+}, {
+    // 21 (tipo a)
+    pregunta: 'En la ecuación compensadora, P2 = P1 + (N - M) + (I - E), ¿qué representan I y E?',
+    opciones: {
+        A: 'I = inmigración, E = emigración',
+        B: 'I = emigración, E = inmigración',
+        C: 'I = ingresos, E = egresos',
+        D: 'I = nacimientos, E = muertes'
+    },
+    correcta: 'A',
+    explicacion: '✅ Correcto. "I es la inmigración (o migración interna) y E es la emigración (o migración externa)" (pág. 43).\n\n❌ B: invierte los términos. C: no son ingresos/egresos en el sentido económico. D: nacimientos y muertes son N y M.'
+}, {
+    // 22 (tipo c)
+    pregunta: 'El crecimiento natural de una población se calcula como ________.',
+    opciones: {
+        A: 'Nacimientos - Muertes',
+        B: 'Nacimientos + Muertes',
+        C: 'Inmigración - Emigración',
+        D: 'Nacimientos - Muertes + Inmigración - Emigración'
+    },
+    correcta: 'A',
+    explicacion: '✅ Correcto. "CN = N - M, donde CN es el crecimiento natural durante un período, y N es el número de nacimientos y M es el número de muertes" (pág. 43).\n\n❌ B: no es suma. C: eso es migración neta. D: eso es el cambio total (ecuación compensadora).'
+}, {
+    // 23 (tipo a)
+    pregunta: 'La tasa de crecimiento de una población se diferencia de la tasa de natalidad en que:',
+    opciones: {
+        A: 'la tasa de crecimiento incluye nacimientos, muertes y migración; la natalidad solo incluye nacimientos.',
+        B: 'la tasa de crecimiento es siempre mayor que la tasa de natalidad.',
+        C: 'la tasa de natalidad incluye muertes y migración, mientras que el crecimiento no.',
+        D: 'son sinónimos y se usan indistintamente.'
+    },
+    correcta: 'A',
+    explicacion: '✅ Correcto. "La tasa de crecimiento toma en cuenta todos los componentes de crecimiento de la población: nacimientos, muertes y migración. Nunca debe confundirse con la tasa de natalidad" (pág. 44).\n\n❌ B: no siempre; puede ser menor si la migración neta es negativa. C: al revés. D: no son sinónimos.'
+}, {
+    // 24 (tipo b)
+    pregunta: 'Asocie cada concepto con su fórmula de aproximación según el documento:\n1. Tiempo de duplicación\n2. Tasa de crecimiento natural (aproximada a partir de tasas)\n3. Tasa de crecimiento (a partir de tasa de crecimiento natural y migración)',
+    opciones: {
+        A: '1-70 / tasa de crecimiento (%); 2-Tasa de natalidad - tasa de mortalidad; 3-Tasa de crecimiento natural + tasa neta de migración.',
+        B: '1-70 / tasa de crecimiento; 2-Tasa de mortalidad - tasa de natalidad; 3-Tasa de crecimiento natural - tasa neta de migración.',
+        C: '1-70 × tasa de crecimiento; 2-Tasa de natalidad + tasa de mortalidad; 3-Tasa de crecimiento natural / tasa neta de migración.',
+        D: '1-100 / tasa de crecimiento; 2-Tasa de natalidad - tasa de mortalidad; 3-Tasa de crecimiento natural + tasa de inmigración.'
+    },
+    correcta: 'A',
+    explicacion: '✅ Correcto. Tiempo de duplicación: "Una manera rápida de aproximar el período de duplicación es dividir 70 por la tasa de crecimiento expresada como un porcentaje" (pág. 45). Tasa de crecimiento natural: "Nacimientos - muertes / población total × 100" o a partir de tasas: tasa de natalidad - tasa de mortalidad (pág. 44). Tasa de crecimiento: tasa de aumento natural + migración neta (pág. 44).\n\n❌ B: invierte el signo en crecimiento natural. C: operaciones incorrectas. D: usa 100 en lugar de 70 y tasa de inmigración en lugar de neta.'
+}, {
+    // 25 (tipo c)
+    pregunta: 'La transición demográfica describe el cambio de ________ a ________ en las tasas de natalidad y mortalidad.',
+    opciones: {
+        A: 'altas a bajas',
+        B: 'bajas a altas',
+        C: 'estables a fluctuantes',
+        D: 'altas a muy bajas en natalidad y bajas a altas en mortalidad'
+    },
+    correcta: 'A',
+    explicacion: '✅ Correcto. "La transición demográfica se refiere al cambio que experimentan las poblaciones de altas tasas de natalidad y mortalidad a bajas tasas de natalidad y mortalidad" (pág. 46).\n\n❌ B: es al revés. C: no se ajusta. D: no describe el cambio general.'
+}, {
+    // 26 (tipo a)
+    pregunta: '¿Cuál de las siguientes afirmaciones sobre la quinta etapa de la transición demográfica es correcta?',
+    opciones: {
+        A: 'Se caracteriza por un crecimiento negativo cuando la fecundidad desciende por debajo del nivel de reemplazo y se mantiene así.',
+        B: 'Es una etapa opcional en la que la mortalidad vuelve a aumentar.',
+        C: 'Solo ocurre en países en desarrollo con alta fecundidad.',
+        D: 'Se caracteriza por un crecimiento rápido debido a la disminución de la mortalidad.'
+    },
+    correcta: 'A',
+    explicacion: '✅ Correcto. "La transición demográfica tiene una quinta etapa. Cuando la fecundidad desciende a niveles demasiado bajos y permanece a ese nivel por un período prolongado, una tasa lenta de crecimiento de la población puede convertirse en una tasa negativa" (pág. 46).\n\n❌ B: no es opcional ni se debe a aumento de mortalidad. C: ocurre en países desarrollados, no en desarrollo. D: es crecimiento lento o negativo, no rápido.'
+}, {
+    // 27 (tipo b)
+    pregunta: 'Relacione las etapas de la transición demográfica con sus características (según el ejemplo de Finlandia):\n1. Etapa I\n2. Etapa II\n3. Etapa IV',
+    opciones: {
+        A: '1-Alta natalidad, alta mortalidad, poco crecimiento; 2-Alta natalidad, mortalidad en descenso, alto crecimiento; 3-Baja natalidad, baja mortalidad, crecimiento muy lento.',
+        B: '1-Baja natalidad, baja mortalidad, crecimiento lento; 2-Alta natalidad, alta mortalidad, poco crecimiento; 3-Alta natalidad, mortalidad en descenso, alto crecimiento.',
+        C: '1-Alta natalidad, baja mortalidad, alto crecimiento; 2-Baja natalidad, alta mortalidad, decrecimiento; 3-Baja natalidad, baja mortalidad, crecimiento cero.',
+        D: '1-Alta natalidad, alta mortalidad, poco crecimiento; 2-Baja natalidad, baja mortalidad, crecimiento lento; 3-Alta natalidad, mortalidad en descenso, alto crecimiento.'
+    },
+    correcta: 'A',
+    explicacion: '✅ Correcto. Según el cuadro 3 (pág. 47): Etapa I: alta natalidad, alta mortalidad, poco crecimiento. Etapa II: alta natalidad, mortalidad en descenso, alto crecimiento. Etapa IV: baja natalidad, baja mortalidad, crecimiento muy lento.\n\n❌ B, C, D: invierten o combinan incorrectamente las características.'
+}, {
+    // 28 (tipo a)
+    pregunta: 'El ímpetu demográfico implica que una población puede seguir creciendo incluso después de alcanzar la fecundidad de reemplazo porque:',
+    opciones: {
+        A: 'la gran proporción de jóvenes eventualmente tendrá hijos, y los nacimientos seguirán superando a las muertes hasta que esa cohorte envejezca.',
+        B: 'la mortalidad disminuye drásticamente en las edades jóvenes.',
+        C: 'la inmigración aumenta automáticamente cuando se alcanza el reemplazo.',
+        D: 'las tasas de fecundidad aumentan nuevamente después del reemplazo.'
+    },
+    correcta: 'A',
+    explicacion: '✅ Correcto. "el ímpetu demográfico... debido a que la fecundidad alta en el pasado conduce a una gran concentración de personas en las edades más tempranas. El total de nacimientos continúa excediendo el total de muertes a medida que estos jóvenes se convierten en padres" (pág. 19).\n\n❌ B: no es por disminución de mortalidad. C: no está relacionado con inmigración. D: no es que aumente la fecundidad.'
+}, {
+    // 29 (tipo c)
+    pregunta: 'La razón de dependencia por edad se calcula como (Población menor de 15 + Población mayor de 64) / ________ × 100.',
+    opciones: {
+        A: 'Población de 15 a 64 años',
+        B: 'Población total',
+        C: 'Población económicamente activa',
+        D: 'Población mayor de 65'
+    },
+    correcta: 'A',
+    explicacion: '✅ Correcto. "La razón de dependencia por edad es la razón de personas en edades en las que \'dependen\' (generalmente personas menores de 15 y mayores de 64 años de edad) de personas en edades \'económicamente productivas\' (entre 15 y 64 años de edad) en una población" (pág. 10). La fórmula usa población de 15 a 64 como denominador.\n\n❌ B: no es población total. C: "económicamente activa" no es el término usado en la fórmula, aunque se aproxima, el texto usa 15-64. D: no es solo mayores de 65.'
+}, {
+    // 30 (tipo a)
+    pregunta: 'Según el documento, la edad mediana es:',
+    opciones: {
+        A: 'la edad que divide a la población en dos grupos numéricamente iguales.',
+        B: 'el promedio de edad de todos los miembros de una población.',
+        C: 'la edad a la que se casan la mayoría de las personas.',
+        D: 'la edad a la que la mitad de las mujeres han tenido su primer hijo.'
+    },
+    correcta: 'A',
+    explicacion: '✅ Correcto. "La edad mediana es la edad que indica exactamente que la mitad de la población es mayor y la otra mitad es menor" (pág. 9).\n\n❌ B: eso es edad promedio. C: eso es edad mediana al primer matrimonio. D: no es la definición.'
+}, {
+    // 31 (tipo b)
+    pregunta: 'Asocie cada tipo de pirámide de población con su descripción:\n1. Crecimiento rápido\n2. Crecimiento lento\n3. Crecimiento nulo o negativo',
+    opciones: {
+        A: '1-Base amplia, altos porcentajes de jóvenes; 2-Proporción más pequeña de jóvenes; 3-Números aproximadamente iguales en todas las edades, disminuyendo en las avanzadas.',
+        B: '1-Proporción más pequeña de jóvenes; 2-Base amplia; 3-Números iguales en todas las edades.',
+        C: '1-Números iguales en todas las edades; 2-Base amplia; 3-Proporción más pequeña de jóvenes.',
+        D: '1-Base amplia; 2-Números iguales en todas las edades; 3-Proporción más pequeña de jóvenes.'
+    },
+    correcta: 'A',
+    explicacion: '✅ Correcto. El texto describe: "1. El crecimiento rápido de una población se indica mediante una pirámide que contiene altos porcentajes de personas en las edades menores. 2. El crecimiento lento se refleja en una pirámide que contiene una proporción más pequeña de la población en las edades menores. 3. El crecimiento nulo o negativo... se indica mediante números aproximadamente iguales de personas en todas las categorías de edad, con una disminución gradual en las edades más avanzadas" (pág. 11).\n\n❌ B, C, D: asignan incorrectamente las descripciones.'
+}, {
+    // 32 (tipo a)
+    pregunta: '¿Cuál de las siguientes afirmaciones sobre la razón de sexo es correcta?',
+    opciones: {
+        A: 'La razón de sexo al nacer es típicamente de 105 o 106 hombres por cada 100 mujeres.',
+        B: 'La razón de sexo al nacer es típicamente de 100 hombres por cada 105 mujeres.',
+        C: 'La razón de sexo es siempre mayor para las mujeres que para los hombres en todos los grupos de edad.',
+        D: 'La razón de sexo no varía a lo largo de la vida de la población.'
+    },
+    correcta: 'A',
+    explicacion: '✅ Correcto. "En la mayoría de los países, la razón por sexo al nacer es de 105 ó 106 hombres por cada 100 mujeres" (pág. 10).\n\n❌ B: es al revés. C: no siempre; en edades jóvenes hay más hombres, y en edades avanzadas más mujeres. D: sí varía por mortalidad y migración.'
+}, {
+    // 33 (tipo c)
+    pregunta: 'La ________ es el superávit (o déficit) de nacimientos en comparación con las muertes dentro de una población en un período determinado.',
+    opciones: {
+        A: 'migración neta',
+        B: 'crecimiento natural',
+        C: 'tasa de crecimiento',
+        D: 'tasa de natalidad'
+    },
+    correcta: 'B',
+    explicacion: '✅ Correcto. "El crecimiento natural es el superávit (o déficit) de nacimientos en comparación con las muertes dentro de una población en un período determinado" (pág. 43).\n\n❌ A: migración neta es diferencia entre inmigración y emigración. C: tasa de crecimiento incluye migración. D: tasa de natalidad es solo nacimientos por 1.000.'
+}, {
+    // 34 (tipo a)
+    pregunta: 'Según el documento, ¿por qué la tasa general de fecundidad es una medida más precisa que la tasa de natalidad?',
+    opciones: {
+        A: 'Porque relaciona los nacimientos solo con las mujeres en edad reproductiva, eliminando distorsiones por estructura de edad y sexo.',
+        B: 'Porque incluye los nacimientos de todas las mujeres, incluidas las menores de 15 y mayores de 49.',
+        C: 'Porque se expresa por 1.000 mujeres totales, no por población total.',
+        D: 'Porque mide la fertilidad en lugar de la fecundidad.'
+    },
+    correcta: 'A',
+    explicacion: '✅ Correcto. "La tasa general de fecundidad es una medida un poco más precisa que la tasa de natalidad porque la misma relaciona los nacimientos al grupo clasificado según la edad y el sexo con las mayores probabilidades de dar a luz (definido normalmente como mujeres de 15 a 49 años de edad). Esta precisión permite eliminar las distorsiones que pueden resultar debido a distintos niveles de distribución por edad y sexo entre poblaciones" (pág. 14).\n\n❌ B: excluye a las menores de 15 y mayores de 49. C: se expresa por 1.000 mujeres de 15-49, no mujeres totales. D: mide fecundidad, no fertilidad.'
+}, {
+    // 35 (tipo b)
+    pregunta: 'Relacione cada medida de fecundidad con su descripción:\n1. Tasa general de fecundidad\n2. Tasa global de fecundidad\n3. Tasa neta de reproducción',
+    opciones: {
+        A: '1-Nacimientos / mujeres 15-49 × 1.000; 2-Promedio de hijos por mujer al final de su vida reproductiva según tasas actuales; 3-Promedio de hijas por mujer considerando mortalidad.',
+        B: '1-Promedio de hijos por mujer; 2-Nacimientos / mujeres 15-49 × 1.000; 3-Promedio de hijas sin considerar mortalidad.',
+        C: '1-Nacimientos / mujeres 15-49 × 1.000; 2-Promedio de hijas por mujer; 3-Promedio de hijos por mujer considerando mortalidad.',
+        D: '1-Nacimientos / población total × 1.000; 2-Promedio de hijos por mujer; 3-Promedio de hijas por mujer sin mortalidad.'
+    },
+    correcta: 'A',
+    explicacion: '✅ Correcto. Tasa general de fecundidad: nacimientos por 1.000 mujeres 15-49 (pág. 13). TGF: promedio de hijos que una mujer tendría al final de sus años reproductivos si se ajusta a tasas actuales (pág. 15). TNR: promedio de hijas considerando mortalidad (pág. 17).\n\n❌ B: invierte TGF y general. C: TGF no es promedio de hijas, sino de hijos totales. D: tasa general no usa población total.'
+}, {
+    // 36 (tipo a)
+    pregunta: 'La tasa de prevalencia del VIH/SIDA en Zimbabwe a finales de 1997 era de 25,8 por 100 habitantes. Esto indica que:',
+    opciones: {
+        A: 'el 25,8% de los adultos de 15 a 49 años vivían con VIH/SIDA en ese momento.',
+        B: 'el 25,8% de la población total tenía VIH/SIDA.',
+        C: 'hubo 25,8 nuevos casos de VIH por cada 100 habitantes durante 1997.',
+        D: 'el 25,8% de las personas con VIH murieron durante ese año.'
+    },
+    correcta: 'A',
+    explicacion: '✅ Correcto. El texto dice: "La prevalencia de VIH/SIDA entre adultos (de 15 a 49 años de edad) en Zimbabwe a finales de 1997 era de 25,8 personas por cada 100 habitantes" (pág. 32). La tasa de prevalencia mide los casos existentes en un punto del tiempo, no nuevos (incidencia) ni letalidad.\n\n❌ B: es entre adultos, no población total. C: eso sería incidencia. D: eso sería letalidad.'
+}, {
+    // 37 (tipo c)
+    pregunta: 'En una tabla de mortalidad, la columna que muestra el número de personas vivas al comienzo de cada período de edad comienza con ________ nacidos.',
+    opciones: {
+        A: '1.000',
+        B: '10.000',
+        C: '100.000',
+        D: '1.000.000'
+    },
+    correcta: 'C',
+    explicacion: '✅ Correcto. "tomando las tasas de mortalidad por edad específica de una población y aplicándolas a una población hipotética de 100.000 personas nacidas en esa misma época" (pág. 29).\n\n❌ A, B, D: no son los usados en el ejemplo del texto.'
+}, {
+    // 38 (tipo a)
+    pregunta: 'Según el documento, la esperanza de vida aumenta con la edad. Esto significa que:',
+    opciones: {
+        A: 'una persona que sobrevive a una edad avanzada puede esperar vivir más años adicionales que los que predijo la esperanza de vida al nacer.',
+        B: 'las personas mayores tienen una esperanza de vida total mayor que los jóvenes.',
+        C: 'la esperanza de vida al nacer es siempre más alta que a cualquier otra edad.',
+        D: 'la esperanza de vida es una medida que no cambia a medida que la persona envejece.'
+    },
+    correcta: 'A',
+    explicacion: '✅ Correcto. "la esperanza de vida aumenta con la edad; es decir, se obtiene una \'bonificación\' por haber sobrevivido. Los 59.464 hombres malayos que llegaron a los 70 años de edad, por ejemplo, pueden esperar vivir más de 10 años adicionales, mucho más que sus 69 años de esperanza de vida al nacer" (pág. 30).\n\n❌ B: no es que tengan mayor esperanza de vida total, sino que los años adicionales esperados desde esa edad son mayores que lo que se predijo al nacer. C: no siempre, la esperanza de vida a edades avanzadas puede ser mayor que la al nacer. D: sí cambia con la edad.'
+}, {
+    // 39 (tipo b)
+    pregunta: 'Asocie cada concepto de migración con su definición:\n1. Tasa de inmigración\n2. Tasa de emigración\n3. Migración neta',
+    opciones: {
+        A: '1-Inmigrantes / población en destino × 1.000; 2-Emigrantes / población en origen × 1.000; 3-Inmigrantes - Emigrantes.',
+        B: '1-Emigrantes / población en destino × 1.000; 2-Inmigrantes / población en origen × 1.000; 3-Emigrantes - Inmigrantes.',
+        C: '1-Inmigrantes / población total × 1.000; 2-Emigrantes / población total × 1.000; 3-Inmigrantes + Emigrantes.',
+        D: '1-Inmigrantes / población en origen × 1.000; 2-Emigrantes / población en destino × 1.000; 3-Inmigrantes - Emigrantes.'
+    },
+    correcta: 'A',
+    explicacion: '✅ Correcto. Tasa de inmigración: "número de inmigrantes que llegan a un destino por cada 1.000 habitantes en ese destino" (pág. 35). Tasa de emigración: "número de emigrantes que abandonan las áreas de donde provienen por cada 1.000 habitantes de esa área de donde provienen" (pág. 35). Migración neta: "efecto neto que tienen la inmigración y la emigración... (aumento o disminución)" (pág. 36), es decir Inmigrantes - Emigrantes.\n\n❌ B: invierte términos y signos. C: usa población total y suma. D: usa denominadores incorrectos.'
+}, {
+    // 40 (tipo a)
+    pregunta: '¿Cuál de las siguientes afirmaciones sobre el crecimiento nulo de la población es correcta?',
+    opciones: {
+        A: 'Ocurre cuando los nacimientos más la inmigración equivalen a las muertes más la emigración.',
+        B: 'Ocurre cuando la fecundidad alcanza el nivel de reemplazo y la población deja de crecer inmediatamente.',
+        C: 'Es lo mismo que la fecundidad a nivel de reemplazo.',
+        D: 'Significa que no hay nacimientos ni muertes en la población.'
+    },
+    correcta: 'A',
+    explicacion: '✅ Correcto. "El crecimiento nulo de la población sucede cuando los nacimientos más la inmigración equivalen a las muertes más la emigración" (pág. 47).\n\n❌ B: no es inmediato; el ímpetu demográfico puede causar crecimiento continuo. C: no es lo mismo; el reemplazo es una condición de fecundidad, no de crecimiento nulo. D: no significa ausencia de nacimientos/muertes.'
+}, {
+    // 41 (tipo c)
+    pregunta: 'La proporción de mujeres que amamantan es útil para calcular el número de mujeres que corren el riesgo de quedar embarazadas, porque amamantar exclusivamente puede prolongar el período antes de reanudarse la ________.',
+    opciones: {
+        A: 'ovulación',
+        B: 'menstruación',
+        C: 'fecundidad',
+        D: 'fertilidad'
+    },
+    correcta: 'B',
+    explicacion: '✅ Correcto. "amamantar exclusivamente a un bebé puede prolongar el período antes de reanudarse la menstruación" (pág. 21).\n\n❌ A: ovulación no es el término usado. C: fecundidad es el resultado, no el proceso. D: fertilidad es capacidad, no se menciona en ese contexto.'
+}, {
+    // 42 (tipo a)
+    pregunta: 'La tasa de mortalidad infantil se considera un buen índice de las condiciones de salud de una población porque:',
+    opciones: {
+        A: 'refleja la salud de la madre, el acceso a atención médica y las condiciones sanitarias, siendo sensible a cambios en el bienestar.',
+        B: 'mide directamente la esperanza de vida de los adultos.',
+        C: 'es la única medida de mortalidad disponible en todos los países.',
+        D: 'no se ve afectada por la estructura por edad.'
+    },
+    correcta: 'A',
+    explicacion: '✅ Correcto. El texto dice: "La tasa de mortalidad infantil se considera un buen índice de las condiciones de salud de una población" (pág. 28). Aunque no da una explicación extensa, es un indicador sensible. La opción A es la más completa y coherente con la demografía.\n\n❌ B: no mide esperanza de vida adulta. C: no es la única. D: aunque menos afectada que la bruta, no es la razón principal.'
+}, {
+    // 43 (tipo b)
+    pregunta: 'Relacione los términos de mortalidad materna con su definición según el documento:\n1. Razón de mortalidad materna\n2. Definición de muerte materna',
+    opciones: {
+        A: '1-Muertes maternas / nacidos vivos × 100.000; 2-Muerte de una mujer durante el embarazo o dentro de 42 días de terminado, por causas relacionadas o agravadas por el embarazo, excepto accidentales.',
+        B: '1-Muertes maternas / mujeres en edad fértil × 100.000; 2-Muerte de una mujer durante el embarazo o dentro de 42 días, por cualquier causa incluyendo accidentes.',
+        C: '1-Muertes maternas / nacidos vivos × 1.000; 2-Muerte de una mujer durante el parto únicamente.',
+        D: '1-Muertes maternas / embarazos × 100.000; 2-Muerte de una mujer dentro del año posterior al parto.'
+    },
+    correcta: 'A',
+    explicacion: '✅ Correcto. Razón de mortalidad materna: "número de mujeres que fallecen... por cada 100.000 nacidos vivos" (pág. 28). Definición: "una muerte materna se define como la muerte de una mujer mientras está embarazada o dentro de un plazo de 42 días de haber terminado el embarazo debido a cualquier causa relacionada o empeorada por el embarazo o su administración, pero no debido a causas accidentales o incidentales" (pág. 28).\n\n❌ B: incluye accidentes, lo cual no es correcto. C: usa 1.000 en lugar de 100.000 y solo parto. D: usa embarazos como denominador y plazo de un año.'
+}, {
+    // 44 (tipo c)
+    pregunta: 'La ________ es una estimación del número promedio de años de vida adicionales que una persona podría esperar vivir si las tasas de mortalidad por edad específica para un año determinado permanecieran durante el resto de su vida.',
+    opciones: {
+        A: 'esperanza de vida',
+        B: 'longevidad',
+        C: 'edad mediana',
+        D: 'probabilidad de supervivencia'
+    },
+    correcta: 'A',
+    explicacion: '✅ Correcto. "La esperanza de vida es una estimación del número promedio de años de vida adicionales que una persona podría esperar vivir si las tasas de mortalidad por edad específica para un año determinado permanecieran durante el resto de su vida" (pág. 28).\n\n❌ B: longevidad es la edad máxima posible. C: edad mediana es otra cosa. D: probabilidad de supervivencia es la proporción que sobrevive a un intervalo.'
+}, {
+    // 45 (tipo a)
+    pregunta: 'Según el documento, ¿cuál de los siguientes NO es un componente del cambio de población?',
+    opciones: {
+        A: 'Nacimientos',
+        B: 'Muertes',
+        C: 'Migración',
+        D: 'Matrimonios'
+    },
+    correcta: 'D',
+    explicacion: '✅ Correcto. "El cambio en una población tiene tres componentes: nacimientos, muertes y migración" (pág. 43). Los matrimonios no son un componente del cambio poblacional, aunque afectan la fecundidad.\n\n❌ A, B, C son los componentes explícitos.'
+}, {
+    // 46 (tipo b)
+    pregunta: 'Asocie cada tasa con su constante estándar (según el texto):\n1. Tasa de mortalidad por causas específicas\n2. Tasa de abortos provocados\n3. Razón de mortalidad materna',
+    opciones: {
+        A: '1-100.000; 2-1.000; 3-100.000',
+        B: '1-1.000; 2-1.000; 3-100.000',
+        C: '1-100.000; 2-100.000; 3-1.000',
+        D: '1-100.000; 2-1.000; 3-1.000'
+    },
+    correcta: 'A',
+    explicacion: '✅ Correcto. Tasa de mortalidad por causas específicas: "expresadas normalmente por el número de muertes por cada 100.000 habitantes" (pág. 26). Tasa de abortos provocados: "número de abortos provocados por cada 1.000 mujeres en edad reproductiva" (pág. 22). Razón de mortalidad materna: "por cada 100.000 nacidos vivos" (pág. 28).\n\n❌ B: mortalidad por causas no usa 1.000. C: abortos no usa 100.000. D: materna no usa 1.000.'
+}, {
+    // 47 (tipo a)
+    pregunta: 'La tasa de fecundidad conyugal se define como el número de nacidos vivos legítimos por 1.000 mujeres casadas de 15 a 49 años. ¿Qué implica una alta tasa de fecundidad conyugal en comparación con la tasa general de fecundidad?',
+    opciones: {
+        A: 'Que la mayoría de los nacimientos ocurren dentro del matrimonio, y que la fecundidad fuera del matrimonio es baja.',
+        B: 'Que las mujeres casadas tienen más hijos que las solteras, pero no da información sobre el total de nacimientos.',
+        C: 'Que la tasa de natalidad es alta porque hay muchas mujeres casadas.',
+        D: 'Que la fecundidad general es necesariamente alta.'
+    },
+    correcta: 'B',
+    explicacion: '✅ Correcto. La tasa de fecundidad conyugal mide la fecundidad entre mujeres casadas. Si es alta, indica que las casadas tienen muchos hijos, pero la tasa general de fecundidad puede ser baja si hay pocas casadas. El documento no da una definición explícita de esta tasa, pero aparece en el glosario (pág. 65). La opción B es la interpretación más ajustada.\n\n❌ A: no necesariamente; puede haber nacimientos fuera del matrimonio. C: no es una consecuencia directa. D: no siempre, depende de la proporción de casadas.'
+}, {
+    // 48 (tipo c)
+    pregunta: 'En la transición demográfica, el descenso de la mortalidad normalmente ________ al descenso de la fecundidad, lo que resulta en un crecimiento rápido durante el período de transición.',
+    opciones: {
+        A: 'precede',
+        B: 'sigue',
+        C: 'ocurre simultáneamente con',
+        D: 'es independiente de'
+    },
+    correcta: 'A',
+    explicacion: '✅ Correcto. "La disminución de la mortalidad normalmente precede a la reducción de la fecundidad, lo que resulta en un crecimiento de la población durante el período de transición" (pág. 46).\n\n❌ B: al revés. C: no es simultáneo. D: no es independiente.'
+}, {
+    // 49 (tipo a)
+    pregunta: 'La población nacida en el extranjero se define como las personas nacidas en el exterior de las fronteras de un país. ¿Qué información proporciona esta medida?',
+    opciones: {
+        A: 'El número de inmigrantes que residen actualmente en el país, independientemente de su estatus migratorio.',
+        B: 'El número de personas que han inmigrado durante el último año.',
+        C: 'La proporción de la población que tiene ciudadanía extranjera.',
+        D: 'El número de emigrantes que han salido del país.'
+    },
+    correcta: 'A',
+    explicacion: '✅ Correcto. "La población nacida en el extranjero representa las personas nacidas en el exterior de las fronteras o territorios de un país" (pág. 38). Es un stock, no un flujo, e incluye a todos los nacidos fuera, independientemente de cuándo llegaron.\n\n❌ B: es un flujo, no un stock. C: no es ciudadanía, es lugar de nacimiento. D: son emigrantes, no residentes.'
+}, {
+    // 50 (tipo b)
+    pregunta: 'Relacione los conceptos de urbanización:\n1. Porcentaje urbano\n2. Crecimiento urbano\n3. Área metropolitana',
+    opciones: {
+        A: '1-Población urbana / total × 100; 2-Aumento del tamaño físico de una zona urbana; 3-Concentración de 100.000 o más con núcleo y áreas integradas.',
+        B: '1-Población urbana / total × 100; 2-Aumento de la población urbana; 3-Ciudad con más de 50.000 habitantes.',
+        C: '1-Población en ciudades / población rural × 100; 2-Crecimiento de la población total; 3-Área con alta densidad.',
+        D: '1-Población urbana / total × 100; 2-Aumento de la proporción urbana; 3-Área con más de 1 millón de habitantes.'
+    },
+    correcta: 'A',
+    explicacion: '✅ Correcto. Porcentaje urbano: "población que reside en zonas urbanas puede expresarse como un porcentaje de la población total" (pág. 41). Crecimiento urbano: "aumento del tamaño físico de una zona urbana" (pág. 41). Área metropolitana: "concentración grande de población, normalmente un área de 100.000 o más residentes con una ciudad importante como su núcleo, además de áreas suburbanas y \'extraurbanas\' que rodean la ciudad y que están integradas social y económicamente a la misma" (pág. 42).\n\n❌ B: crecimiento urbano no es aumento de población, sino físico. C: porcentaje no es relación con rural. D: metropolitana no es solo 1 millón.'
+}];
 
-        // -------------------------------------------------------------
-        //  LÓGICA DE LA APLICACIÓN
-        // -------------------------------------------------------------
-        const app = {
-            current: 0,
-            answers: [], // almacena 'correcta' o 'incorrecta' para cada pregunta
-            answered: false,
-            total: questions.length,
+const app = {
+    current: 0,
+    answers: [], // almacena 'correcta' o 'incorrecta' para cada pregunta
+    answered: false,
+    total: questions.length,
 
-            init() {
-                this.renderQuestion();
-                document.getElementById('btnNext').addEventListener('click', () => this.nextQuestion());
-                document.getElementById('btnRestart').addEventListener('click', () => this.restart());
-            },
+    init() {
+        this.renderQuestion();
+        document.getElementById('btnNext').addEventListener('click', () => this.nextQuestion());
+        document.getElementById('btnRestart').addEventListener('click', () => this.restart());
+    },
 
-            renderQuestion() {
-                const q = questions[this.current];
-                const container = document.getElementById('optionsContainer');
-                const feedback = document.getElementById('feedback');
-                const btnNext = document.getElementById('btnNext');
-                const progress = document.getElementById('progressFill');
-                const qNum = document.getElementById('qNum');
-                const qStatus = document.getElementById('qStatus');
+    renderQuestion() {
+        const q = questions[this.current];
+        const container = document.getElementById('optionsContainer');
+        const feedback = document.getElementById('feedback');
+        const btnNext = document.getElementById('btnNext');
+        const progress = document.getElementById('progressFill');
+        const qNum = document.getElementById('qNum');
+        const qStatus = document.getElementById('qStatus');
 
-                // Mostrar enunciado
-                document.getElementById('questionText').innerHTML = q.pregunta;
+        // Mostrar enunciado
+        document.getElementById('questionText').innerHTML = q.pregunta;
 
-                // Opciones
-                container.innerHTML = '';
-                const letters = ['A', 'B', 'C', 'D'];
-                for (let letra of letters) {
-                    const btn = document.createElement('button');
-                    btn.className = 'option-btn';
-                    btn.setAttribute('data-letter', letra);
-                    btn.innerHTML = `<span class="letter">${letra}.</span> ${q.opciones[letra]}`;
-                    btn.addEventListener('click', () => this.selectOption(letra));
-                    container.appendChild(btn);
-                }
+        // Opciones
+        container.innerHTML = '';
+        const letters = ['A', 'B', 'C', 'D'];
+        for (let letra of letters) {
+            const btn = document.createElement('button');
+            btn.className = 'option-btn';
+            btn.setAttribute('data-letter', letra);
+            btn.innerHTML = `<span class="letter">${letra}.</span> ${q.opciones[letra]}`;
+            btn.addEventListener('click', () => this.selectOption(letra));
+            container.appendChild(btn);
+        }
 
-                // Resetear feedback
-                feedback.className = 'feedback';
-                feedback.style.display = 'none';
-                document.getElementById('resultLabel').textContent = '';
-                document.getElementById('explanationText').textContent = '';
+        // Resetear feedback
+        feedback.className = 'feedback';
+        feedback.style.display = 'none';
+        document.getElementById('resultLabel').textContent = '';
+        document.getElementById('explanationText').textContent = '';
 
-                // Botón siguiente deshabilitado
-                btnNext.disabled = true;
+        // Botón siguiente deshabilitado
+        btnNext.disabled = true;
 
-                // Actualizar contador y progreso
-                qNum.textContent = `Pregunta ${this.current + 1} de ${this.total}`;
-                qStatus.textContent = '⏳ Sin responder';
-                progress.style.width = `${(this.current / this.total) * 100}%`;
+        // Actualizar contador y progreso
+        qNum.textContent = `Pregunta ${this.current + 1} de ${this.total}`;
+        qStatus.textContent = '⏳ Sin responder';
+        progress.style.width = `${(this.current / this.total) * 100}%`;
 
-                // Habilitar opciones
-                document.querySelectorAll('.option-btn').forEach(b => b.disabled = false);
+        // Habilitar opciones
+        document.querySelectorAll('.option-btn').forEach(b => b.disabled = false);
 
-                this.answered = false;
-            },
+        this.answered = false;
+    },
 
-            selectOption(letter) {
-                if (this.answered) return;
-                const q = questions[this.current];
-                const isCorrect = (letter === q.correcta);
-                const buttons = document.querySelectorAll('.option-btn');
+    selectOption(letter) {
+        if (this.answered) return;
+        const q = questions[this.current];
+        const isCorrect = (letter === q.correcta);
+        const buttons = document.querySelectorAll('.option-btn');
 
-                // Deshabilitar todos los botones
-                buttons.forEach(b => b.disabled = true);
+        // Deshabilitar todos los botones
+        buttons.forEach(b => b.disabled = true);
 
-                // Marcar correcta/incorrecta en cada opción
-                buttons.forEach(b => {
-                    const l = b.getAttribute('data-letter');
-                    if (l === q.correcta) {
-                        b.classList.add('show-correct');
-                    }
-                    if (l === letter && !isCorrect) {
-                        b.classList.add('incorrect');
-                    }
-                    if (l === letter && isCorrect) {
-                        b.classList.add('correct');
-                    }
-                });
-
-                // Guardar resultado
-                this.answers[this.current] = isCorrect ? 'correcta' : 'incorrecta';
-
-                // Mostrar feedback
-                const feedback = document.getElementById('feedback');
-                feedback.style.display = 'block';
-                feedback.className = 'feedback visible';
-                const resultLabel = document.getElementById('resultLabel');
-                const explanation = document.getElementById('explanationText');
-
-                if (isCorrect) {
-                    resultLabel.className = 'result correct-text';
-                    resultLabel.textContent = '✅ ¡Correcto!';
-                } else {
-                    resultLabel.className = 'result incorrect-text';
-                    resultLabel.textContent = `❌ Incorrecto. La respuesta correcta era ${q.correcta}.`;
-                }
-                explanation.textContent = q.explicacion;
-
-                // Actualizar estado
-                document.getElementById('qStatus').textContent = isCorrect ? '✅ Correcta' : '❌ Incorrecta';
-
-                // Habilitar botón siguiente
-                document.getElementById('btnNext').disabled = false;
-                this.answered = true;
-            },
-
-            nextQuestion() {
-                if (this.current < this.total - 1) {
-                    this.current++;
-                    this.renderQuestion();
-                } else {
-                    this.showResults();
-                }
-            },
-
-            showResults() {
-                // Ocultar elementos del cuestionario
-                document.getElementById('questionText').style.display = 'none';
-                document.getElementById('optionsContainer').style.display = 'none';
-                document.getElementById('feedback').style.display = 'none';
-                document.getElementById('btnNext').style.display = 'none';
-                document.querySelector('.question-counter').style.display = 'none';
-                document.getElementById('progressFill').style.width = '100%';
-
-                // Calcular puntuación
-                const correctas = this.answers.filter(a => a === 'correcta').length;
-                const porcentaje = Math.round((correctas / this.total) * 100);
-
-                document.getElementById('finalScore').textContent = `${porcentaje}%`;
-                document.getElementById('finalDetail').textContent = `${correctas} aciertos de ${this.total}`;
-
-                let mensaje = '';
-                if (porcentaje >= 90) mensaje = '🌟 ¡Excelente! Dominas los conceptos demográficos.';
-                else if (porcentaje >= 70) mensaje = '📘 Buen trabajo, pero revisa los capítulos para afianzar.';
-                else if (porcentaje >= 50) mensaje = '📖 Te recomendamos repasar las definiciones y fórmulas.';
-                else mensaje = '🔁 Vuelve a estudiar los capítulos 4, 5 y 8, luego intenta de nuevo.';
-                document.getElementById('finalMessage').textContent = mensaje;
-
-                document.getElementById('resultsContainer').classList.remove('hidden');
-            },
-
-            restart() {
-                // Reiniciar todo
-                this.current = 0;
-                this.answers = [];
-                this.answered = false;
-
-                // Mostrar elementos ocultos
-                document.getElementById('questionText').style.display = 'block';
-                document.getElementById('optionsContainer').style.display = 'flex';
-                document.getElementById('btnNext').style.display = 'inline-block';
-                document.querySelector('.question-counter').style.display = 'flex';
-                document.getElementById('resultsContainer').classList.add('hidden');
-
-                this.renderQuestion();
-                document.getElementById('progressFill').style.width = '0%';
+        // Marcar correcta/incorrecta en cada opción
+        buttons.forEach(b => {
+            const l = b.getAttribute('data-letter');
+            if (l === q.correcta) {
+                b.classList.add('show-correct');
             }
-        };
+            if (l === letter && !isCorrect) {
+                b.classList.add('incorrect');
+            }
+            if (l === letter && isCorrect) {
+                b.classList.add('correct');
+            }
+        });
 
-        // Iniciar la aplicación
+        // Guardar resultado
+        this.answers[this.current] = isCorrect ? 'correcta' : 'incorrecta';
+
+        // Mostrar feedback
+        const feedback = document.getElementById('feedback');
+        feedback.style.display = 'block';
+        feedback.className = 'feedback visible';
+        const resultLabel = document.getElementById('resultLabel');
+        const explanation = document.getElementById('explanationText');
+
+        if (isCorrect) {
+            resultLabel.className = 'result correct-text';
+            resultLabel.textContent = '✅ ¡Correcto!';
+        } else {
+            resultLabel.className = 'result incorrect-text';
+            resultLabel.textContent = `❌ Incorrecto. La respuesta correcta era ${q.correcta}.`;
+        }
+        explanation.textContent = q.explicacion;
+
+        // Actualizar estado
+        document.getElementById('qStatus').textContent = isCorrect ? '✅ Correcta' : '❌ Incorrecta';
+
+        // Habilitar botón siguiente
+        document.getElementById('btnNext').disabled = false;
+        this.answered = true;
+    },
+
+    nextQuestion() {
+        if (this.current < this.total - 1) {
+            this.current++;
+            this.renderQuestion();
+        } else {
+            this.showResults();
+        }
+    },
+
+    showResults() {
+        // Ocultar elementos del cuestionario
+        document.getElementById('questionText').style.display = 'none';
+        document.getElementById('optionsContainer').style.display = 'none';
+        document.getElementById('feedback').style.display = 'none';
+        document.getElementById('btnNext').style.display = 'none';
+        document.querySelector('.question-counter').style.display = 'none';
+        document.getElementById('progressFill').style.width = '100%';
+
+        // Calcular puntuación
+        const correctas = this.answers.filter(a => a === 'correcta').length;
+        const porcentaje = Math.round((correctas / this.total) * 100);
+
+        document.getElementById('finalScore').textContent = `${porcentaje}%`;
+        document.getElementById('finalDetail').textContent = `${correctas} aciertos de ${this.total}`;
+
+        let mensaje = '';
+        if (porcentaje >= 90) mensaje = '🌟 ¡Excelente! Dominas los conceptos demográficos.';
+        else if (porcentaje >= 70) mensaje = '📘 Buen trabajo, pero revisa los capítulos para afianzar.';
+        else if (porcentaje >= 50) mensaje = '📖 Te recomendamos repasar las definiciones y fórmulas.';
+        else mensaje = '🔁 Vuelve a estudiar los capítulos 4, 5 y 8, luego intenta de nuevo.';
+        document.getElementById('finalMessage').textContent = mensaje;
+
+        document.getElementById('resultsContainer').classList.remove('hidden');
+    },
+
+    restart() {
+        // Reiniciar todo
+        this.current = 0;
+        this.answers = [];
+        this.answered = false;
+
+        // Mostrar elementos ocultos
+        document.getElementById('questionText').style.display = 'block';
+        document.getElementById('optionsContainer').style.display = 'flex';
+        document.getElementById('btnNext').style.display = 'inline-block';
+        document.querySelector('.question-counter').style.display = 'flex';
+        document.getElementById('resultsContainer').classList.add('hidden');
+
+        this.renderQuestion();
+        document.getElementById('progressFill').style.width = '0%';
+    }
+};
+
+// Iniciar la aplicación
+
         document.addEventListener('DOMContentLoaded', () => app.init());
     </script>
 </body>
