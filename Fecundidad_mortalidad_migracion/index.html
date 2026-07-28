@@ -5,198 +5,47 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Haupt. Guía rápida de población (Capítulos 4, 5 y 8)</title>
     <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-        body {
-            font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
-            background: #f2f6fc;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
-        .container {
-            background: white;
-            max-width: 880px;
-            width: 100%;
-            border-radius: 28px;
-            box-shadow: 0 20px 40px -12px rgba(0,0,0,0.2);
-            padding: 30px 35px;
-            transition: 0.3s;
-        }
-        h1 {
-            font-size: 1.8rem;
-            font-weight: 600;
-            color: #0a2a44;
-            border-left: 6px solid #1b6b8a;
-            padding-left: 18px;
-            margin-bottom: 6px;
-        }
-        .subtitle {
-            color: #2c3e50;
-            font-size: 0.95rem;
-            margin-bottom: 25px;
-            padding-left: 24px;
-            opacity: 0.75;
-        }
-        .progress-bar {
-            background: #e9ecf0;
-            height: 8px;
-            border-radius: 20px;
-            margin: 20px 0 25px;
-            overflow: hidden;
-        }
-        .progress-fill {
-            height: 100%;
-            width: 0%;
-            background: #1b6b8a;
-            border-radius: 20px;
-            transition: width 0.4s ease;
-        }
-        .question-number {
-            font-weight: 600;
-            color: #15445c;
-            font-size: 0.9rem;
-            letter-spacing: 0.3px;
-            margin-bottom: 6px;
-        }
-        .question-text {
-            font-size: 1.2rem;
-            font-weight: 500;
-            color: #0b1e2e;
-            line-height: 1.5;
-            margin-bottom: 25px;
-        }
-        .options {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            margin-bottom: 30px;
-        }
-        .option {
-            background: #f8faff;
-            border: 1.5px solid #dde3ed;
-            border-radius: 14px;
-            padding: 14px 18px;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: all 0.15s;
-            color: #1a2b3c;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-        .option:hover {
-            background: #edf3fc;
-            border-color: #8ab3d0;
-        }
-        .option.selected {
-            border-color: #1b6b8a;
-            background: #e1edf7;
-        }
-        .option.correct {
-            border-color: #1e8b4c;
-            background: #dff0e6;
-        }
-        .option.wrong {
-            border-color: #b13e3e;
-            background: #f7e3e3;
-        }
-        .option.disabled {
-            pointer-events: none;
-            opacity: 0.85;
-        }
-        .option-letter {
-            font-weight: 700;
-            color: #1f5a78;
-            min-width: 24px;
-        }
-        .feedback {
-            background: #f0f4fa;
-            border-radius: 16px;
-            padding: 18px 22px;
-            margin: 10px 0 25px;
-            border-left: 5px solid #1b6b8a;
-            display: none;
-        }
-        .feedback.correct {
-            border-left-color: #1e8b4c;
-            background: #eaf6ef;
-        }
-        .feedback.wrong {
-            border-left-color: #b13e3e;
-            background: #f7ecec;
-        }
-        .feedback-title {
-            font-weight: 600;
-            font-size: 1rem;
-            margin-bottom: 6px;
-        }
-        .feedback-detail {
-            font-size: 0.95rem;
-            line-height: 1.5;
-            color: #1f3345;
-        }
-        .feedback-detail strong {
-            color: #0a2a44;
-        }
-        .btn {
-            background: #1b6b8a;
-            border: none;
-            color: white;
-            font-weight: 600;
-            font-size: 1rem;
-            padding: 12px 28px;
-            border-radius: 40px;
-            cursor: pointer;
-            transition: 0.2s;
-            margin-top: 5px;
-            display: inline-block;
-        }
-        .btn:hover {
-            background: #13516b;
-            transform: scale(1.02);
-        }
-        .btn:disabled {
-            opacity: 0.5;
-            pointer-events: none;
-        }
-        .result-box {
-            text-align: center;
-            padding: 25px 10px;
-        }
-        .result-score {
-            font-size: 3.2rem;
-            font-weight: 700;
-            color: #0a2a44;
-        }
-        .result-msg {
-            font-size: 1.1rem;
-            color: #1e3b54;
-            margin-top: 8px;
-        }
-        .restart-btn {
-            margin-top: 25px;
-            background: #3d5f7a;
-        }
-        .hidden {
-            display: none;
-        }
-        @media (max-width: 550px) {
-            .container { padding: 20px; }
-            h1 { font-size: 1.4rem; }
-            .question-text { font-size: 1rem; }
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', Roboto, system-ui, sans-serif; background: #f2f6fc; min-height: 100vh; display: flex; justify-content: center; align-items: center; padding: 20px; }
+        .container { background: white; max-width: 880px; width: 100%; border-radius: 28px; box-shadow: 0 20px 40px -12px rgba(0,0,0,0.2); padding: 30px 35px; }
+        h1 { font-size: 1.8rem; font-weight: 600; color: #0a2a44; border-left: 6px solid #1b6b8a; padding-left: 18px; margin-bottom: 6px; }
+        .subtitle { color: #2c3e50; font-size: 0.95rem; margin-bottom: 25px; padding-left: 24px; opacity: 0.75; }
+        .progress-bar { background: #e9ecf0; height: 8px; border-radius: 20px; margin: 20px 0 25px; overflow: hidden; }
+        .progress-fill { height: 100%; width: 0%; background: #1b6b8a; border-radius: 20px; transition: width 0.4s ease; }
+        .question-number { font-weight: 600; color: #15445c; font-size: 0.9rem; letter-spacing: 0.3px; margin-bottom: 6px; }
+        .question-text { font-size: 1.2rem; font-weight: 500; color: #0b1e2e; line-height: 1.5; margin-bottom: 25px; }
+        .options { display: flex; flex-direction: column; gap: 12px; margin-bottom: 30px; }
+        .option { background: #f8faff; border: 1.5px solid #dde3ed; border-radius: 14px; padding: 14px 18px; font-size: 1rem; cursor: pointer; transition: all 0.15s; color: #1a2b3c; display: flex; align-items: center; gap: 12px; }
+        .option:hover { background: #edf3fc; border-color: #8ab3d0; }
+        .option.selected { border-color: #1b6b8a; background: #e1edf7; }
+        .option.correct { border-color: #1e8b4c; background: #dff0e6; }
+        .option.wrong { border-color: #b13e3e; background: #f7e3e3; }
+        .option.disabled { pointer-events: none; opacity: 0.85; }
+        .option-letter { font-weight: 700; color: #1f5a78; min-width: 24px; }
+        .feedback { background: #f0f4fa; border-radius: 16px; padding: 18px 22px; margin: 10px 0 25px; border-left: 5px solid #1b6b8a; display: none; }
+        .feedback.correct { border-left-color: #1e8b4c; background: #eaf6ef; }
+        .feedback.wrong { border-left-color: #b13e3e; background: #f7ecec; }
+        .feedback-title { font-weight: 600; font-size: 1rem; margin-bottom: 6px; }
+        .feedback-detail { font-size: 0.95rem; line-height: 1.5; color: #1f3345; }
+        .feedback-detail strong { color: #0a2a44; }
+        .btn { background: #1b6b8a; border: none; color: white; font-weight: 600; font-size: 1rem; padding: 12px 28px; border-radius: 40px; cursor: pointer; transition: 0.2s; margin-top: 5px; display: inline-block; }
+        .btn:hover { background: #13516b; transform: scale(1.02); }
+        .btn:disabled { opacity: 0.5; pointer-events: none; }
+        .result-box { text-align: center; padding: 25px 10px; }
+        .result-score { font-size: 3.2rem; font-weight: 700; color: #0a2a44; }
+        .result-msg { font-size: 1.1rem; color: #1e3b54; margin-top: 8px; }
+        .restart-btn { margin-top: 25px; background: #3d5f7a; }
+        .hidden { display: none; }
+        .error-box { background: #f8d7da; color: #721c24; padding: 15px; border-radius: 10px; margin-bottom: 20px; border: 1px solid #f5c6cb; display: none; }
+        @media (max-width: 550px) { .container { padding: 20px; } h1 { font-size: 1.4rem; } .question-text { font-size: 1rem; } }
     </style>
 </head>
 <body>
 <div class="container" id="app">
     <h1>👥 Guía rápida de población</h1>
     <div class="subtitle">Haupt & Kane · PRB · Capítulos 4, 5 y 8</div>
+
+    <div class="error-box" id="errorBox">⚠️ <span id="errorText"></span></div>
 
     <div class="progress-bar">
         <div class="progress-fill" id="progressFill"></div>
@@ -221,8 +70,14 @@
 </div>
 
 <script>
+    // ================================================================
+    //  EXAMEN: GUÍA RÁPIDA DE POBLACIÓN (Capítulos 4, 5 y 8)
+    //  Haupt & Kane · PRB
+    // ================================================================
+
+    console.log('🚀 Script iniciado');
+
     // ========== PREGUNTAS (50) ==========
-    // Basadas en capítulos 4, 5 y 8 de la Guía rápida de población (PRB)
     const questions = [
         // ---- Capítulo 4: Factores que afectan la fecundidad ----
         {
@@ -533,8 +388,7 @@
                 'D) La migración implica residencia permanente o semipermanente, no estacional.'
             ]
         },
-        // Más preguntas para completar 50, distribuidas entre los tres capítulos
-        // Capítulo 4
+        // ---- Más preguntas para completar 50 ----
         {
             type: 'completar',
             text: 'El porcentaje de mujeres en relaciones de pareja en un país se calcula dividiendo el número de mujeres casadas (o en unión) entre 15 y 49 años entre el número total de mujeres de 15 a 49 años, y multiplicando por ______.',
@@ -569,7 +423,6 @@
                 'D) No es la definición de razón de abortos.'
             ]
         },
-        // Capítulo 5
         {
             type: 'opcion',
             text: 'La tabla de mortalidad es una herramienta que simula la mortalidad vitalicia experimentada por una población. Se basa en una población hipotética de:',
@@ -621,7 +474,6 @@
                 'D) Venezuela no es el país con la esperanza de vida más larga.'
             ]
         },
-        // Capítulo 8
         {
             type: 'opcion',
             text: 'La tasa neta de migración se calcula restando el número de emigrantes del número de inmigrantes, dividiendo por la población total y multiplicando por:',
@@ -656,8 +508,6 @@
                 'D) M - E no es un componente estándar.'
             ]
         },
-        // Más preguntas para llegar a 50, combinando los tres capítulos
-        // Capítulo 4
         {
             type: 'opcion',
             text: 'La tasa de prevalencia del uso de anticonceptivos puede calcularse para diferentes subpoblaciones, como mujeres casadas, mujeres solteras o:',
@@ -692,7 +542,6 @@
                 'D) No es una constante estándar.'
             ]
         },
-        // Capítulo 5
         {
             type: 'opcion',
             text: 'La tasa de mortalidad neonatal se refiere a las muertes de niños menores de:',
@@ -727,7 +576,6 @@
                 'D) No es la definición correcta.'
             ]
         },
-        // Capítulo 8
         {
             type: 'opcion',
             text: 'Los términos "migración hacia" y "migración desde" se utilizan para clasificar los movimientos:',
@@ -745,8 +593,6 @@
                 'D) La migración implica residencia permanente o semipermanente.'
             ]
         },
-        // Repetir para completar 50: generaré más preguntas de cada capítulo
-        // Capítulo 4 - más
         {
             type: 'opcion',
             text: 'La tasa de abortos provocados en un año determinado se calcula dividiendo el número de abortos provocados entre el número de mujeres de 15 a 49 años y multiplicando por:',
@@ -781,7 +627,6 @@
                 'D) No es el grupo considerado.'
             ]
         },
-        // Capítulo 5 - más
         {
             type: 'opcion',
             text: 'La tasa de mortalidad infantil se considera un buen índice de las condiciones de salud de una población. En 1996, la tasa más baja del mundo fue de 3,5 por 1.000, en:',
@@ -816,7 +661,6 @@
                 'D) La migración no es el factor principal.'
             ]
         },
-        // Capítulo 8 - más
         {
             type: 'opcion',
             text: 'La tasa de inmigración en Suecia en 1996 fue de 4,5 por cada 1.000 residentes. Ese año, el 83% del crecimiento de la población sueca se debió a:',
@@ -834,8 +678,6 @@
                 'D) La fecundidad contribuye al crecimiento natural, pero no fue el principal factor en Suecia en 1996.'
             ]
         },
-        // Más preguntas para completar 50
-        // Capítulo 4
         {
             type: 'opcion',
             text: 'El porcentaje de mujeres que amamantan en Nepal en 1996 era prácticamente del 100%. Este alto porcentaje indica que:',
@@ -853,7 +695,6 @@
                 'D) No necesariamente; la alta prevalencia de amamantamiento puede contribuir a reducir la fecundidad, pero no es un indicador directo de baja fecundidad.'
             ]
         },
-        // Capítulo 5
         {
             type: 'opcion',
             text: 'En 1996, la tasa de mortalidad por causas específicas para cáncer en Estados Unidos fue de 205 por 100.000 habitantes. Esto significa que:',
@@ -871,44 +712,23 @@
                 'D) No está relacionado.'
             ]
         },
-        // Capítulo 8
         {
             type: 'opcion',
-            text: 'La migración neta en Polonia durante 1996 fue de -13.111 personas (emigración neta). La tasa neta de migración fue de -0,07 por ciento. Esto significa que:',
+            text: 'Según el capítulo 8, una tasa neta de migración negativa indica que:',
             options: [
-                'A) Polonia perdió 13.111 personas por cada 1.000 habitantes debido a la migración.',
-                'B) Polonia perdió 0,07 personas por cada 100 habitantes debido a la migración.',
-                'C) Polonia perdió 0,07 personas por cada 1.000 habitantes debido a la migración.',
-                'D) Polonia ganó 13.111 personas por cada 1.000 habitantes debido a la migración.'
+                'A) La inmigración supera a la emigración.',
+                'B) La emigración supera a la inmigración.',
+                'C) No hay migración.',
+                'D) El crecimiento natural es negativo.'
             ],
-            correct: 2,
-            justification: 'La tasa neta de migración se expresa como aumento o disminución por cada 1.000 habitantes. Una tasa de -0,07 por ciento es equivalente a -0,07 por cada 100, o -0,7 por cada 1.000. Sin embargo, el cálculo del ejemplo: "Nacimientos en 1996 429.000 – Muertes en 1996 – 386.000 ± Migración neta en 1996 x K = – 13.111 x 100 = 0,07". La tasa se expresa como porcentaje, pero la interpretación correcta es que hubo una pérdida de 0,07 personas por cada 100 habitantes, que es lo mismo que 0,7 por cada 1.000. Pero la opción C dice "0,07 personas por cada 1.000", lo cual sería incorrecto numéricamente. Revisemos: el texto dice "tasa de crecimiento anual en Polonia era del 0,07 por ciento." Eso es 0,07 por cada 100, que es 0,7 por cada 1.000. La opción que dice "0,07 por cada 1.000" sería incorrecta. Pero la opción B dice "0,07 por cada 100" que es correcta. Entonces la respuesta correcta sería B. Ajustemos la pregunta y opciones.
-
-Reformularé la pregunta para evitar ambigüedad. En el texto: "En 1996, la tasa de crecimiento anual en Polonia era del 0,07 por ciento." La tasa de crecimiento incluye migración neta. La migración neta fue -13.111. La tasa neta de migración sería -13.111 / 38.609.400 * 100 = -0,034%. No coincide. Mejor me baso en la definición general.
-
-Voy a corregir la pregunta y hacerla más directa: "Una tasa neta de migración de -0,7 por cada 1.000 habitantes significa que:"
-
-Pero mejor la dejo como está y corrijo la opción.
-
-Rehago la pregunta:
-{
-type: 'opcion',
-text: 'Según el capítulo 8, una tasa neta de migración negativa indica que:',
-options: [
-'A) La inmigración supera a la emigración.',
-'B) La emigración supera a la inmigración.',
-'C) No hay migración.',
-'D) El crecimiento natural es negativo.'
-],
-correct: 1,
-...
-}
-
-Incluiré esa. Voy a generar las preguntas que faltan sin más contratiempos.
+            correct: 1,
+            justification: 'Una tasa neta de migración negativa significa que la emigración supera a la inmigración, resultando en una pérdida neta de población por migración.',
+            distractors: [
+                'A) Eso sería una tasa positiva.',
+                'C) No necesariamente; hubo migración, pero con saldo negativo.',
+                'D) El crecimiento natural es independiente de la migración.'
+            ]
         },
-        // Generaré más preguntas aleatorias de los tres capítulos hasta completar 50.
-        // Ya tengo 30 aproximadamente. Añadiré 20 más.
-        // Capítulo 4
         {
             type: 'opcion',
             text: 'El porcentaje de mujeres en relaciones de pareja se calcula generalmente para mujeres de 15 a 49 años, que es el período considerado como edad reproductiva. En algunos países, cuando hay muchas uniones consensuales, es posible utilizar:',
@@ -926,7 +746,6 @@ Incluiré esa. Voy a generar las preguntas que faltan sin más contratiempos.
                 'D) No son el grupo objetivo.'
             ]
         },
-        // Capítulo 5
         {
             type: 'opcion',
             text: 'La tasa de mortalidad perinatal incluye las muertes fetales tardías (después de 28 semanas de gestación) y las muertes de niños menores de 7 días. Esto se expresa por cada:',
@@ -944,7 +763,6 @@ Incluiré esa. Voy a generar las preguntas que faltan sin más contratiempos.
                 'D) Esa es la base para tasas brutas de mortalidad.'
             ]
         },
-        // Capítulo 8
         {
             type: 'opcion',
             text: 'En la ecuación compensadora, el cambio total de población entre dos fechas (P2 - P1) es igual a:',
@@ -962,8 +780,6 @@ Incluiré esa. Voy a generar las preguntas que faltan sin más contratiempos.
                 'D) No es la fórmula correcta.'
             ]
         },
-        // Más preguntas...
-        // Capítulo 4
         {
             type: 'opcion',
             text: 'La tasa de abortos provocados en Hungría en 1996 fue de 34,8 por 1.000 mujeres de 15 a 49 años. Esto se calculó dividiendo 76.600 abortos entre 2.200.300 mujeres y multiplicando por:',
@@ -981,7 +797,6 @@ Incluiré esa. Voy a generar las preguntas que faltan sin más contratiempos.
                 'D) No es la constante estándar.'
             ]
         },
-        // Capítulo 5
         {
             type: 'opcion',
             text: 'En la tabla de mortalidad, la columna 1 muestra la proporción de cada grupo de edad que fallece a esa edad. Estos datos se basan en:',
@@ -999,7 +814,6 @@ Incluiré esa. Voy a generar las preguntas que faltan sin más contratiempos.
                 'D) La migración no se usa.'
             ]
         },
-        // Capítulo 8
         {
             type: 'opcion',
             text: 'La tasa de emigración en Suecia en 1996 fue de 3,8 por 1.000 habitantes. Esto significa que por cada 1.000 habitantes en Suecia, aproximadamente:',
@@ -1017,12 +831,6 @@ Incluiré esa. Voy a generar las preguntas que faltan sin más contratiempos.
                 'D) Esa sería la tasa de mortalidad.'
             ]
         },
-        // Añado más preguntas para completar 50. Ya llevo unas 35. Añadiré 15 más distribuidas.
-        // Capítulo 4: factores que afectan la fecundidad, tasas de abortos, etc.
-        // Capítulo 5: mortalidad infantil, esperanza de vida, tabla de mortalidad.
-        // Capítulo 8: migración neta, tasas de inmigración/emigración.
-        // Generaré preguntas de completar y relación.
-        // Pregunta de relación: asociar término con definición.
         {
             type: 'relacion',
             text: 'Relacione cada término con su definición según el capítulo 5:',
@@ -1040,7 +848,6 @@ Incluiré esa. Voy a generar las preguntas que faltan sin más contratiempos.
                 'D) La tasa de mortalidad infantil no es por 1.000 habitantes.'
             ]
         },
-        // Pregunta de completar sobre la tabla de mortalidad.
         {
             type: 'completar',
             text: 'En una tabla de mortalidad, la esperanza de vida a una edad exacta se calcula dividiendo el total de años-persona vividos desde esa edad hasta el final de la tabla por el número de personas _______ a esa edad.',
@@ -1058,8 +865,6 @@ Incluiré esa. Voy a generar las preguntas que faltan sin más contratiempos.
                 'D) La migración no se considera en la tabla de mortalidad.'
             ]
         },
-        // Más preguntas...
-        // Capítulo 4: tasa de prevalencia de anticonceptivos.
         {
             type: 'opcion',
             text: 'La tasa de prevalencia del uso de anticonceptivos en Bangladesh en 1996-1997 era de 49,2%. Esto se calculó dividiendo el número de mujeres que usan anticonceptivos (5.268) entre el número total de mujeres entrevistadas (10.707) y multiplicando por:',
@@ -1077,7 +882,6 @@ Incluiré esa. Voy a generar las preguntas que faltan sin más contratiempos.
                 'D) No es una constante estándar.'
             ]
         },
-        // Capítulo 5: proporción de muertes por causas específicas.
         {
             type: 'opcion',
             text: 'En 1996, el 23,4% de todas las muertes en Estados Unidos se debió al cáncer. Este es un ejemplo de:',
@@ -1095,7 +899,6 @@ Incluiré esa. Voy a generar las preguntas que faltan sin más contratiempos.
                 'D) No es una razón con nacidos vivos.'
             ]
         },
-        // Capítulo 8: migración neta.
         {
             type: 'opcion',
             text: 'La migración neta en Rumania durante 1996 fue negativa (-0,9 por 1.000). Esto indica que:',
@@ -1113,8 +916,6 @@ Incluiré esa. Voy a generar las preguntas que faltan sin más contratiempos.
                 'D) El crecimiento natural es independiente de la migración.'
             ]
         },
-        // Más preguntas para llegar a 50.
-        // Capítulo 4: razón de abortos provocados.
         {
             type: 'opcion',
             text: 'En 1996, la razón de abortos provocados en Hungría fue de 727,6 por cada 1.000 nacidos vivos. Esto significa que:',
@@ -1132,7 +933,6 @@ Incluiré esa. Voy a generar las preguntas que faltan sin más contratiempos.
                 'D) No es la definición correcta.'
             ]
         },
-        // Capítulo 5: esperanza de vida.
         {
             type: 'opcion',
             text: 'La esperanza de vida al nacer en Bangladesh en 1994 era de 58 años para las mujeres. Si una mujer sobrevivía hasta cumplir 1 año, podía esperar vivir hasta los 62 años. Esto ilustra que:',
@@ -1150,7 +950,6 @@ Incluiré esa. Voy a generar las preguntas que faltan sin más contratiempos.
                 'D) Es falso, puede ser mayor a 1 año.'
             ]
         },
-        // Capítulo 8: ecuación compensadora.
         {
             type: 'completar',
             text: 'En la ecuación compensadora, P1 + (N - M) + (I - E) = P2, la variable M representa:',
@@ -1168,7 +967,6 @@ Incluiré esa. Voy a generar las preguntas que faltan sin más contratiempos.
                 'D) E representa emigración.'
             ]
         },
-        // Capítulo 4: factores que afectan la fecundidad.
         {
             type: 'opcion',
             text: 'La fecundidad se ve afectada por factores culturales, sociales, económicos y de salud. La mayoría de estos factores ejercen su influencia a través de cuatro factores principales. Uno de ellos es el porcentaje de mujeres que usan métodos anticonceptivos. Otro es:',
@@ -1186,7 +984,6 @@ Incluiré esa. Voy a generar las preguntas que faltan sin más contratiempos.
                 'D) El ingreso es un factor socioeconómico indirecto.'
             ]
         },
-        // Capítulo 5: mortalidad por causas.
         {
             type: 'opcion',
             text: 'En 1900, en Estados Unidos, las enfermedades como la pulmonía, bronquitis y gripe eran las principales causas de muerte, representando el 17,2% de todas las muertes. En 1996, las enfermedades cardíacas representaban el 31,6% de las muertes. Esto ilustra:',
@@ -1204,7 +1001,6 @@ Incluiré esa. Voy a generar las preguntas que faltan sin más contratiempos.
                 'D) La mortalidad infantil disminuyó, no aumentó.'
             ]
         },
-        // Capítulo 8: migración interna.
         {
             type: 'opcion',
             text: 'La migración interna se refiere al movimiento de personas dentro de un país. Los términos "migración hacia" y "migración desde" se utilizan para:',
@@ -1222,8 +1018,6 @@ Incluiré esa. Voy a generar las preguntas que faltan sin más contratiempos.
                 'D) Los refugiados son un tipo especial de migrante, pero no es la distinción principal.'
             ]
         },
-        // Más preguntas...
-        // Capítulo 4: tasa de abortos provocados y razón de abortos.
         {
             type: 'relacion',
             text: 'Relacione cada medida con su denominador según el capítulo 4:',
@@ -1241,7 +1035,6 @@ Incluiré esa. Voy a generar las preguntas que faltan sin más contratiempos.
                 'D) El denominador de la razón no es la población total.'
             ]
         },
-        // Capítulo 5: tabla de mortalidad.
         {
             type: 'opcion',
             text: 'En la tabla de mortalidad, la columna 4 muestra el número total de "años-persona" que se vivirían durante cada período de edad. Este cálculo se basa en:',
@@ -1259,7 +1052,6 @@ Incluiré esa. Voy a generar las preguntas que faltan sin más contratiempos.
                 'D) La fecundidad no se usa en la tabla de mortalidad.'
             ]
         },
-        // Capítulo 8: migración neta.
         {
             type: 'opcion',
             text: 'La migración neta en un área durante un año determinado es:',
@@ -1277,7 +1069,6 @@ Incluiré esa. Voy a generar las preguntas que faltan sin más contratiempos.
                 'D) Eso es la migración bruta, no neta.'
             ]
         },
-        // Capítulo 4: porcentaje de mujeres que amamantan.
         {
             type: 'opcion',
             text: 'El porcentaje de mujeres que amamantan es útil para calcular el número de mujeres que corren el riesgo de quedar embarazadas porque la lactancia materna exclusiva:',
@@ -1295,7 +1086,6 @@ Incluiré esa. Voy a generar las preguntas que faltan sin más contratiempos.
                 'D) Sí tiene efecto.'
             ]
         },
-        // Capítulo 5: mortalidad infantil y salud.
         {
             type: 'opcion',
             text: 'La tasa de mortalidad infantil se considera un buen índice de las condiciones de salud de una población porque refleja:',
@@ -1313,7 +1103,6 @@ Incluiré esa. Voy a generar las preguntas que faltan sin más contratiempos.
                 'D) La inmigración no está relacionada.'
             ]
         },
-        // Capítulo 8: ecuación compensadora.
         {
             type: 'opcion',
             text: 'Si una población tiene más nacimientos que muertes y más inmigración que emigración, su población:',
@@ -1331,7 +1120,6 @@ Incluiré esa. Voy a generar las preguntas que faltan sin más contratiempos.
                 'D) Se puede determinar que aumentará.'
             ]
         },
-        // Capítulo 4: tasa de abortos provocados.
         {
             type: 'opcion',
             text: 'La tasa de abortos provocados en Bulgaria en 1996 fue de 54 por 1.000 mujeres de 15 a 49 años. Esto significa que:',
@@ -1349,7 +1137,6 @@ Incluiré esa. Voy a generar las preguntas que faltan sin más contratiempos.
                 'D) No es el significado correcto.'
             ]
         },
-        // Capítulo 5: esperanza de vida por sexo.
         {
             type: 'opcion',
             text: 'En la mayoría de los países, las mujeres tienen una esperanza de vida más alta que los hombres. Esto se debe principalmente a:',
@@ -1367,7 +1154,6 @@ Incluiré esa. Voy a generar las preguntas que faltan sin más contratiempos.
                 'D) La urbanización no explica la diferencia por sexo.'
             ]
         },
-        // Capítulo 8: tasa neta de migración.
         {
             type: 'opcion',
             text: 'La tasa neta de migración en Suecia en 1996 fue de +0,7 por 1.000. Esto significa que la población sueca aumentó en 0,7 personas por cada 1.000 habitantes debido a:',
@@ -1385,7 +1171,6 @@ Incluiré esa. Voy a generar las preguntas que faltan sin más contratiempos.
                 'D) Incluye tanto inmigración como emigración, no solo inmigración.'
             ]
         },
-        // Capítulo 4: factores que afectan la fecundidad.
         {
             type: 'opcion',
             text: 'El porcentaje de mujeres en relaciones de pareja es un factor que afecta la fecundidad. Este porcentaje puede variar según:',
@@ -1403,7 +1188,6 @@ Incluiré esa. Voy a generar las preguntas que faltan sin más contratiempos.
                 'D) Eso es otro factor que afecta la fecundidad, no la proporción de mujeres en uniones.'
             ]
         },
-        // Capítulo 5: tabla de mortalidad - esperanza de vida.
         {
             type: 'opcion',
             text: 'En una tabla de mortalidad, la esperanza de vida a los 70 años suele ser mayor que la esperanza de vida al nacer porque:',
@@ -1421,7 +1205,6 @@ Incluiré esa. Voy a generar las preguntas que faltan sin más contratiempos.
                 'D) La fecundidad no afecta la esperanza de vida directamente.'
             ]
         },
-        // Capítulo 8: migración interna.
         {
             type: 'opcion',
             text: 'La migración interna se diferencia de la migración internacional en que:',
@@ -1441,7 +1224,36 @@ Incluiré esa. Voy a generar las preguntas que faltan sin más contratiempos.
         }
     ];
 
-    // ========== LÓGICA DEL EXAMEN ==========
+    // ================================================================
+    //  LÓGICA DEL EXAMEN
+    // ================================================================
+
+    console.log('📋 Número de preguntas cargadas:', questions.length);
+
+    // Validar estructura
+    let hasError = false;
+    questions.forEach((q, idx) => {
+        if (!q.options || q.options.length !== 4) {
+            console.error(`❌ Pregunta ${idx+1}: ${q.options?.length || 0} opciones, deben ser 4.`);
+            hasError = true;
+        }
+        if (!q.distractors || q.distractors.length !== 3) {
+            console.error(`❌ Pregunta ${idx+1}: ${q.distractors?.length || 0} distractores, deben ser 3.`);
+            hasError = true;
+        }
+        if (q.correct === undefined || q.correct < 0 || q.correct > 3) {
+            console.error(`❌ Pregunta ${idx+1}: correct = ${q.correct}, debe ser 0-3.`);
+            hasError = true;
+        }
+    });
+
+    if (hasError) {
+        document.getElementById('errorBox').style.display = 'block';
+        document.getElementById('errorText').textContent = 'Error en los datos. Revisa consola (F12).';
+        document.getElementById('qText').textContent = '⚠️ No se puede cargar el examen.';
+    }
+
+    // ---- Variables ----
     let currentIndex = 0;
     let score = 0;
     let answered = false;
@@ -1461,50 +1273,53 @@ Incluiré esa. Voy a generar las preguntas que faltan sin más contratiempos.
     const finalMsg = document.getElementById('finalMsg');
     const restartBtn = document.getElementById('restartBtn');
 
-    // Mezclar opciones para cada pregunta (aleatorizar orden)
+    // ---- Funciones ----
     function shuffleOptions(q) {
         const opts = q.options.map((text, index) => ({ text, index }));
         for (let i = opts.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
             [opts[i], opts[j]] = [opts[j], opts[i]];
         }
-        // Reasignar el índice correcto al nuevo orden
-        const newOptions = opts.map(item => item.text);
-        const newCorrect = opts.findIndex(item => item.index === q.correct);
-        return { options: newOptions, correct: newCorrect };
+        return {
+            options: opts.map(item => item.text),
+            correct: opts.findIndex(item => item.index === q.correct)
+        };
     }
 
-    // Aplicar shuffle a todas las preguntas al cargar
-    const shuffledQuestions = questions.map(q => {
-        const shuffled = shuffleOptions(q);
-        return {
-            ...q,
-            options: shuffled.options,
-            correct: shuffled.correct
-        };
-    });
+    const shuffledQuestions = questions.map(q => ({
+        ...q,
+        options: shuffleOptions(q).options,
+        correct: shuffleOptions(q).correct
+    }));
 
     function renderQuestion(index) {
-        const q = shuffledQuestions[index];
-        qNumber.textContent = `Pregunta ${index+1} de ${totalQuestions}`;
-        qText.textContent = q.text;
-        optionsContainer.innerHTML = '';
-        feedback.className = 'feedback';
-        feedback.style.display = 'none';
-        nextBtn.disabled = true;
-        answered = false;
+        try {
+            const q = shuffledQuestions[index];
+            qNumber.textContent = `Pregunta ${index+1} de ${totalQuestions}`;
+            qText.textContent = q.text;
+            optionsContainer.innerHTML = '';
+            feedback.className = 'feedback';
+            feedback.style.display = 'none';
+            nextBtn.disabled = true;
+            answered = false;
 
-        const letters = ['A', 'B', 'C', 'D'];
-        q.options.forEach((opt, i) => {
-            const div = document.createElement('div');
-            div.className = 'option';
-            div.dataset.index = i;
-            div.innerHTML = `<span class="option-letter">${letters[i]}</span> ${opt.substring(3)}`;
-            div.addEventListener('click', () => selectOption(i));
-            optionsContainer.appendChild(div);
-        });
+            const letters = ['A', 'B', 'C', 'D'];
+            q.options.forEach((opt, i) => {
+                const div = document.createElement('div');
+                div.className = 'option';
+                div.dataset.index = i;
+                const cleanText = opt.replace(/^[A-D]\)\s*/, '');
+                div.innerHTML = `<span class="option-letter">${letters[i]}</span> ${cleanText}`;
+                div.addEventListener('click', () => selectOption(i));
+                optionsContainer.appendChild(div);
+            });
 
-        updateProgress();
+            updateProgress();
+        } catch (error) {
+            console.error('❌ renderQuestion error:', error);
+            document.getElementById('errorBox').style.display = 'block';
+            document.getElementById('errorText').textContent = 'Error: ' + error.message;
+        }
     }
 
     function selectOption(selected) {
@@ -1521,7 +1336,6 @@ Incluiré esa. Voy a generar las preguntas que faltan sin más contratiempos.
         const isCorrect = (selected === q.correct);
         if (isCorrect) score++;
 
-        // Mostrar feedback
         feedback.style.display = 'block';
         if (isCorrect) {
             feedback.className = 'feedback correct';
@@ -1563,10 +1377,10 @@ Incluiré esa. Voy a generar las preguntas que faltan sin más contratiempos.
         const pct = Math.round((score / totalQuestions) * 100);
         finalScore.textContent = `${pct}%`;
         let msg = '';
-        if (pct === 100) msg = '🏆 ¡Excelente! Dominas perfectamente los conceptos de fecundidad, mortalidad y migración.';
-        else if (pct >= 80) msg = '🌟 Muy bien. Tienes un sólido entendimiento de los temas.';
-        else if (pct >= 60) msg = '📘 Buen esfuerzo. Revisa los temas donde fallaste para profundizar.';
-        else msg = '📖 Te recomendamos repasar los capítulos 4, 5 y 8 de la Guía rápida de población y volver a intentarlo.';
+        if (pct === 100) msg = '🏆 ¡Excelente! Dominas perfectamente los conceptos.';
+        else if (pct >= 80) msg = '🌟 Muy bien. Sólido entendimiento.';
+        else if (pct >= 60) msg = '📘 Buen esfuerzo. Revisa los temas donde fallaste.';
+        else msg = '📖 Repasa los capítulos 4, 5 y 8 y vuelve a intentarlo.';
         finalMsg.textContent = msg;
     }
 
@@ -1576,15 +1390,18 @@ Incluiré esa. Voy a generar las preguntas que faltan sin más contratiempos.
         answered = false;
         questionArea.classList.remove('hidden');
         resultArea.classList.add('hidden');
+        document.getElementById('errorBox').style.display = 'none';
         renderQuestion(0);
     }
 
-    // Eventos
+    // ---- Eventos ----
     nextBtn.addEventListener('click', nextQuestion);
     restartBtn.addEventListener('click', restart);
 
-    // Iniciar
-    renderQuestion(0);
+    // ---- Inicio ----
+    if (!hasError) {
+        renderQuestion(0);
+    }
 </script>
 </body>
 </html>
