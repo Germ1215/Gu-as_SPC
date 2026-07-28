@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Examen: Proporciones, Porcentajes y Cambio Porcentual</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background: #f5f7fa;
+            font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .exam-container {
+            max-width: 800px;
+            width: 100%;
+            background: white;
+            border-radius: 28px;
+            padding: 2.2rem 2rem;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+            transition: all 0.2s;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #eef2f7;
+            padding-bottom: 0.8rem;
+            margin-bottom: 1.8rem;
+            flex-wrap: wrap;
+        }
+        .header h1 {
+            font-size: 1.7rem;
+            font-weight: 600;
+            color: #0b1a2e;
+            letter-spacing: -0.3px;
+        }
+        .badge {
+            background: #1e2b3c;
+            color: white;
+            padding: 0.3rem 1rem;
+            border-radius: 40px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+        .question-area {
+            margin-bottom: 2rem;
+        }
+        .q-number {
+            font-size: 0.9rem;
+            color: #4a6a85;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+        }
+        .q-text {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            margin: 0.6rem 0 1.8rem 0;
+            color: #0b1a2e;
+            font-weight: 500;
+        }
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 0.7rem;
+            margin-bottom: 1.8rem;
+        }
+        .option-btn {
+            background: #f9fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 14px;
+            padding: 0.9rem 1.5rem;
+            font-size: 1rem;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.15s;
+            color: #1a2a3f;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .option-btn:hover:not(.disabled) {
+            background: #edf2f9;
+            border-color: #2a7de1;
+            transform: scale(1.01);
+        }
+        .option-btn .letter {
+            display: inline-block;
+            font-weight: 700;
+            color: #3a5a7a;
+            min-width: 24px;
+        }
+        .option-btn.correct {
+            border-color: #0f7b3a;
+            background: #e2f3e9;
+        }
+        .option-btn.incorrect {
+            border-color: #b22234;
+            background: #fde8e8;
+        }
+        .option-btn.disabled {
+            cursor: default;
+            opacity: 0.85;
+        }
+        .feedback {
+            background: #f0f4f8;
+            border-radius: 16px;
+            padding: 1.2rem 1.5rem;
+            margin: 0.8rem 0 1.5rem 0;
+            display: none;
+            border-left: 5px solid #2a7de1;
+        }
+        .feedback.show {
+            display: block;
+        }
+        .feedback .correct-badge {
+            font-weight: 700;
+            color: #0f7b3a;
+        }
+        .feedback .incorrect-badge {
+            font-weight: 700;
+            color: #b22234;
+        }
+        .feedback .detail {
+            margin-top: 0.6rem;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            color: #1f2e46;
+        }
+        .feedback .distractor {
+            margin-top: 0.4rem;
+            font-size: 0.9rem;
+            color: #3a4e6b;
+            background: #e9edf4;
+            padding: 0.5rem 0.8rem;
+            border-radius: 8px;
+        }
+        .actions {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-top: 0.5rem;
+        }
+        .btn-primary {
+            background: #1e2b3c;
+            border: none;
+            color: white;
+            font-weight: 600;
+            padding: 0.8rem 2rem;
+            border-radius: 40px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: 0.15s;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+        }
+        .btn-primary:hover:not(:disabled) {
+            background: #0f1a2a;
+            transform: scale(1.02);
+        }
+        .btn-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .btn-secondary {
+            background: transparent;
+            border: 2px solid #cbd5e1;
+            color: #1e2b3c;
+            font-weight: 600;
+            padding: 0.8rem 2rem;
+            border-radius: 40px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: 0.15s;
+        }
+        .btn-secondary:hover:not(:disabled) {
+            background: #eef2f7;
+            border-color: #94a3b8;
+        }
+        .result-box {
+            background: #eef7f1;
+            border-radius: 20px;
+            padding: 1.8rem;
+            text-align: center;
+            margin-top: 1.5rem;
+            display: none;
+        }
+        .result-box .score {
+            font-size: 3rem;
+            font-weight: 700;
+            color: #0b1a2e;
+        }
+        .result-box .label {
+            font-size: 1.1rem;
+            color: #2a4a6a;
+        }
+        .footer {
+            margin-top: 2rem;
+            font-size: 0.85rem;
+            color: #6a7f99;
+            text-align: center;
+            border-top: 1px solid #e9edf4;
+            padding-top: 1.2rem;
+        }
+        @media (max-width: 500px) {
+            .exam-container { padding: 1.5rem; }
+            .header h1 { font-size: 1.3rem; }
+            .q-text { font-size: 1rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="exam-container" id="app">
+        <div class="header">
+            <h1>📊 Autoevaluación</h1>
+            <span class="badge">30 preguntas</span>
+        </div>
+
+        <!-- pregunta -->
+        <div id="questionArea" class="question-area">
+            <div class="q-number" id="qNumber">Pregunta 1 de 30</div>
+            <div class="q-text" id="qText">Cargando pregunta...</div>
+            <div class="options" id="optionsContainer"></div>
+            <div id="feedback" class="feedback"></div>
+            <div class="actions">
+                <button class="btn-primary" id="nextBtn" disabled>Siguiente →</button>
+            </div>
+        </div>
+
+        <!-- resultado final -->
+        <div id="resultBox" class="result-box">
+            <div class="label">📝 Tu puntuación</div>
+            <div class="score" id="finalScore">0%</div>
+            <div style="margin-top: 1rem; font-size: 0.95rem; color: #1f3a5a;">
+                <span id="correctCount">0</span> de <span id="totalCount">30</span> acertadas
+            </div>
+            <button class="btn-primary" style="margin-top: 1.5rem;" onclick="location.reload()">Reintentar</button>
+        </div>
+
+        <div class="footer">Basado en Padua (2018) · Sección B · Proporciones, Porcentajes, Cambio porcentual</div>
+    </div>
+
+    <script>
+        // ------------------------------------------------------------
+        // 30 preguntas de opción múltiple (A, B, C, D)
+        // Basadas EXCLUSIVAMENTE en el texto de Padua, secciones indicadas.
+        // ------------------------------------------------------------
+        const questions = [{
+            id: 1,
+            text: '¿Qué es una proporción en el contexto del análisis de datos?',
+            options: [
+                'El resultado de dividir dos números cualesquiera de un grupo.',
+                'El número de casos en una posición dividido por el total de casos del grupo.',
+                'El número de casos en una posición multiplicado por 100.',
+                'La suma de los casos en todas las posiciones dividida por el número de posiciones.'
+            ],
+            correct: 1,
+            justification: '“Una proporción se obtiene dividiendo el número de casos en cada posición de una variable (o de un grupo experimental) entre el total de casos de esa variable (o de un grupo experimental)”. (p. 264)',
+            distractor: 'A) confunde razón con proporción; C) describe un porcentaje; D) no es una definición de proporción.'
+        }, {
+            id: 2,
+            text: '¿Cuál de las siguientes NO es una propiedad de las proporciones?',
+            options: [
+                'La suma de los numeradores de las proporciones de cada grupo es igual al denominador.',
+                'Cada proporción es siempre menor o igual a 1.',
+                'La suma de todas las proporciones de cada variable es igual a 1.',
+                'Las proporciones son siempre números enteros.'
+            ],
+            correct: 3,
+            justification: 'Las proporciones son números decimales (frecuencias relativas), no necesariamente enteros. (p. 264-265)',
+            distractor: 'A, B y C son propiedades correctas mencionadas en el texto.'
+        }, {
+            id: 3,
+            text: '¿Qué se entiende por “normalización” o “estandarización” en el contexto de las proporciones?',
+            options: [
+                'Multiplicar cada proporción por 100 para obtener porcentajes.',
+                'Igualar los totales de los grupos a 1, haciendo comparables las proporciones.',
+                'Restar la media de cada proporción para centrarlas en cero.',
+                'Dividir cada proporción por la desviación estándar.'
+            ],
+            correct: 1,
+            justification: '“Este procedimiento de igualar los totales en una cifra se llama ‘normalización’ o ‘estandarización’”. (p. 265, punto 5)',
+            distractor: 'A) es el paso a porcentajes; C) y D) son transformaciones estadísticas no mencionadas.'
+        }, {
+            id: 4,
+            text: '¿Qué condición deben cumplir las variables o grupos experimentales para calcular proporciones?',
+            options: [
+                'Deben ser mutuamente excluyentes y exhaustivos.',
+                'Deben tener al menos 50 casos cada uno.',
+                'Deben ser variables medidas a nivel intervalar.',
+                'Deben estar ordenadas de mayor a menor.'
+            ],
+            correct: 0,
+            justification: '“Las variables o grupos experimentales de los que se calculan las proporciones deben estar correctamente clasificados (en forma exhaustiva y mutuamente excluyente)”. (p. 264, punto 2)',
+            distractor: 'B) es una regla para porcentajes; C) no se exige; D) es para variables ordinales.'
+        }, {
+            id: 5,
+            text: '¿Por qué las proporciones son poco utilizadas en análisis sociológicos?',
+            options: [
+                'Porque no permiten comparar grupos de diferente tamaño.',
+                'Porque los números decimales dificultan su lectura.',
+                'Porque siempre son mayores que 1.',
+                'Porque requieren cálculos complejos.'
+            ],
+            correct: 1,
+            justification: '“las proporciones son muy poco utilizadas porque los números decimales dificultan su lectura”. (p. 265)',
+            distractor: 'A) es falso, las proporciones permiten comparar; C) falso, son ≤1; D) no es la razón principal.'
+        }, {
+            id: 6,
+            text: '¿Qué relación existe entre una proporción y una razón?',
+            options: [
+                'Una razón es el inverso de una proporción.',
+                'Una proporción es una razón cuyo denominador es el total del grupo.',
+                'Son conceptos idénticos.',
+                'Una razón siempre es mayor que una proporción.'
+            ],
+            correct: 1,
+            justification: '“Una razón de un número A con respecto a otro número B se define como A/B... Si B fuera el total del grupo, no se trataría de una razón, sino de una proporción”. (p. 263)',
+            distractor: 'A) no siempre; C) son distintos; D) falso, depende.'
+        }, {
+            id: 7,
+            text: '¿Qué indica la propiedad de que la suma de todas las proporciones de una variable sea igual a 1?',
+            options: [
+                'Que los grupos son homogéneos.',
+                'Que la clasificación es exhaustiva y mutuamente excluyente.',
+                'Que la variable tiene una distribución normal.',
+                'Que los datos son confiables.'
+            ],
+            correct: 1,
+            justification: 'La suma de todas las proporciones de cada variable o grupo experimental es igual a 1, lo que refleja una clasificación correcta. (p. 265, punto 5)',
+            distractor: 'A, C y D no se derivan de esta propiedad.'
+        }, {
+            id: 8,
+            text: '¿Cuál es el valor máximo que puede tomar una proporción?',
+            options: [
+                '100',
+                '1',
+                '0.5',
+                'Depende del tamaño del grupo.'
+            ],
+            correct: 1,
+            justification: '“Cada proporción es siempre menor o igual a 1”. (p. 265, punto 4)',
+            distractor: 'A) es para porcentajes; C) falso; D) no, es siempre ≤1.'
+        }, {
+            id: 9,
+            text: '¿Qué es un porcentaje en el análisis de datos?',
+            options: [
+                'El número de casos en una posición dividido por el total y multiplicado por 1000.',
+                'El número de casos en una posición dividido por el total y multiplicado por 100.',
+                'El número de casos en una posición dividido por el total.',
+                'El número de casos en una posición multiplicado por el total y dividido por 100.'
+            ],
+            correct: 1,
+            justification: '“Los porcentajes resultan de multiplicar por 100 el número de unidades en una posición del grupo experimental (o de la variable) y dividir el producto por el total de unidades de la variable (o del grupo experimental)”. (p. 265)',
+            distractor: 'A) factor 1000 incorrecto; C) es la proporción; D) operación incorrecta.'
+        }, {
+            id: 10,
+            text: '¿Cuál es una ventaja de los porcentajes sobre las proporciones?',
+            options: [
+                'Permiten calcular la fuerza de la asociación.',
+                'Son más fáciles de leer y comparar porque todos los grupos se igualan a 100.',
+                'No requieren clasificación exhaustiva.',
+                'Se pueden calcular con cualquier número de casos.'
+            ],
+            correct: 1,
+            justification: '“Los distintos grupos experimentales son comparables porque todos ellos han sido igualados (normalizados, estandarizados) en 100”. (p. 265-266)',
+            distractor: 'A) los porcentajes solo indican dirección; C) falso; D) no, requieren mínimo de casos.'
+        }, {
+            id: 11,
+            text: 'Según el texto, ¿cuándo no se recomienda calcular porcentajes?',
+            options: [
+                'Cuando el total de unidades es menor a 50 casos (o 20-30 según el número de posiciones).',
+                'Cuando los datos son de nivel nominal.',
+                'Cuando la variable tiene más de 5 posiciones.',
+                'Cuando se quiere medir la fuerza de la relación.'
+            ],
+            correct: 0,
+            justification: '“los autores coinciden en que no deben calcularse porcentajes, a menos que el total de unidades sea de alrededor de 50 casos. Algunos autores dan una cifra de 20 a 30 casos. Pero todas estas cifras dependen del número de posiciones que haya en la variable”. (p. 266)',
+            distractor: 'B) no es correcto; C) no es una regla; D) los porcentajes no miden fuerza.'
+        }, {
+            id: 12,
+            text: '¿En qué sentido se calculan los porcentajes en una tabla de contingencia?',
+            options: [
+                'En el sentido de las hileras, siempre.',
+                'En el sentido en que se han constituido los grupos experimentales (generalmente las columnas, es decir, vertical).',
+                'En el sentido de la variable dependiente.',
+                'En diagonal.'
+            ],
+            correct: 1,
+            justification: '“los porcentajes deben calcularse en el sentido en que se han constituido los grupos experimentales (ya sea éste el sentido de las columnas o el de las hileras). Se acostumbra a calcular los porcentajes en sentido vertical, porque se acostumbra a encabezar la columna con las variables consideradas independientes”. (p. 267)',
+            distractor: 'A) no siempre; C) es incorrecto; D) no es el sentido.'
+        }, {
+            id: 13,
+            text: '¿Cómo se leen los porcentajes en una tabla?',
+            options: [
+                'En el mismo sentido en que se calcularon.',
+                'En sentido transversal a aquel en que se calcularon.',
+                'Siempre de izquierda a derecha.',
+                'De arriba a abajo.'
+            ],
+            correct: 1,
+            justification: '“los porcentajes se leen en el sentido transversal a aquel en que se han calculado”. (p. 267)',
+            distractor: 'A) es incorrecto; C) y D) son generalizaciones falsas.'
+        }, {
+            id: 14,
+            text: '¿Qué indican los porcentajes en un análisis de datos?',
+            options: [
+                'La dirección de la relación entre variables.',
+                'La fuerza de la asociación entre variables.',
+                'La significancia estadística de la relación.',
+                'El tamaño del efecto.'
+            ],
+            correct: 0,
+            justification: '“los porcentajes son un instrumento que, si bien es superior a las razones y proporciones, es siempre elemental para el análisis, ya que sólo indican la dirección de la relación entre las variables, pero no la fuerza de la asociación entre ellas”. (p. 266)',
+            distractor: 'B, C y D son incorrectos según el texto.'
+        }, {
+            id: 15,
+            text: '¿Cuándo es aceptable incluir decimales en los porcentajes?',
+            options: [
+                'Nunca, porque dificultan la lectura.',
+                'Cuando el número de casos es muy grande y se justifica obtener una diferencia porcentual muy pequeña, o cuando se requiere precisión, o cuando se prevén futuras mediciones.',
+                'Siempre, para mayor precisión.',
+                'Solo cuando el total de casos es menor a 50.'
+            ],
+            correct: 1,
+            justification: '“los decimales deben calcularse cuando: a) el número de casos es muy grande y se justifica obtener una diferencia porcentual muy pequeña; b) es necesaria la precisión como sucede en la determinación de personas que han sanado (o enfermado) con la utilización de cierto medicamento; c) se prevé la realización de futuras mediciones, cuyos resultados no se conocen al practicar la medición actual”. (p. 266)',
+            distractor: 'A) es falso; C) no siempre; D) es al revés.'
+        }, {
+            id: 16,
+            text: '¿Qué sucede si se omiten los decimales en los porcentajes cuando hay muchos casos?',
+            options: [
+                'Se pierde claridad en la presentación.',
+                'Se pueden ocultar diferencias pequeñas pero importantes.',
+                'Se facilita la comparación entre grupos.',
+                'No tiene efecto.'
+            ],
+            correct: 1,
+            justification: 'Cuando el número de casos es muy grande, las diferencias pequeñas pueden ser significativas y los decimales ayudan a detectarlas. (p. 266)',
+            distractor: 'A) no es el efecto principal; C) no es cierto; D) falso.'
+        }, {
+            id: 17,
+            text: '¿Cuál es la regla general sobre el número mínimo de casos para calcular porcentajes?',
+            options: [
+                'Al menos 100 casos.',
+                'Al menos 50 casos, aunque depende del número de posiciones.',
+                'Al menos 10 casos por posición.',
+                'No hay regla, se puede hacer siempre.'
+            ],
+            correct: 1,
+            justification: '“no deben calcularse porcentajes, a menos que el total de unidades sea de alrededor de 50 casos. Algunos autores dan una cifra de 20 a 30 casos. Pero todas estas cifras dependen del número de posiciones que haya en la variable”. (p. 266)',
+            distractor: 'A) no es la regla; C) no se menciona; D) falso.'
+        }, {
+            id: 18,
+            text: '¿Qué se entiende por “diferencia porcentual” en la medición del cambio?',
+            options: [
+                'La diferencia entre el nivel final y el nivel inicial (p2 - p1).',
+                'La diferencia entre el nivel inicial y el final dividida por el inicial.',
+                'La diferencia entre el nivel final y el inicial dividida por el incremento potencial.',
+                'La suma de los niveles inicial y final.'
+            ],
+            correct: 0,
+            justification: '“Una forma de medir el cambio porcentual es calcular la diferencia porcentual, que se obtiene restando del nivel final el nivel inicial: P2 - P1”. (p. 272)',
+            distractor: 'B) es la tasa de cambio; C) es el índice de efectividad; D) no es una medida de cambio.'
+        }, {
+            id: 19,
+            text: '¿Qué es la tasa de cambio porcentual?',
+            options: [
+                '(p2 - p1) / p1',
+                '(p2 - p1) / (100 - p1)',
+                'p2 / p1',
+                'p1 - p2'
+            ],
+            correct: 0,
+            justification: '“la tasa de cambio, es decir, dividiendo por el nivel inicial, la diferencia entre el nivel final y el nivel inicial: (P2 - P1) / P1”. (p. 272)',
+            distractor: 'B) es el índice de efectividad; C) no es una tasa de cambio; D) es negativo.'
+        }, {
+            id: 20,
+            text: '¿Qué es el índice de efectividad?',
+            options: [
+                '(p2 - p1) / p1',
+                '(p2 - p1) / (100 - p1)',
+                '(p2 - p1) * 100',
+                '(p2 - p1) / 100'
+            ],
+            correct: 1,
+            justification: '“un índice de efectividad que resulta de dividir por el incremento potencial la diferencia entre el nivel final y el nivel inicial: (P2 - P1) / (100 - P1)”. (p. 272)',
+            distractor: 'A) es la tasa de cambio; C) y D) no corresponden.'
+        }, {
+            id: 21,
+            text: '¿Qué problema resuelve el índice de efectividad en comparación con la tasa de cambio?',
+            options: [
+                'Considera el incremento potencial (100 - p1), lo que permite comparar cambios en grupos con diferentes niveles iniciales.',
+                'Es más fácil de calcular.',
+                'No requiere mediciones iniciales.',
+                'Elimina la necesidad de grupo de control.'
+            ],
+            correct: 0,
+            justification: '“la diferencia porcentual como la tasa de cambio porcentual tienen un defecto básico, que es prescindir del incremento potencial (100 - P1)... Para obtener una medida comparable del cambio porcentual, hay que incluir el incremento potencial en dicha medida.” (p. 272)',
+            distractor: 'B, C, D son afirmaciones falsas según el texto.'
+        }, {
+            id: 22,
+            text: '¿Qué representa el denominador en el índice de efectividad (100 - p1)?',
+            options: [
+                'El número de casos totales.',
+                'El incremento potencial, es decir, el porcentaje de individuos que aún no poseen la propiedad en la medición inicial.',
+                'El nivel final.',
+                'El error de medición.'
+            ],
+            correct: 1,
+            justification: '“incremento potencial (100 —P1)”. (p. 272)',
+            distractor: 'A) no es el total; C) es p2; D) no se menciona.'
+        }, {
+            id: 23,
+            text: '¿Cuál de las siguientes afirmaciones sobre la diferencia porcentual es correcta?',
+            options: [
+                'Siempre es positiva.',
+                'Puede ser negativa si hay disminución.',
+                'Se expresa como un número entre 0 y 1.',
+                'Es igual a la tasa de cambio.'
+            ],
+            correct: 1,
+            justification: '“restando del nivel final el nivel inicial: P2 — P1” puede ser negativa si P2 < P1. (p. 272)',
+            distractor: 'A) no siempre; C) es la proporción; D) no es igual.'
+        }, {
+            id: 24,
+            text: '¿Qué indica una tasa de cambio porcentual mayor que 1?',
+            options: [
+                'Que el nivel final es más del doble del inicial.',
+                'Que el cambio es negativo.',
+                'Que el incremento potencial es muy grande.',
+                'Que la diferencia porcentual es negativa.'
+            ],
+            correct: 0,
+            justification: 'Si (p2 - p1) / p1 > 1, entonces p2 > 2p1. (p. 272)',
+            distractor: 'B) sería negativa si <0; C) no es correcto; D) no se relaciona.'
+        }, {
+            id: 25,
+            text: '¿Cuál es la diferencia entre la tasa de cambio y el índice de efectividad?',
+            options: [
+                'La tasa de cambio usa el denominador p1, mientras que el índice usa (100 - p1).',
+                'La tasa de cambio usa (100 - p1), mientras que el índice usa p1.',
+                'Son idénticos.',
+                'La tasa de cambio se usa para incrementos, el índice para decrementos.'
+            ],
+            correct: 0,
+            justification: 'Fórmulas: tasa = (p2 - p1) / p1; índice = (p2 - p1) / (100 - p1). (p. 272)',
+            distractor: 'B) es al revés; C) falso; D) no es correcto.'
+        }, {
+            id: 26,
+            text: '¿Qué se debe hacer cuando hay un alto porcentaje de respuestas “No sabe” en una pregunta?',
+            options: [
+                'Eliminar todos los casos con “No sabe”.',
+                'Distribuir los “No sabe” proporcionalmente entre las otras categorías.',
+                'Suponer que los “No sabe” se distribuyen al azar, excluirlos, o suponer que son evasivas y asignarlos según otra pregunta asociada.',
+                'Ignorarlos y no reportarlos.'
+            ],
+            correct: 2,
+            justification: '“pueden seguirse tres procedimientos... a) suponer que las respuestas No sabe se distribuyen al azar entre las restantes alternativas... b) excluir directamente las respuestas No sabe... c) suponer que la respuesta No sabe es, en realidad, una evasiva... buscar en el cuestionario alguna otra pregunta altamente asociada”. (p. 274)',
+            distractor: 'A) es una opción, pero no la única; B) es una de las opciones; D) no es aceptable.'
+        }, {
+            id: 27,
+            text: '¿Qué es el incremento potencial en la medición del cambio?',
+            options: [
+                'La diferencia entre el nivel final y el inicial.',
+                'El 100% menos el nivel inicial (100 - p1).',
+                'El nivel inicial menos el nivel final.',
+                'El 100% menos el nivel final.'
+            ],
+            correct: 1,
+            justification: '“incremento potencial (100 —P1)”. (p. 272)',
+            distractor: 'A) es la diferencia porcentual; C) es negativo; D) es el complemento del nivel final.'
+        }, {
+            id: 28,
+            text: '¿Cuál de las siguientes opciones describe correctamente la relación entre la diferencia porcentual y la tasa de cambio?',
+            options: [
+                'La tasa de cambio es la diferencia porcentual dividida por el nivel inicial.',
+                'La diferencia porcentual es la tasa de cambio dividida por el nivel inicial.',
+                'Son iguales.',
+                'La tasa de cambio es la diferencia porcentual multiplicada por 100.'
+            ],
+            correct: 0,
+            justification: '“la tasa de cambio, es decir, dividiendo por el nivel inicial, la diferencia entre el nivel final y el nivel inicial: (P2 - P1) / P1”. (p. 272)',
+            distractor: 'B) es al revés; C) falso; D) no es correcto.'
+        }, {
+            id: 29,
+            text: '¿Por qué el índice de efectividad es superior a la tasa de cambio para comparar cambios entre grupos?',
+            options: [
+                'Porque tiene en cuenta los diferentes puntos de partida de los grupos, utilizando el incremento potencial.',
+                'Porque es más sencillo de calcular.',
+                'Porque no requiere conocer el nivel inicial.',
+                'Porque siempre da valores positivos.'
+            ],
+            correct: 0,
+            justification: '“la diferencia porcentual como la tasa de cambio porcentual tienen un defecto básico, que es prescindir del incremento potencial... Para obtener una medida comparable del cambio porcentual, hay que incluir el incremento potencial”. (p. 272-273)',
+            distractor: 'B) no es más sencillo; C) falso; D) no siempre.'
+        }, {
+            id: 30,
+            text: '¿Cuál es la fórmula del índice de efectividad cuando se considera la proporción de falsos positivos (x) constante?',
+            options: [
+                '(K2 - K1) / (100 - K1)',
+                '(P2 - P1) / (100 - P1)',
+                '(K2 - K1) / (100 - K1) * (1 - x)',
+                'No se modifica.'
+            ],
+            correct: 0,
+            justification: 'Tras la derivación en la página 273, se llega a que el índice de efectividad en función de los verdaderos poseedores de la propiedad (K) es: IE = (K2 - K1) / (100 - K1). La x se cancela si es constante.',
+            distractor: 'B) es la fórmula con P (observado); C) incluye x incorrectamente; D) es falso, sí se modifica.'
+        }];
+
+        // ------------------------------------------------------------
+        // Estado
+        // ------------------------------------------------------------
+        let currentIndex = 0;
+        let correctAnswers = 0;
+        let answered = false;
+        const totalQuestions = questions.length;
+
+        const qNumber = document.getElementById('qNumber');
+        const qText = document.getElementById('qText');
+        const optionsContainer = document.getElementById('optionsContainer');
+        const feedbackDiv = document.getElementById('feedback');
+        const nextBtn = document.getElementById('nextBtn');
+        const resultBox = document.getElementById('resultBox');
+        const finalScore = document.getElementById('finalScore');
+        const correctCountSpan = document.getElementById('correctCount');
+        const totalCountSpan = document.getElementById('totalCount');
+
+        // ------------------------------------------------------------
+        // Funciones
+        // ------------------------------------------------------------
+        function renderQuestion(index) {
+            const q = questions[index];
+            qNumber.textContent = `Pregunta ${index + 1} de ${totalQuestions}`;
+            qText.textContent = q.text;
+
+            // Limpiar opciones
+            optionsContainer.innerHTML = '';
+            const letters = ['A', 'B', 'C', 'D'];
+            q.options.forEach((opt, i) => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.innerHTML = `<span class="letter">${letters[i]}.</span> ${opt}`;
+                btn.dataset.index = i;
+                btn.addEventListener('click', () => handleOptionClick(i));
+                optionsContainer.appendChild(btn);
+            });
+
+            // Ocultar feedback y deshabilitar next
+            feedbackDiv.className = 'feedback';
+            feedbackDiv.innerHTML = '';
+            nextBtn.disabled = true;
+            answered = false;
+            // Habilitar botones
+            document.querySelectorAll('.option-btn').forEach(b => b.classList.remove('disabled', 'correct', 'incorrect'));
+        }
+
+        function handleOptionClick(selectedIndex) {
+            if (answered) return;
+            const q = questions[currentIndex];
+            const isCorrect = (selectedIndex === q.correct);
+            if (isCorrect) correctAnswers++;
+
+            // Marcar opciones
+            const btns = document.querySelectorAll('.option-btn');
+            btns.forEach((btn, idx) => {
+                btn.classList.add('disabled');
+                if (idx === q.correct) btn.classList.add('correct');
+                if (idx === selectedIndex && !isCorrect) btn.classList.add('incorrect');
+            });
+
+            // Mostrar feedback
+            feedbackDiv.className = 'feedback show';
+            const status = isCorrect ? '<span class="correct-badge">✅ Correcto</span>' :
+                '<span class="incorrect-badge">❌ Incorrecto</span>';
+            feedbackDiv.innerHTML = `
+                <div style="font-weight:600; margin-bottom:0.3rem;">${status}</div>
+                <div class="detail"><strong>Justificación:</strong> ${q.justification}</div>
+                <div class="distractor"><strong>Análisis de distractores:</strong> ${q.distractor}</div>
+            `;
+
+            answered = true;
+            nextBtn.disabled = false;
+        }
+
+        function nextQuestion() {
+            if (currentIndex < totalQuestions - 1) {
+                currentIndex++;
+                renderQuestion(currentIndex);
+            } else {
+                // Fin del examen
+                showResults();
+            }
+        }
+
+        function showResults() {
+            document.getElementById('questionArea').style.display = 'none';
+            resultBox.style.display = 'block';
+            const pct = Math.round((correctAnswers / totalQuestions) * 100);
+            finalScore.textContent = `${pct}%`;
+            correctCountSpan.textContent = correctAnswers;
+            totalCountSpan.textContent = totalQuestions;
+        }
+
+        // ------------------------------------------------------------
+        // Event listeners
+        // ------------------------------------------------------------
+        nextBtn.addEventListener('click', nextQuestion);
+
+        // Iniciar
+        renderQuestion(0);
+    </script>
+</body>
+</html>
