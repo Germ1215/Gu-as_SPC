@@ -1,0 +1,1303 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guía de Estudio - Planeación y Control Administrativo en Proyectos Estadísticos</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f4f7fb;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+        .container {
+            max-width: 850px;
+            width: 100%;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+            padding: 30px 25px;
+            transition: all 0.2s;
+        }
+        h1 {
+            font-size: 1.8rem;
+            color: #0a2a44;
+            margin-bottom: 8px;
+            border-bottom: 3px solid #1e6f9f;
+            padding-bottom: 12px;
+        }
+        .subtitle {
+            color: #2c5282;
+            font-size: 0.95rem;
+            margin-bottom: 25px;
+            font-weight: 500;
+            background: #e8f0fe;
+            padding: 8px 14px;
+            border-radius: 30px;
+            display: inline-block;
+        }
+        .progress-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            background: #e9edf2;
+            border-radius: 40px;
+            padding: 6px 16px 6px 20px;
+        }
+        .progress-text {
+            font-weight: 600;
+            color: #1a3a5e;
+        }
+        .progress-num {
+            background: #1e6f9f;
+            color: white;
+            border-radius: 30px;
+            padding: 4px 16px;
+            font-size: 0.9rem;
+        }
+        .question-box {
+            background: #f9fcff;
+            border-radius: 14px;
+            padding: 22px 20px 18px;
+            border: 1px solid #dde7f0;
+            min-height: 200px;
+        }
+        .q-type {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #4a6a85;
+            background: #dce7f2;
+            display: inline-block;
+            padding: 2px 14px;
+            border-radius: 30px;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+        .q-text {
+            font-size: 1.2rem;
+            font-weight: 500;
+            color: #0b2a44;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin: 12px 0 18px;
+        }
+        .option {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            background: white;
+            border: 1.5px solid #d0dce8;
+            border-radius: 10px;
+            padding: 12px 16px;
+            cursor: pointer;
+            transition: border 0.2s, background 0.2s;
+        }
+        .option:hover {
+            border-color: #7fa3c7;
+            background: #f0f6fe;
+        }
+        .option input[type="radio"] {
+            margin-top: 3px;
+            accent-color: #1e6f9f;
+            width: 18px;
+            height: 18px;
+            flex-shrink: 0;
+        }
+        .option label {
+            font-size: 1rem;
+            color: #1a334a;
+            cursor: pointer;
+            line-height: 1.4;
+            width: 100%;
+        }
+        .option.correct {
+            border-color: #2b7a4b;
+            background: #e2f3e6;
+        }
+        .option.incorrect {
+            border-color: #b33c3c;
+            background: #fde8e8;
+        }
+        .option.disabled {
+            cursor: default;
+            opacity: 0.9;
+        }
+        .feedback {
+            margin-top: 20px;
+            background: #f0f4fa;
+            border-left: 5px solid #1e6f9f;
+            padding: 16px 20px;
+            border-radius: 8px;
+            display: none;
+        }
+        .feedback.show {
+            display: block;
+        }
+        .feedback .correct-badge {
+            color: #1a7a4a;
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+        .feedback .incorrect-badge {
+            color: #b33c3c;
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+        .feedback .justification {
+            margin-top: 10px;
+            font-weight: 500;
+            color: #003366;
+        }
+        .feedback .distractors {
+            margin-top: 8px;
+            color: #2c3e50;
+            font-size: 0.95rem;
+            background: #f5f8fc;
+            padding: 10px 14px;
+            border-radius: 6px;
+        }
+        .feedback .ref {
+            margin-top: 8px;
+            font-size: 0.85rem;
+            color: #3a5f7a;
+            font-style: italic;
+        }
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 28px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .nav-left, .nav-right {
+            display: flex;
+            gap: 10px;
+        }
+        button {
+            background: white;
+            border: 1.5px solid #b0c8dd;
+            padding: 10px 22px;
+            border-radius: 30px;
+            font-weight: 600;
+            color: #1a3a5e;
+            cursor: pointer;
+            transition: background 0.2s, border 0.2s;
+            font-size: 0.95rem;
+        }
+        button:hover:not(:disabled) {
+            background: #e1ecf5;
+            border-color: #7fa3c7;
+        }
+        button:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+        .btn-primary {
+            background: #1e6f9f;
+            border-color: #1e6f9f;
+            color: white;
+        }
+        .btn-primary:hover:not(:disabled) {
+            background: #155a83;
+            border-color: #155a83;
+        }
+        .btn-check {
+            background: #2b7a4b;
+            border-color: #2b7a4b;
+            color: white;
+        }
+        .btn-check:hover:not(:disabled) {
+            background: #1f5e3a;
+            border-color: #1f5e3a;
+        }
+        .result-final {
+            margin-top: 25px;
+            background: #e2edf7;
+            border-radius: 14px;
+            padding: 20px;
+            text-align: center;
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #0a2a44;
+        }
+        @media (max-width: 600px) {
+            .container { padding: 18px 14px; }
+            .q-text { font-size: 1rem; }
+            .nav-buttons { flex-direction: column; align-items: stretch; }
+            .nav-left, .nav-right { justify-content: center; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="app">
+        <h1>📊 Planeación y control administrativo en proyectos estadísticos</h1>
+        <div class="subtitle">Autoevaluación · 50 preguntas · INEGI 2012</div>
+
+        <div class="progress-bar">
+            <span class="progress-text">Pregunta <span id="currentNum">1</span> de <span id="totalNum">50</span></span>
+            <span class="progress-num" id="progressScore">0%</span>
+        </div>
+
+        <div class="question-box" id="questionBox">
+            <div class="q-type" id="qType">Tipo A</div>
+            <div class="q-text" id="qText">Cargando pregunta...</div>
+            <div class="options" id="optionsContainer"></div>
+            <div class="feedback" id="feedback">
+                <div id="feedbackHeader"></div>
+                <div class="justification" id="justificationText"></div>
+                <div class="distractors" id="distractorsText"></div>
+                <div class="ref" id="refText"></div>
+            </div>
+        </div>
+
+        <div class="nav-buttons">
+            <div class="nav-left">
+                <button id="prevBtn" disabled>◀ Anterior</button>
+                <button id="resetBtn">⟳ Reiniciar</button>
+            </div>
+            <div class="nav-right">
+                <button id="checkBtn" class="btn-check">✔ Verificar</button>
+                <button id="nextBtn" class="btn-primary">Siguiente ▶</button>
+            </div>
+        </div>
+
+        <div id="resultContainer" style="display:none;" class="result-final">
+            🎯 Has completado la autoevaluación.<br>
+            <span id="finalScore">0%</span> de aciertos.
+        </div>
+    </div>
+
+    <script>
+        // --------------------------------------------------------------
+        //  BASE DE DATOS DE PREGUNTAS (50 preguntas)
+        // --------------------------------------------------------------
+        const questions = [
+            // 1. Tipo a
+            {
+                id: 1,
+                tipo: 'a',
+                pregunta: '¿Cómo define la Norma Técnica para la Generación de Estadística Básica un proyecto estadístico?',
+                opciones: [
+                    'Conjunto de procedimientos para la captación de datos.',
+                    'Conjunto de actividades ordenadas y relacionadas para producir o integrar información estadística.',
+                    'Proceso para determinar objetivos y estrategia de un proyecto.',
+                    'Serie de actividades para la elaboración de productos estadísticos.'
+                ],
+                respuesta: 1,
+                justificacion: 'La Norma Técnica define proyecto estadístico como "Conjunto de actividades ordenadas y relacionadas para producir o integrar información estadística" (pág. 6).',
+                distractores: 'A) se refiere a la captación; C) es la definición de planeación; D) corresponde a presentación de resultados.',
+                ref: 'Página 6'
+            },
+            // 2. Tipo c
+            {
+                id: 2,
+                tipo: 'c',
+                pregunta: 'La fase de planeación en un proyecto estadístico consiste en un conjunto de actividades donde se define el soporte estratégico para la realización de las actividades ________.',
+                opciones: [
+                    'técnicas',
+                    'administrativas',
+                    'de captación',
+                    'de procesamiento'
+                ],
+                respuesta: 0,
+                justificacion: 'El texto indica: "la planeación como una fase del proceso estadístico, la cual consiste en un conjunto de actividades donde se define el soporte estratégico para la realización de las actividades técnicas" (pág. 7).',
+                distractores: 'Las otras opciones son tipos de actividades, pero el texto específicamente menciona "técnicas".',
+                ref: 'Página 7'
+            },
+            // 3. Tipo b (relación)
+            {
+                id: 3,
+                tipo: 'b',
+                pregunta: 'Relacione las fases del proceso estadístico con sus macroactividades correspondientes (pág. 7).\nFases: 1) Planeación, 2) Diseño conceptual, 3) Diseño de la muestra, 4) Captación.\nMacroactividades: a) Definición de objetivos y estrategia general, b) Diseño del esquema para la presentación de resultados, c) Determinación del método de muestreo, d) Preparación del operativo.',
+                opciones: [
+                    '1-a, 2-b, 3-c, 4-d',
+                    '1-b, 2-a, 3-d, 4-c',
+                    '1-c, 2-d, 3-a, 4-b',
+                    '1-d, 2-c, 3-b, 4-a'
+                ],
+                respuesta: 0,
+                justificacion: 'Según la tabla de la página 7: Planeación → Definición de objetivos y estrategia general; Diseño conceptual → Diseño del esquema para la presentación de resultados; Diseño de la muestra → Determinación del método de muestreo; Captación → Preparación del operativo.',
+                distractores: 'Las otras opciones alteran la correspondencia correcta entre fases y macroactividades.',
+                ref: 'Página 7'
+            },
+            // 4. Tipo a
+            {
+                id: 4,
+                tipo: 'a',
+                pregunta: 'Según la ONU, ¿cuál es uno de los elementos más importantes de un plan?',
+                opciones: [
+                    'Una descripción detallada de los recursos financieros.',
+                    'Un conjunto bien definido de objetivos que deberán cumplirse al finalizar el periodo.',
+                    'Una lista de las necesidades de personal.',
+                    'Un análisis de los riesgos del proyecto.'
+                ],
+                respuesta: 1,
+                justificacion: 'La ONU señala que los elementos más importantes de un plan son: "Un conjunto bien definido de objetivos que deberán cumplirse al finalizar el periodo" (pág. 8).',
+                distractores: 'Los otros elementos mencionados son: descripción de pasos, lista de necesidades (entorno y recursos), análisis de alternativas y mecanismos de seguimiento; no se mencionan recursos financieros, personal o riesgos como elementos principales.',
+                ref: 'Página 8'
+            },
+            // 5. Tipo c
+            {
+                id: 5,
+                tipo: 'c',
+                pregunta: 'En la fase de planeación se tiene un primer acercamiento al conocimiento de las necesidades de información de los usuarios y el grado en que pueden satisfacerse según los ________ disponibles.',
+                opciones: [
+                    'recursos',
+                    'presupuestos',
+                    'tiempos',
+                    'marcos legales'
+                ],
+                respuesta: 0,
+                justificacion: 'El texto dice: "En esta fase, se tiene un primer acercamiento al conocimiento de las necesidades de información de los usuarios y el grado en que pueden satisfacerse según los recursos disponibles" (pág. 8).',
+                distractores: 'Presupuestos, tiempos y marcos legales son aspectos relevantes, pero la frase textual usa "recursos".',
+                ref: 'Página 8'
+            },
+            // 6. Tipo a
+            {
+                id: 6,
+                tipo: 'a',
+                pregunta: '¿Cuál de los siguientes NO es un atributo de calidad de la información según la LSNIEG?',
+                opciones: [
+                    'Relevancia',
+                    'Rigor conceptual',
+                    'Rentabilidad',
+                    'Oportunidad'
+                ],
+                respuesta: 2,
+                justificacion: 'Los atributos de calidad según la LSNIEG son: relevancia, rigor conceptual, confiabilidad, oportunidad, accesibilidad, comparabilidad, suficiencia y facilidad de consulta (pág. 9). Rentabilidad no es un atributo de calidad.',
+                distractores: 'Relevancia, rigor conceptual y oportunidad son atributos explícitos.',
+                ref: 'Página 9'
+            },
+            // 7. Tipo b
+            {
+                id: 7,
+                tipo: 'b',
+                pregunta: 'Relacione los atributos de calidad con su definición (págs. 9-10).\nAtributos: 1) Relevancia, 2) Confiabilidad, 3) Oportunidad, 4) Accesibilidad.\nDefiniciones: a) Grado en que un dato se aproxima a la veracidad, b) Lapso mínimo entre presentación de resultados y referencia temporal, c) Utilidad de los datos para atender necesidades de los usuarios, d) Facilidad con que los usuarios pueden establecer la existencia de la información.',
+                opciones: [
+                    '1-c, 2-a, 3-b, 4-d',
+                    '1-a, 2-b, 3-c, 4-d',
+                    '1-b, 2-c, 3-d, 4-a',
+                    '1-d, 2-a, 3-b, 4-c'
+                ],
+                respuesta: 0,
+                justificacion: 'Relevancia → utilidad; Confiabilidad → aproximación a la veracidad; Oportunidad → lapso mínimo entre presentación y referencia; Accesibilidad → facilidad para establecer existencia y localización.',
+                distractores: 'Las otras combinaciones invierten o confunden las definiciones.',
+                ref: 'Páginas 9-10'
+            },
+            // 8. Tipo c
+            {
+                id: 8,
+                tipo: 'c',
+                pregunta: 'La gestión de la calidad en los proyectos estadísticos facilita la disminución de costos de producción y agrega valor al producto; también incrementa la satisfacción del cliente y la ________ en la institución.',
+                opciones: [
+                    'credibilidad',
+                    'eficiencia',
+                    'productividad',
+                    'transparencia'
+                ],
+                respuesta: 0,
+                justificacion: 'El texto menciona: "La gestión de la calidad en los proyectos estadísticos facilita la disminución de costos de producción y agrega valor al producto; también incrementa la satisfacción del cliente y la credibilidad en la institución" (pág. 10).',
+                distractores: 'Eficiencia, productividad y transparencia son beneficios deseables, pero la frase usa "credibilidad".',
+                ref: 'Página 10'
+            },
+            // 9. Tipo a
+            {
+                id: 9,
+                tipo: 'a',
+                pregunta: '¿Qué aspecto NO se considera esencial en un programa de calidad para proyectos estadísticos?',
+                opciones: [
+                    'Describir cada fase, identificando sus insumos, procesos y resultados.',
+                    'Definir la secuencia de actividades.',
+                    'Realizar encuestas de satisfacción de usuarios al final del proyecto.',
+                    'Determinar el perfil del personal requerido para cada fase.'
+                ],
+                respuesta: 2,
+                justificacion: 'Los aspectos esenciales mencionados son: describir cada fase, definir secuencia, diseñar cada actividad con estándares, determinar perfil del personal, designar responsable para ajustes (pág. 10). Las encuestas de satisfacción se mencionan en el contexto de evaluación de relevancia, no como aspecto esencial del programa de calidad.',
+                distractores: 'Los otros tres son mencionados explícitamente como esenciales.',
+                ref: 'Página 10'
+            },
+            // 10. Tipo b
+            {
+                id: 10,
+                tipo: 'b',
+                pregunta: 'Relacione los tipos de planeación con su descripción según el documento (pág. 11).\nTipos: 1) Planeación general, 2) Planeación operativa.\nDescripciones: a) Determina el alcance del proyecto, objetivos, estrategia, programa básico, organización y presupuesto. b) Se enfoca en la ejecución detallada de actividades diarias.',
+                opciones: [
+                    '1-a, 2-b',
+                    '1-b, 2-a',
+                    '1-a, 2-a',
+                    '1-b, 2-b'
+                ],
+                respuesta: 0,
+                justificacion: 'El documento señala que se refiere a la planeación general, que "determina el alcance del proyecto y se definen sus objetivos y la estrategia general, incluye el método de generación de datos estadísticos y un programa básico de trabajo..." (pág. 11). La operativa no se detalla, pero por contexto se asocia a ejecución diaria.',
+                distractores: 'Las otras opciones confunden ambos tipos.',
+                ref: 'Página 11'
+            },
+            // 11. Tipo c
+            {
+                id: 11,
+                tipo: 'c',
+                pregunta: 'En la definición de objetivos, el objetivo constituye un elemento programático que identifica la finalidad hacia la cual deben dirigirse los ________ y esfuerzos.',
+                opciones: [
+                    'recursos',
+                    'estrategias',
+                    'actividades',
+                    'presupuestos'
+                ],
+                respuesta: 0,
+                justificacion: 'El texto dice: "El objetivo constituye un elemento programático que identifica la finalidad hacia la cual deben dirigirse los recursos y esfuerzos" (pág. 12).',
+                distractores: 'Las otras opciones son parte de la gestión, pero la frase usa "recursos".',
+                ref: 'Página 12'
+            },
+            // 12. Tipo a
+            {
+                id: 12,
+                tipo: 'a',
+                pregunta: '¿Qué preguntas deben responderse al definir los objetivos de un proyecto estadístico?',
+                opciones: [
+                    '¿Qué información se necesita?, ¿Quién necesita los datos?, ¿Con qué recursos se cuenta?',
+                    '¿Qué información se necesita?, ¿Quién necesita los datos?, ¿Para qué propósitos?',
+                    '¿Cómo se va a hacer?, ¿Quiénes lo van a hacer?, ¿Con qué recursos?',
+                    '¿Cuándo se va a hacer?, ¿Dónde se va a hacer?, ¿Por qué?'
+                ],
+                respuesta: 1,
+                justificacion: 'La sección 3.1.1 indica que se deben responder: "¿Qué información se necesita?", "¿Quién necesita los datos y para qué propósitos?" (pág. 12).',
+                distractores: 'Las otras preguntas corresponden a aspectos de estrategia, organización o programación, no a la definición de objetivos.',
+                ref: 'Página 12'
+            },
+            // 13. Tipo b
+            {
+                id: 13,
+                tipo: 'b',
+                pregunta: 'Relacione los elementos de la estrategia general con su definición (pág. 14).\nElementos: 1) Determinación del método de captación, 2) Establecimiento de la cobertura y desglose geográfico, 3) Cobertura temporal, 4) Definición de la temática.\nDefiniciones: a) Periodo de referencia para las principales variables, b) Espacio territorial al que se referirán los datos, c) Puede ser encuesta, censo o registros administrativos, d) Descripción de los campos de interés.',
+                opciones: [
+                    '1-c, 2-b, 3-a, 4-d',
+                    '1-a, 2-c, 3-d, 4-b',
+                    '1-b, 2-a, 3-c, 4-d',
+                    '1-d, 2-b, 3-a, 4-c'
+                ],
+                respuesta: 0,
+                justificacion: 'Método de captación → encuesta, censo o registros; cobertura geográfica → espacio territorial; cobertura temporal → periodo de referencia; temática → descripción de campos de interés.',
+                distractores: 'Las otras opciones alteran las correspondencias correctas.',
+                ref: 'Página 14'
+            },
+            // 14. Tipo c
+            {
+                id: 14,
+                tipo: 'c',
+                pregunta: 'Entre los factores que pueden afectar el tamaño de muestra y la precisión en encuestas se encuentra la ________ de las características de interés en la población.',
+                opciones: [
+                    'variabilidad',
+                    'homogeneidad',
+                    'estabilidad',
+                    'normalidad'
+                ],
+                respuesta: 0,
+                justificacion: 'El texto menciona: "Variabilidad de las características de interés en la población" como factor que afecta el tamaño de muestra y precisión (pág. 14).',
+                distractores: 'Homogeneidad, estabilidad y normalidad no son mencionados en ese contexto.',
+                ref: 'Página 14'
+            },
+            // 15. Tipo a
+            {
+                id: 15,
+                tipo: 'a',
+                pregunta: '¿Cuál de las siguientes NO es una limitante que afecta la determinación de objetivos y estrategia general?',
+                opciones: [
+                    'La precisión de los datos requerida.',
+                    'La tasa de respuesta esperada.',
+                    'El tamaño de la población.',
+                    'La disponibilidad de software estadístico.'
+                ],
+                respuesta: 3,
+                justificacion: 'Las limitantes mencionadas incluyen precisión, tasa de respuesta, tamaño de población, tipo de diseño muestral, restricciones operativas, etc. (pág. 14). No se menciona la disponibilidad de software estadístico.',
+                distractores: 'Los otros tres son limitantes explícitamente mencionados.',
+                ref: 'Página 14'
+            },
+            // 16. Tipo b
+            {
+                id: 16,
+                tipo: 'b',
+                pregunta: 'Relacione las siguientes fases con sus macroactividades (pág. 7).\nFases: 1) Diseño conceptual, 2) Diseño de la muestra, 3) Diseño de la captación y del procesamiento, 4) Presentación de resultados.\nMacroactividades: a) Determinación del método de muestreo, b) Identificación de necesidades e integración del marco conceptual, c) Programa de productos, d) Diseño de la estrategia operativa.',
+                opciones: [
+                    '1-b, 2-a, 3-d, 4-c',
+                    '1-a, 2-b, 3-c, 4-d',
+                    '1-c, 2-d, 3-a, 4-b',
+                    '1-d, 2-c, 3-b, 4-a'
+                ],
+                respuesta: 0,
+                justificacion: 'Según el cuadro de la página 7: Diseño conceptual → Identificación de necesidades e integración del marco conceptual; Diseño de la muestra → Determinación del método de muestreo; Diseño de la captación y procesamiento → Diseño de la estrategia operativa; Presentación de resultados → Programa de productos.',
+                distractores: 'Las otras opciones presentan asociaciones incorrectas.',
+                ref: 'Página 7'
+            },
+            // 17. Tipo c
+            {
+                id: 17,
+                tipo: 'c',
+                pregunta: 'El programa general de actividades comprende la identificación del conjunto de actividades que será necesario realizar en cada fase, y para cada una de ellas, su objetivo específico, secuencia, área responsable, tiempo requerido, y el respectivo ________.',
+                opciones: [
+                    'entregable',
+                    'presupuesto',
+                    'indicador',
+                    'responsable'
+                ],
+                respuesta: 0,
+                justificacion: 'El texto dice: "Esta macroactividad comprende la identificación del conjunto de actividades que será necesario realizar en cada fase, y para cada una de ellas, su objetivo específico, secuencia, área responsable, tiempo requerido, y el respectivo entregable" (pág. 15).',
+                distractores: 'Las otras opciones son componentes del proyecto, pero el término correcto es "entregable".',
+                ref: 'Página 15'
+            },
+            // 18. Tipo a
+            {
+                id: 18,
+                tipo: 'a',
+                pregunta: 'Según el documento, ¿qué herramienta se recomienda para la programación de actividades?',
+                opciones: [
+                    'Diagrama de Gantt',
+                    'Histograma de frecuencias',
+                    'Diagrama de Pareto',
+                    'Análisis de regresión'
+                ],
+                respuesta: 0,
+                justificacion: 'Entre las herramientas mencionadas están: "Estructura de descomposición del trabajo", "Planificación de actividades y tareas" del método PERT, "Diagrama de Gantt", "Histograma de recursos" y "Patrón de límites" (pág. 15). El Diagrama de Gantt es una de ellas.',
+                distractores: 'Histograma de frecuencias, Pareto y regresión son herramientas estadísticas, no de programación de proyectos.',
+                ref: 'Página 15'
+            },
+            // 19. Tipo b
+            {
+                id: 19,
+                tipo: 'b',
+                pregunta: 'Relacione los conceptos de la planeación con su definición (según glosario).\nConceptos: 1) Planeación, 2) Control administrativo, 3) Evaluación, 4) Presupuestación global.\nDefiniciones: a) Estimación del costo del proyecto, considerando cada fase y tipo de recursos. b) Proceso para determinar los objetivos y estrategia de un proyecto, así como la secuencia de actividades y su calendarización. c) Conjunto de procedimientos de registro, análisis y evaluación de las actividades de un proyecto. d) Conjunto de procedimientos de seguimiento y control que permiten la verificación y medición del cumplimiento de los objetivos.',
+                opciones: [
+                    '1-b, 2-c, 3-d, 4-a',
+                    '1-a, 2-b, 3-c, 4-d',
+                    '1-c, 2-d, 3-a, 4-b',
+                    '1-d, 2-a, 3-b, 4-c'
+                ],
+                respuesta: 0,
+                justificacion: 'Planeación: proceso para determinar objetivos, estrategia, secuencia y recursos (pág. 8). Control administrativo: procedimientos de registro, análisis y evaluación (pág. 23). Evaluación: procedimientos de seguimiento y control para verificar cumplimiento (pág. 30). Presupuestación global: estimación del costo (pág. 27).',
+                distractores: 'Las otras opciones invierten las definiciones.',
+                ref: 'Glosario'
+            },
+            // 20. Tipo c
+            {
+                id: 20,
+                tipo: 'c',
+                pregunta: 'El control administrativo consiste en medir y supervisar los resultados, comparar las mediciones con los planes y, cuando sea necesario, adoptar y aplicar medidas correctivas para cubrir los ________ del proyecto.',
+                opciones: [
+                    'objetivos',
+                    'presupuestos',
+                    'cronogramas',
+                    'recursos'
+                ],
+                respuesta: 0,
+                justificacion: 'El texto dice: "Consiste en medir y supervisar los resultados, comparar las mediciones con los planes y, cuando sea necesario, adoptar y aplicar medidas correctivas para cubrir los objetivos del proyecto" (pág. 19).',
+                distractores: 'Las otras opciones son elementos que se controlan, pero la frase dice "objetivos".',
+                ref: 'Página 19'
+            },
+            // 21. Tipo a
+            {
+                id: 21,
+                tipo: 'a',
+                pregunta: '¿Cuál de los siguientes NO es un instrumento de control mencionado?',
+                opciones: [
+                    'Diagrama de Gantt',
+                    'Método de Ruta crítica',
+                    'Tablero de control "Control C4"',
+                    'Matriz de decisión'
+                ],
+                respuesta: 3,
+                justificacion: 'Los instrumentos mencionados son: Diagrama de Gantt, Administrador universal, métodos de Ruta crítica (PERT), tablero de control o "Control C4" (pág. 20). Matriz de decisión no se menciona.',
+                distractores: 'Los otros tres son explícitamente citados.',
+                ref: 'Página 20'
+            },
+            // 22. Tipo b
+            {
+                id: 22,
+                tipo: 'b',
+                pregunta: 'Relacione los tipos de control con su descripción (págs. 20-21).\nTipos: 1) Control de actividades, 2) Control de productos, 3) Control de presupuesto.\nDescripciones: a) Verificación del cumplimiento de especificaciones determinadas para cada conjunto de tareas. b) Medición de la calidad de productos intermedios y finales. c) Seguimiento de los gastos comparados con las estimaciones.',
+                opciones: [
+                    '1-a, 2-b, 3-c',
+                    '1-b, 2-c, 3-a',
+                    '1-c, 2-a, 3-b',
+                    '1-a, 2-c, 3-b'
+                ],
+                respuesta: 0,
+                justificacion: 'Control de actividades: verificación del cumplimiento de estándares (pág. 20). Control de productos: calidad de productos (pág. 20). Control de presupuesto: seguimiento de gastos (se menciona en el ejercicio presupuestal, pág. 19).',
+                distractores: 'Las otras opciones asignan descripciones incorrectas.',
+                ref: 'Páginas 20-21'
+            },
+            // 23. Tipo c
+            {
+                id: 23,
+                tipo: 'c',
+                pregunta: 'La evaluación de procesos en proyectos estadísticos debe cubrir todos los aspectos y actividades, identificando las fortalezas y debilidades observadas en cada tarea, para proponer mejoras en proyectos ________.',
+                opciones: [
+                    'futuros',
+                    'anteriores',
+                    'similares',
+                    'en curso'
+                ],
+                respuesta: 0,
+                justificacion: 'El texto dice: "La evaluación debe cubrir todos los aspectos y actividades, identificando las fortalezas y debilidades observadas en cada tarea, para proponer mejoras en proyectos futuros" (pág. 21).',
+                distractores: 'Las otras opciones no coinciden con el texto.',
+                ref: 'Página 21'
+            },
+            // 24. Tipo a
+            {
+                id: 24,
+                tipo: 'a',
+                pregunta: '¿Qué indicador se utiliza para evaluar la confiabilidad de los datos?',
+                opciones: [
+                    'Coeficiente de variación',
+                    'Tasa de respuesta',
+                    'Número de usuarios',
+                    'Disponibilidad de metadatos'
+                ],
+                respuesta: 0,
+                justificacion: 'Para evaluar la confiabilidad se mencionan: "Errores de muestreo. Coeficiente de variación para las principales variables" (pág. 22).',
+                distractores: 'Tasa de respuesta se asocia a errores de no respuesta; número de usuarios y metadatos a otros atributos.',
+                ref: 'Página 22'
+            },
+            // 25. Tipo b
+            {
+                id: 25,
+                tipo: 'b',
+                pregunta: 'Relacione los atributos de calidad con sus indicadores de evaluación (págs. 21-22).\nAtributos: 1) Relevancia, 2) Rigor conceptual, 3) Oportunidad, 4) Suficiencia.\nIndicadores: a) Porcentaje de productos estadísticos disponibles respecto a los planeados. b) Disponibilidad de metadatos. c) Encuestas de satisfacción de usuarios. d) Diferencia temporal entre fecha de captación y entrega de resultados.',
+                opciones: [
+                    '1-c, 2-b, 3-d, 4-a',
+                    '1-b, 2-c, 3-a, 4-d',
+                    '1-d, 2-a, 3-b, 4-c',
+                    '1-a, 2-d, 3-c, 4-b'
+                ],
+                respuesta: 0,
+                justificacion: 'Relevancia → encuestas de satisfacción; Rigor conceptual → disponibilidad de metadatos; Oportunidad → diferencia temporal; Suficiencia → porcentaje de productos disponibles.',
+                distractores: 'Las otras combinaciones confunden los indicadores.',
+                ref: 'Páginas 21-22'
+            },
+            // 26. Tipo c
+            {
+                id: 26,
+                tipo: 'c',
+                pregunta: 'El responsable del proyecto debe estar atento no solo al cumplimiento de las actividades sino a garantizar que éstas se efectúen dentro de las fechas programadas y tener disponibles los ________ y las condiciones necesarias para su desarrollo.',
+                opciones: [
+                    'recursos',
+                    'presupuestos',
+                    'equipos',
+                    'instalaciones'
+                ],
+                respuesta: 0,
+                justificacion: 'El texto dice: "El responsable del proyecto debe estar atento no solo al cumplimiento de las actividades sino a garantizar que éstas se efectúen dentro de las fechas programadas y tener disponibles los recursos y las condiciones necesarias para su desarrollo" (pág. 20).',
+                distractores: 'Las otras opciones son parte de los recursos, pero el término general es "recursos".',
+                ref: 'Página 20'
+            },
+            // 27. Tipo a
+            {
+                id: 27,
+                tipo: 'a',
+                pregunta: '¿Cuál es el propósito de la presupuestación global?',
+                opciones: [
+                    'Estimar el costo del proyecto y las fuentes de financiamiento.',
+                    'Definir los objetivos del proyecto.',
+                    'Determinar la estructura organizacional.',
+                    'Programar las actividades.'
+                ],
+                respuesta: 0,
+                justificacion: 'La presupuestación global es "la estimación del costo del proyecto, considerando cada fase y tipo de recursos; la identificación de las fuentes de financiamiento (si fuera el caso) y los procedimientos para verificar el ejercicio del presupuesto" (pág. 18).',
+                distractores: 'Las otras opciones corresponden a otras macroactividades (objetivos, organización, programa de actividades).',
+                ref: 'Página 18'
+            },
+            // 28. Tipo b
+            {
+                id: 28,
+                tipo: 'b',
+                pregunta: 'Relacione los tipos de fuentes de financiamiento con su ejemplo (pág. 19).\nTipos: 1) Presupuesto etiquetado, 2) Fondos complementarios de la Unidad del Estado, 3) Otras instancias de gobierno, 4) Organismos internacionales.\nEjemplos: a) Recursos del gobierno federal, b) Aportación adicional de la misma oficina, c) Banco Mundial, d) Gobierno estatal.',
+                opciones: [
+                    '1-a, 2-b, 3-d, 4-c',
+                    '1-b, 2-a, 3-c, 4-d',
+                    '1-c, 2-d, 3-a, 4-b',
+                    '1-d, 2-c, 3-b, 4-a'
+                ],
+                respuesta: 0,
+                justificacion: 'Presupuesto etiquetado → recursos del gobierno federal; fondos complementarios → aportación de la misma oficina; otras instancias → gobierno estatal; organismos internacionales → Banco Mundial.',
+                distractores: 'Las otras opciones mezclan los ejemplos incorrectamente.',
+                ref: 'Página 19'
+            },
+            // 29. Tipo c
+            {
+                id: 29,
+                tipo: 'c',
+                pregunta: 'El control administrativo debe ser integrador, entendiéndolo como una forma de alineación y articulación de todas las actividades del proyecto en busca de cumplir los ________ que fueron planteados desde su planeación.',
+                opciones: [
+                    'objetivos',
+                    'presupuestos',
+                    'cronogramas',
+                    'estándares'
+                ],
+                respuesta: 0,
+                justificacion: 'El texto dice: "El control administrativo debe ser integrador, entendiéndolo como una forma de alineación y articulación de todas las actividades del proyecto en busca de cumplir los objetivos que fueron planteados desde su planeación" (pág. 20).',
+                distractores: 'Las otras opciones son aspectos controlados, pero la frase menciona "objetivos".',
+                ref: 'Página 20'
+            },
+            // 30. Tipo a
+            {
+                id: 30,
+                tipo: 'a',
+                pregunta: '¿Qué se debe verificar en el control de productos?',
+                opciones: [
+                    'Que se cumplan los plazos.',
+                    'Que los productos cumplan con los estándares de calidad.',
+                    'Que se utilicen los recursos adecuadamente.',
+                    'Que se sigan los procedimientos.'
+                ],
+                respuesta: 1,
+                justificacion: 'El control de productos se refiere a "la calidad de un producto se determina en función de su utilidad" y se debe medir cada uno de sus respectivos estándares de calidad (pág. 20).',
+                distractores: 'Cumplir plazos es control de actividades; uso de recursos y procedimientos son otros tipos de control.',
+                ref: 'Página 20'
+            },
+            // 31. Tipo b
+            {
+                id: 31,
+                tipo: 'b',
+                pregunta: 'Relacione los conceptos del glosario con su definición.\nConceptos: 1) Actividad, 2) Carga de respuesta, 3) Claridad, 4) Cobertura conceptual.\nDefiniciones: a) Esfuerzo en tiempo y costo requerido para que los informantes proporcionen respuestas. b) Requisito de calidad relacionado con la información que acompaña a los datos. c) Componente del trabajo realizado en el transcurso de un proyecto. d) Temas, categorías, variables y clasificaciones de los que se requiere obtener información.',
+                opciones: [
+                    '1-c, 2-a, 3-b, 4-d',
+                    '1-a, 2-b, 3-c, 4-d',
+                    '1-b, 2-c, 3-d, 4-a',
+                    '1-d, 2-a, 3-b, 4-c'
+                ],
+                respuesta: 0,
+                justificacion: 'Actividad → componente del trabajo; Carga de respuesta → esfuerzo en tiempo y costo; Claridad → requisito de calidad (información que acompaña); Cobertura conceptual → temas, categorías, variables.',
+                distractores: 'Las otras opciones presentan asociaciones incorrectas.',
+                ref: 'Glosario'
+            },
+            // 32. Tipo c
+            {
+                id: 32,
+                tipo: 'c',
+                pregunta: 'La fase de planeación, según la Norma Técnica, es el proceso para determinar los objetivos y estrategia de un proyecto, así como la secuencia de actividades y su calendarización, los recursos y la ________ requeridos para su realización.',
+                opciones: [
+                    'organización',
+                    'financiamiento',
+                    'calidad',
+                    'documentación'
+                ],
+                respuesta: 0,
+                justificacion: 'La definición de planeación en la Norma Técnica: "Proceso para determinar los objetivos y estrategia de un proyecto, así como la secuencia de actividades y su calendarización, los recursos y la organización requeridos para su realización" (pág. 8).',
+                distractores: 'Las otras opciones no forman parte de la definición textual.',
+                ref: 'Página 8'
+            },
+            // 33. Tipo a
+            {
+                id: 33,
+                tipo: 'a',
+                pregunta: '¿Cuál de los siguientes NO es un elemento que debe considerar la Unidad del Estado en la planeación según el marco legal mexicano?',
+                opciones: [
+                    'Ley del Sistema Nacional de Información Estadística y Geográfica.',
+                    'Código de Ética para los integrantes del SNIEG.',
+                    'Reglas para la determinación de la Información de Interés Nacional.',
+                    'Reglamento de la Ley Federal de Transparencia.'
+                ],
+                respuesta: 3,
+                justificacion: 'Los documentos mencionados son: LSNIEG, Código de Ética, Reglas para la determinación de la Información de Interés Nacional, Norma técnica para la generación de estadística básica, Norma técnica sobre domicilios geográficos (págs. 8-9). No se menciona el Reglamento de la Ley Federal de Transparencia.',
+                distractores: 'Los otros tres son explícitamente citados.',
+                ref: 'Páginas 8-9'
+            },
+            // 34. Tipo b
+            {
+                id: 34,
+                tipo: 'b',
+                pregunta: 'Relacione las macroactividades de la planeación con su objetivo principal (págs. 11-19).\nMacroactividades: 1) Definición de objetivos y estrategia general, 2) Programa general de actividades, 3) Determinación de la estructura de organización, 4) Presupuestación global.\nObjetivos: a) Identificar las funciones y esquemas de autoridad-responsabilidad. b) Estimar el costo del proyecto y fuentes de financiamiento. c) Definir los propósitos y características generales del proyecto. d) Identificar actividades, secuencia y tiempos.',
+                opciones: [
+                    '1-c, 2-d, 3-a, 4-b',
+                    '1-d, 2-a, 3-b, 4-c',
+                    '1-a, 2-b, 3-c, 4-d',
+                    '1-b, 2-c, 3-d, 4-a'
+                ],
+                respuesta: 0,
+                justificacion: 'Definición de objetivos → definir propósitos y características; Programa general → identificar actividades, secuencia y tiempos; Estructura de organización → funciones y esquemas de autoridad; Presupuestación global → estimar costos y financiamiento.',
+                distractores: 'Las otras opciones asignan objetivos incorrectos a cada macroactividad.',
+                ref: 'Páginas 11-19'
+            },
+            // 35. Tipo c
+            {
+                id: 35,
+                tipo: 'c',
+                pregunta: 'La determinación de la estrategia general consiste en la identificación de las principales líneas de acción a seguir sobre aspectos ________ y administrativos.',
+                opciones: [
+                    'técnicos',
+                    'financieros',
+                    'legales',
+                    'operativos'
+                ],
+                respuesta: 0,
+                justificacion: 'El texto dice: "Esta consiste en la identificación de las principales líneas de acción a seguir sobre aspectos técnicos y administrativos" (pág. 13).',
+                distractores: 'Las otras opciones no son las que se mencionan en el texto.',
+                ref: 'Página 13'
+            },
+            // 36. Tipo a
+            {
+                id: 36,
+                tipo: 'a',
+                pregunta: '¿Qué se debe considerar al determinar la cobertura geográfica de un proyecto estadístico?',
+                opciones: [
+                    'El Marco Geoestadístico Nacional del INEGI.',
+                    'Los censos anteriores.',
+                    'Las recomendaciones de los usuarios.',
+                    'La disponibilidad de recursos.'
+                ],
+                respuesta: 0,
+                justificacion: 'El texto indica: "Para determinar las coberturas geográficas, las Unidades del Estado deben basarse en el Marco Geoestadístico Nacional del INEGI" (pág. 14).',
+                distractores: 'Los otros son consideraciones generales pero no la base específica.',
+                ref: 'Página 14'
+            },
+            // 37. Tipo b
+            {
+                id: 37,
+                tipo: 'b',
+                pregunta: 'Relacione los tipos de errores con su definición (glosario).\nErrores: 1) Error de muestreo, 2) Error no muestral, 3) Error de cobertura, 4) Error de medición.\nDefiniciones: a) Ocurre cuando la respuesta difiere del valor real. b) Surge por fallas en la cobertura adecuada de todos los componentes de la población. c) Diferencia entre un valor estimado y el verdadero debido a que solo se observa una muestra. d) Error en las estimaciones que no puede atribuirse a fluctuaciones del muestreo.',
+                opciones: [
+                    '1-c, 2-d, 3-b, 4-a',
+                    '1-d, 2-c, 3-a, 4-b',
+                    '1-b, 2-a, 3-d, 4-c',
+                    '1-a, 2-b, 3-c, 4-d'
+                ],
+                respuesta: 0,
+                justificacion: 'Error de muestreo → diferencia por muestra; error no muestral → no atribuible a fluctuaciones; error de cobertura → fallas en cobertura; error de medición → respuesta difiere del valor real.',
+                distractores: 'Las otras opciones confunden las definiciones.',
+                ref: 'Glosario'
+            },
+            // 38. Tipo c
+            {
+                id: 38,
+                tipo: 'c',
+                pregunta: 'En el programa general de actividades, el entregable se refiere a la forma concreta en que se materializa el resultado de la actividad, ya sean productos intermedios o ________.',
+                opciones: [
+                    'servicios',
+                    'datos',
+                    'reportes',
+                    'bases'
+                ],
+                respuesta: 0,
+                justificacion: 'El texto dice: "Entregable. Se refiere a la forma concreta en que se materializa el resultado de la actividad, ya sean productos intermedios o servicios" (pág. 16).',
+                distractores: 'Datos, reportes y bases son tipos de productos, pero la frase dice "servicios".',
+                ref: 'Página 16'
+            },
+            // 39. Tipo a
+            {
+                id: 39,
+                tipo: 'a',
+                pregunta: '¿Cuál de los siguientes aspectos incide en el costo del proyecto?',
+                opciones: [
+                    'La complejidad del diseño de la muestra.',
+                    'La satisfacción de los usuarios.',
+                    'La reputación de la Unidad del Estado.',
+                    'La cantidad de metadatos.'
+                ],
+                respuesta: 0,
+                justificacion: 'Entre los aspectos que inciden en el costo se mencionan: "Complejidad del diseño de la muestra y del tipo de marco muestral" (pág. 18).',
+                distractores: 'Satisfacción de usuarios, reputación y metadatos no se mencionan como factores de costo.',
+                ref: 'Página 18'
+            },
+            // 40. Tipo b
+            {
+                id: 40,
+                tipo: 'b',
+                pregunta: 'Relacione los conceptos de evaluación con su descripción (págs. 21-22).\nConceptos: 1) Evaluación de procesos, 2) Evaluación de resultados finales, 3) Evaluación de la precisión de los datos, 4) Evaluación de la oportunidad.\nDescripciones: a) Comparación de resultados con datos similares de otras fuentes. b) Establecimiento de indicadores de desempeño para medir la calidad. c) Identificación de problemas en los procesos. d) Diferencia entre fecha real de liberación y fecha programada.',
+                opciones: [
+                    '1-b, 2-a, 3-c, 4-d',
+                    '1-a, 2-b, 3-d, 4-c',
+                    '1-c, 2-d, 3-b, 4-a',
+                    '1-d, 2-c, 3-a, 4-b'
+                ],
+                respuesta: 0,
+                justificacion: 'Evaluación de procesos → indicadores de desempeño; Evaluación de resultados → comparación con otras fuentes; Precisión → identificación de problemas (se menciona como parte de la evaluación de la precisión); Oportunidad → diferencia entre fecha real y programada.',
+                distractores: 'Las otras opciones mezclan las descripciones.',
+                ref: 'Páginas 21-22'
+            },
+            // 41. Tipo c
+            {
+                id: 41,
+                tipo: 'c',
+                pregunta: 'El cierre del proyecto estadístico incluye la entrega formal de los productos y la aceptación por parte del ________ cuando se trata de proyectos con financiamiento externo.',
+                opciones: [
+                    'patrocinador',
+                    'usuario final',
+                    'comité directivo',
+                    'responsable'
+                ],
+                respuesta: 0,
+                justificacion: 'El texto dice: "Se refiere al vínculo entre el cliente o patrocinador(es) y los responsables del proyecto..." (pág. 23).',
+                distractores: 'Las otras opciones son actores, pero el texto especifica "cliente o patrocinador".',
+                ref: 'Página 23'
+            },
+            // 42. Tipo a
+            {
+                id: 42,
+                tipo: 'a',
+                pregunta: '¿Qué documento se debe elaborar al cierre del proyecto para describir los objetivos alcanzados y las incidencias?',
+                opciones: [
+                    'Reporte final.',
+                    'Reporte administrativo.',
+                    'Acta de aceptación.',
+                    'Informe de evaluación.'
+                ],
+                respuesta: 0,
+                justificacion: 'El reporte final es el que "describe los objetivos alcanzados por fase, incidencias y desviaciones detectadas junto con las acciones implementadas para corregirlas" (pág. 23).',
+                distractores: 'Reporte administrativo se refiere a recepción de equipo; acta de aceptación es para formalizar la recepción; informe de evaluación es parte del control.',
+                ref: 'Página 23'
+            },
+            // 43. Tipo b
+            {
+                id: 43,
+                tipo: 'b',
+                pregunta: 'Relacione los términos del glosario con su definición (págs. 9-10).\nTérminos: 1) Confiabilidad, 2) Comparabilidad, 3) Suficiencia, 4) Facilidad de consulta.\nDefiniciones: a) Grado en que son equivalentes las definiciones y clasificaciones de conceptos comunes. b) Grado en que los datos se aproximan a la veracidad. c) Grado en que la presentación de datos permite a los usuarios su consulta e interpretación. d) Grado en que las estadísticas disponibles permiten el conocimiento de un objeto o fenómeno.',
+                opciones: [
+                    '1-b, 2-a, 3-d, 4-c',
+                    '1-a, 2-b, 3-c, 4-d',
+                    '1-c, 2-d, 3-a, 4-b',
+                    '1-d, 2-c, 3-b, 4-a'
+                ],
+                respuesta: 0,
+                justificacion: 'Confiabilidad → aproximación a la veracidad; Comparabilidad → equivalencia de definiciones; Suficiencia → permiten conocimiento del objeto; Facilidad de consulta → presentación permite consulta e interpretación.',
+                distractores: 'Las otras opciones invierten las definiciones.',
+                ref: 'Páginas 9-10'
+            },
+            // 44. Tipo c
+            {
+                id: 44,
+                tipo: 'c',
+                pregunta: 'Los reportes de avance son un elemento muy importante para cotejar la programación original de actividades, conocer en qué medida se vienen logrando los objetivos y así ________ el proyecto.',
+                opciones: [
+                    'monitorear',
+                    'evaluar',
+                    'controlar',
+                    'planear'
+                ],
+                respuesta: 0,
+                justificacion: 'El texto dice: "Los reportes de avance son un elemento muy importante para cotejar la programación original de actividades, conocer en qué medida se vienen logrando los objetivos y así monitorear el proyecto" (pág. 21).',
+                distractores: 'Evaluar, controlar y planear son acciones relacionadas, pero la frase usa "monitorear".',
+                ref: 'Página 21'
+            },
+            // 45. Tipo a
+            {
+                id: 45,
+                tipo: 'a',
+                pregunta: '¿Qué se debe hacer cuando se detecta una desviación en el control administrativo?',
+                opciones: [
+                    'Analizar las causas para efectuar correcciones oportunas.',
+                    'Reportar al comité directivo.',
+                    'Detener el proyecto.',
+                    'Modificar los objetivos.'
+                ],
+                respuesta: 0,
+                justificacion: 'El texto dice: "En el momento en que se detecta cualquier desviación hay que analizar las causas para poder efectuar las correcciones oportunas" (pág. 20).',
+                distractores: 'Reportar, detener o modificar objetivos no son las acciones indicadas.',
+                ref: 'Página 20'
+            },
+            // 46. Tipo b
+            {
+                id: 46,
+                tipo: 'b',
+                pregunta: 'Relacione las herramientas de control con su función (pág. 20).\nHerramientas: 1) Diagrama de Gantt, 2) Método PERT, 3) Tablero de control "Control C4", 4) Reuniones de seguimiento.\nFunciones: a) Representar gráficamente actividades y duración. b) Mostrar la interdependencia y cadena de actividades. c) Aplicarse a actividades, recursos o resultados. d) Presentar información sobre la marcha del proyecto y estudiar desviaciones.',
+                opciones: [
+                    '1-a, 2-b, 3-c, 4-d',
+                    '1-b, 2-a, 3-d, 4-c',
+                    '1-c, 2-d, 3-a, 4-b',
+                    '1-d, 2-c, 3-b, 4-a'
+                ],
+                respuesta: 0,
+                justificacion: 'Diagrama de Gantt → representación gráfica de actividades y duración; PERT → interdependencia y cadena; Tablero de control → aplicable a actividades, recursos o resultados; Reuniones de seguimiento → presentar información y estudiar desviaciones.',
+                distractores: 'Las otras opciones asignan funciones incorrectas.',
+                ref: 'Página 20'
+            },
+            // 47. Tipo c
+            {
+                id: 47,
+                tipo: 'c',
+                pregunta: 'La calidad de un producto se determina en función de su utilidad, y ésta se refiere a la característica de la información en cuanto a su relevancia o uso práctico por parte de los ________.',
+                opciones: [
+                    'usuarios',
+                    'productores',
+                    'patrocinadores',
+                    'informantes'
+                ],
+                respuesta: 0,
+                justificacion: 'El texto dice: "La calidad de un producto se determina en función de su utilidad, y ésta se refiere a la característica de la información en cuanto a su relevancia o uso práctico por parte de los usuarios" (pág. 20).',
+                distractores: 'Los otros actores no son los mencionados en el contexto de utilidad.',
+                ref: 'Página 20'
+            },
+            // 48. Tipo a
+            {
+                id: 48,
+                tipo: 'a',
+                pregunta: '¿Cuál de los siguientes NO es un tipo de indicador de evaluación de procesos mencionado?',
+                opciones: [
+                    'De eficacia de métodos y procedimientos.',
+                    'De la relación costo-beneficio de la información.',
+                    'De eficiencia financiera.',
+                    'De satisfacción del personal.'
+                ],
+                respuesta: 3,
+                justificacion: 'Los indicadores mencionados son: "De eficacia de métodos y procedimientos", "De la relación costo-beneficio de la información a producirse", "De la eficiencia financiera", "Del ejercicio presupuestal" (pág. 21). No se menciona "satisfacción del personal".',
+                distractores: 'Los otros tres están explícitamente citados.',
+                ref: 'Página 21'
+            },
+            // 49. Tipo b
+            {
+                id: 49,
+                tipo: 'b',
+                pregunta: 'Relacione las definiciones del glosario con su término correspondiente.\nTérminos: 1) Proyecto estadístico, 2) Fase del proyecto, 3) Entregable, 4) Hito.\nDefiniciones: a) Punto o evento significativo dentro del proyecto. b) Conjunto de actividades ordenadas y relacionadas para producir o integrar información estadística. c) Cualquier ítem verificable que debe ser producido para completar un proyecto. d) Un conjunto de actividades del proyecto relacionadas lógicamente que culminan con un producto entregable.',
+                opciones: [
+                    '1-b, 2-d, 3-c, 4-a',
+                    '1-d, 2-c, 3-a, 4-b',
+                    '1-c, 2-a, 3-d, 4-b',
+                    '1-a, 2-b, 3-c, 4-d'
+                ],
+                respuesta: 0,
+                justificacion: 'Proyecto estadístico → actividades ordenadas; Fase del proyecto → conjunto de actividades que culminan con entregable; Entregable → ítem verificable; Hito → punto significativo.',
+                distractores: 'Las otras opciones confunden los términos.',
+                ref: 'Glosario'
+            },
+            // 50. Tipo c
+            {
+                id: 50,
+                tipo: 'c',
+                pregunta: 'La evaluación de la accesibilidad considera el número y tipos de medios utilizados para la ________ estadística.',
+                opciones: [
+                    'difusión',
+                    'captación',
+                    'procesamiento',
+                    'planeación'
+                ],
+                respuesta: 0,
+                justificacion: 'El texto dice: "Para evaluar la accesibilidad es necesario disponer de un resumen que describa las condiciones de acceso a los datos, considerando: – El número de medios utilizados para la difusión estadística" (pág. 22).',
+                distractores: 'Las otras opciones son fases del proceso, pero la frase específica "difusión".',
+                ref: 'Página 22'
+            }
+        ];
+
+        // --------------------------------------------------------------
+        //  LÓGICA DE LA APLICACIÓN
+        // --------------------------------------------------------------
+        let currentIndex = 0;
+        let answers = new Array(questions.length).fill(null); // índice de opción seleccionada (null = no respondida)
+        let verified = new Array(questions.length).fill(false); // si ya se verificó
+        let selectedOptionIndex = null;
+
+        const qTypeEl = document.getElementById('qType');
+        const qTextEl = document.getElementById('qText');
+        const optionsContainer = document.getElementById('optionsContainer');
+        const feedbackEl = document.getElementById('feedback');
+        const feedbackHeader = document.getElementById('feedbackHeader');
+        const justificationText = document.getElementById('justificationText');
+        const distractorsText = document.getElementById('distractorsText');
+        const refText = document.getElementById('refText');
+        const currentNum = document.getElementById('currentNum');
+        const totalNum = document.getElementById('totalNum');
+        const progressScore = document.getElementById('progressScore');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const checkBtn = document.getElementById('checkBtn');
+        const resetBtn = document.getElementById('resetBtn');
+        const resultContainer = document.getElementById('resultContainer');
+        const finalScore = document.getElementById('finalScore');
+
+        totalNum.textContent = questions.length;
+
+        function shuffleArray(arr) {
+            for (let i = arr.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+            return arr;
+        }
+
+        // Para cada pregunta, barajamos las opciones y guardamos el nuevo índice de la respuesta
+        function shuffleOptions(q) {
+            const opts = q.opciones.map((text, idx) => ({ text, idx }));
+            const shuffled = shuffleArray([...opts]);
+            const newOptions = shuffled.map(item => item.text);
+            const newAnswerIndex = shuffled.findIndex(item => item.idx === q.respuesta);
+            return { newOptions, newAnswerIndex };
+        }
+
+        // Pre-barrer todas las preguntas para tener opciones barajadas fijas
+        const shuffledData = questions.map(q => {
+            const { newOptions, newAnswerIndex } = shuffleOptions(q);
+            return {
+                ...q,
+                opciones: newOptions,
+                respuesta: newAnswerIndex
+            };
+        });
+
+        function renderQuestion(index) {
+            const q = shuffledData[index];
+            qTypeEl.textContent = `Tipo ${q.tipo.toUpperCase()}`;
+            qTextEl.textContent = q.pregunta;
+            optionsContainer.innerHTML = '';
+            feedbackEl.classList.remove('show');
+
+            // Mostrar opciones
+            q.opciones.forEach((text, idx) => {
+                const div = document.createElement('div');
+                div.className = 'option';
+                const radio = document.createElement('input');
+                radio.type = 'radio';
+                radio.name = 'question';
+                radio.value = idx;
+                radio.id = `opt_${idx}`;
+                const label = document.createElement('label');
+                label.htmlFor = `opt_${idx}`;
+                label.textContent = text;
+                div.appendChild(radio);
+                div.appendChild(label);
+                optionsContainer.appendChild(div);
+
+                // Si ya habíamos seleccionado esta pregunta, marcar
+                if (answers[index] === idx) {
+                    radio.checked = true;
+                }
+                // Si ya verificada, deshabilitar cambios y mostrar estilo
+                if (verified[index]) {
+                    radio.disabled = true;
+                    div.classList.add('disabled');
+                    if (idx === q.respuesta) {
+                        div.classList.add('correct');
+                    } else if (answers[index] === idx && idx !== q.respuesta) {
+                        div.classList.add('incorrect');
+                    }
+                }
+
+                radio.addEventListener('change', (e) => {
+                    if (!verified[index]) {
+                        selectedOptionIndex = parseInt(e.target.value);
+                        answers[index] = selectedOptionIndex;
+                    }
+                });
+            });
+
+            // Si ya verificada, mostrar feedback
+            if (verified[index]) {
+                showFeedback(index);
+            }
+
+            // Actualizar contador
+            currentNum.textContent = index + 1;
+            updateProgress();
+
+            // Botones
+            prevBtn.disabled = index === 0;
+            nextBtn.disabled = index === questions.length - 1;
+            checkBtn.disabled = verified[index];
+
+            // Ocultar resultado final si estamos en medio
+            resultContainer.style.display = 'none';
+        }
+
+        function showFeedback(index) {
+            const q = shuffledData[index];
+            const isCorrect = answers[index] === q.respuesta;
+            feedbackEl.classList.add('show');
+            feedbackHeader.innerHTML = isCorrect
+                ? '<span class="correct-badge">✅ Correcto</span>'
+                : '<span class="incorrect-badge">❌ Incorrecto</span>';
+            justificationText.textContent = '🔍 ' + q.justificacion;
+            distractorsText.textContent = '📌 Análisis de distractores: ' + q.distractores;
+            refText.textContent = '📖 Referencia: ' + q.ref;
+        }
+
+        function updateProgress() {
+            const answered = answers.filter(a => a !== null).length;
+            const pct = Math.round((answered / questions.length) * 100);
+            progressScore.textContent = pct + '%';
+        }
+
+        function checkAnswer() {
+            const index = currentIndex;
+            const q = shuffledData[index];
+            if (answers[index] === null || answers[index] === undefined) {
+                alert('Selecciona una opción antes de verificar.');
+                return;
+            }
+            verified[index] = true;
+            // Deshabilitar radios y marcar correctos/incorrectos
+            const options = document.querySelectorAll('.option');
+            options.forEach((div, idx) => {
+                const radio = div.querySelector('input[type="radio"]');
+                radio.disabled = true;
+                div.classList.add('disabled');
+                if (idx === q.respuesta) {
+                    div.classList.add('correct');
+                } else if (answers[index] === idx && idx !== q.respuesta) {
+                    div.classList.add('incorrect');
+                }
+            });
+            checkBtn.disabled = true;
+            showFeedback(index);
+            updateProgress();
+
+            // Si es la última y todas verificadas, mostrar resultado
+            if (verified.every(v => v === true)) {
+                showFinalResult();
+            }
+        }
+
+        function showFinalResult() {
+            const correctas = shuffledData.filter((q, idx) => answers[idx] === q.respuesta).length;
+            const total = questions.length;
+            const pct = Math.round((correctas / total) * 100);
+            finalScore.textContent = pct + '% (' + correctas + '/' + total + ')';
+            resultContainer.style.display = 'block';
+        }
+
+        function goTo(index) {
+            if (index < 0 || index >= questions.length) return;
+            currentIndex = index;
+            // Al cambiar, no se pierde la selección guardada
+            renderQuestion(index);
+        }
+
+        // Event Listeners
+        prevBtn.addEventListener('click', () => {
+            if (currentIndex > 0) goTo(currentIndex - 1);
+        });
+
+        nextBtn.addEventListener('click', () => {
+            if (currentIndex < questions.length - 1) goTo(currentIndex + 1);
+        });
+
+        checkBtn.addEventListener('click', checkAnswer);
+
+        resetBtn.addEventListener('click', () => {
+            if (confirm('¿Reiniciar todas las respuestas?')) {
+                answers.fill(null);
+                verified.fill(false);
+                resultContainer.style.display = 'none';
+                goTo(0);
+                updateProgress();
+                checkBtn.disabled = false;
+            }
+        });
+
+        // Iniciar
+        renderQuestion(0);
+    </script>
+</body>
+</html>
