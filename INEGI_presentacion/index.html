@@ -1,0 +1,965 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guía de Estudio - Presentación de datos estadísticos en cuadros y gráficas</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f4f7fb;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+        .container {
+            max-width: 850px;
+            width: 100%;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+            padding: 30px 25px;
+            transition: all 0.2s;
+        }
+        h1 {
+            font-size: 1.8rem;
+            color: #0a2a44;
+            margin-bottom: 8px;
+            border-bottom: 3px solid #1e6f9f;
+            padding-bottom: 12px;
+        }
+        .subtitle {
+            color: #2c5282;
+            font-size: 0.95rem;
+            margin-bottom: 25px;
+            font-weight: 500;
+            background: #e8f0fe;
+            padding: 8px 14px;
+            border-radius: 30px;
+            display: inline-block;
+        }
+        .progress-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            background: #e9edf2;
+            border-radius: 40px;
+            padding: 6px 16px 6px 20px;
+        }
+        .progress-text {
+            font-weight: 600;
+            color: #1a3a5e;
+        }
+        .progress-num {
+            background: #1e6f9f;
+            color: white;
+            border-radius: 30px;
+            padding: 4px 16px;
+            font-size: 0.9rem;
+        }
+        .question-box {
+            background: #f9fcff;
+            border-radius: 14px;
+            padding: 22px 20px 18px;
+            border: 1px solid #dde7f0;
+            min-height: 200px;
+        }
+        .q-type {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #4a6a85;
+            background: #dce7f2;
+            display: inline-block;
+            padding: 2px 14px;
+            border-radius: 30px;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+        .q-text {
+            font-size: 1.2rem;
+            font-weight: 500;
+            color: #0b2a44;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin: 12px 0 18px;
+        }
+        .option {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            background: white;
+            border: 1.5px solid #d0dce8;
+            border-radius: 10px;
+            padding: 12px 16px;
+            cursor: pointer;
+            transition: border 0.2s, background 0.2s;
+        }
+        .option:hover {
+            border-color: #7fa3c7;
+            background: #f0f6fe;
+        }
+        .option input[type="radio"] {
+            margin-top: 3px;
+            accent-color: #1e6f9f;
+            width: 18px;
+            height: 18px;
+            flex-shrink: 0;
+        }
+        .option label {
+            font-size: 1rem;
+            color: #1a334a;
+            cursor: pointer;
+            line-height: 1.4;
+            width: 100%;
+        }
+        .option.correct {
+            border-color: #2b7a4b;
+            background: #e2f3e6;
+        }
+        .option.incorrect {
+            border-color: #b33c3c;
+            background: #fde8e8;
+        }
+        .option.disabled {
+            cursor: default;
+            opacity: 0.9;
+        }
+        .feedback {
+            margin-top: 20px;
+            background: #f0f4fa;
+            border-left: 5px solid #1e6f9f;
+            padding: 16px 20px;
+            border-radius: 8px;
+            display: none;
+        }
+        .feedback.show {
+            display: block;
+        }
+        .feedback .correct-badge {
+            color: #1a7a4a;
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+        .feedback .incorrect-badge {
+            color: #b33c3c;
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+        .feedback .justification {
+            margin-top: 10px;
+            font-weight: 500;
+            color: #003366;
+        }
+        .feedback .distractors {
+            margin-top: 8px;
+            color: #2c3e50;
+            font-size: 0.95rem;
+            background: #f5f8fc;
+            padding: 10px 14px;
+            border-radius: 6px;
+        }
+        .feedback .ref {
+            margin-top: 8px;
+            font-size: 0.85rem;
+            color: #3a5f7a;
+            font-style: italic;
+        }
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 28px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .nav-left, .nav-right {
+            display: flex;
+            gap: 10px;
+        }
+        button {
+            background: white;
+            border: 1.5px solid #b0c8dd;
+            padding: 10px 22px;
+            border-radius: 30px;
+            font-weight: 600;
+            color: #1a3a5e;
+            cursor: pointer;
+            transition: background 0.2s, border 0.2s;
+            font-size: 0.95rem;
+        }
+        button:hover:not(:disabled) {
+            background: #e1ecf5;
+            border-color: #7fa3c7;
+        }
+        button:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+        .btn-primary {
+            background: #1e6f9f;
+            border-color: #1e6f9f;
+            color: white;
+        }
+        .btn-primary:hover:not(:disabled) {
+            background: #155a83;
+            border-color: #155a83;
+        }
+        .btn-check {
+            background: #2b7a4b;
+            border-color: #2b7a4b;
+            color: white;
+        }
+        .btn-check:hover:not(:disabled) {
+            background: #1f5e3a;
+            border-color: #1f5e3a;
+        }
+        .result-final {
+            margin-top: 25px;
+            background: #e2edf7;
+            border-radius: 14px;
+            padding: 20px;
+            text-align: center;
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #0a2a44;
+        }
+        @media (max-width: 600px) {
+            .container { padding: 18px 14px; }
+            .q-text { font-size: 1rem; }
+            .nav-buttons { flex-direction: column; align-items: stretch; }
+            .nav-left, .nav-right { justify-content: center; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="app">
+        <h1>📊 Presentación de datos estadísticos en cuadros y gráficas</h1>
+        <div class="subtitle">Autoevaluación · 30 preguntas · INEGI 2011</div>
+
+        <div class="progress-bar">
+            <span class="progress-text">Pregunta <span id="currentNum">1</span> de <span id="totalNum">30</span></span>
+            <span class="progress-num" id="progressScore">0%</span>
+        </div>
+
+        <div class="question-box" id="questionBox">
+            <div class="q-type" id="qType">Tipo A</div>
+            <div class="q-text" id="qText">Cargando pregunta...</div>
+            <div class="options" id="optionsContainer"></div>
+            <div class="feedback" id="feedback">
+                <div id="feedbackHeader"></div>
+                <div class="justification" id="justificationText"></div>
+                <div class="distractors" id="distractorsText"></div>
+                <div class="ref" id="refText"></div>
+            </div>
+        </div>
+
+        <div class="nav-buttons">
+            <div class="nav-left">
+                <button id="prevBtn" disabled>◀ Anterior</button>
+                <button id="resetBtn">⟳ Reiniciar</button>
+            </div>
+            <div class="nav-right">
+                <button id="checkBtn" class="btn-check">✔ Verificar</button>
+                <button id="nextBtn" class="btn-primary">Siguiente ▶</button>
+            </div>
+        </div>
+
+        <div id="resultContainer" style="display:none;" class="result-final">
+            🎯 Has completado la autoevaluación.<br>
+            <span id="finalScore">0%</span> de aciertos.
+        </div>
+    </div>
+
+    <script>
+        // --------------------------------------------------------------
+        //  BASE DE DATOS DE PREGUNTAS (30 preguntas) - Páginas 1-19
+        // --------------------------------------------------------------
+        const questions = [
+            // 1. Definición de cuadro estadístico (tipo c)
+            {
+                id: 1,
+                tipo: 'c',
+                pregunta: 'Un cuadro estadístico, también denominado tabulado o tabulación, es una presentación ordenada de un conjunto de datos ________, ya sea en una sola columna o en un solo renglón o, también, en columnas o renglones cruzados.',
+                opciones: [
+                    'cuantitativos',
+                    'cualitativos',
+                    'descriptivos',
+                    'numéricos y alfabéticos'
+                ],
+                respuesta: 0,
+                justificacion: 'La definición textual en la página 9: "Un cuadro estadístico, también denominado tabulado o tabulación, es una presentación ordenada de un conjunto de datos cuantitativos..."',
+                distractores: 'Las otras opciones: cualitativos (no se ajusta), descriptivos (no es el término usado), numéricos y alfabéticos (no es exacto).',
+                ref: 'Página 9'
+            },
+            // 2. Componentes de un cuadro (tipo b - relación)
+            {
+                id: 2,
+                tipo: 'b',
+                pregunta: 'Relacione los componentes de un cuadro con su función (pág. 9-10).\nComponentes: 1) Título, 2) Columna matriz, 3) Matriz de cifras, 4) Pie de cuadro.\nFunciones: a) Espacio destinado a los valores cuantitativos o símbolos, b) Enuncia las categorías, variables o clasificaciones según su agrupamiento en renglones, c) Describe el contenido con enunciado, cobertura, referencia y unidad, d) Precisiones conceptuales, técnicas o metodológicas.',
+                opciones: [
+                    '1-c, 2-b, 3-a, 4-d',
+                    '1-b, 2-a, 3-d, 4-c',
+                    '1-a, 2-d, 3-b, 4-c',
+                    '1-d, 2-c, 3-a, 4-b'
+                ],
+                respuesta: 0,
+                justificacion: 'Según la página 9-10: Título describe el contenido; Columna matriz enuncia las categorías en renglones; Matriz de cifras es el espacio para valores; Pie de cuadro contiene precisiones conceptuales.',
+                distractores: 'Las otras combinaciones asignan funciones incorrectas a cada componente.',
+                ref: 'Páginas 9-10'
+            },
+            // 3. Componentes NO incluido (tipo a)
+            {
+                id: 3,
+                tipo: 'a',
+                pregunta: '¿Cuál de los siguientes NO es un componente de un cuadro estadístico según el documento?',
+                opciones: [
+                    'Título',
+                    'Columna matriz',
+                    'Leyenda',
+                    'Indicaciones de orden'
+                ],
+                respuesta: 2,
+                justificacion: 'Los componentes listados en la página 9 son: Título, Columna matriz, Encabezado en columnas de la matriz de cifras, Matriz de cifras, Pie de cuadro e Indicaciones de orden. La leyenda es un componente de las gráficas, no de los cuadros.',
+                distractores: 'Título, Columna matriz e Indicaciones de orden son componentes explícitos.',
+                ref: 'Página 9'
+            },
+            // 4. Elementos del título (tipo b)
+            {
+                id: 4,
+                tipo: 'b',
+                pregunta: 'Relacione los elementos que componen el título de un cuadro con su descripción (pág. 10).\nElementos: 1) Enunciado, 2) Cobertura geográfica, 3) Referencia temporal, 4) Unidad de medida.\nDescripciones: a) Indica la fecha o periodo al que se refieren los datos, b) Expresa el nombre de las categorías, indicadores o variables, c) Indica la referencia de una magnitud constante adoptada, d) Indica el espacio territorial al que se refiere el conjunto de datos.',
+                opciones: [
+                    '1-b, 2-d, 3-a, 4-c',
+                    '1-a, 2-c, 3-b, 4-d',
+                    '1-c, 2-a, 3-d, 4-b',
+                    '1-d, 2-b, 3-c, 4-a'
+                ],
+                respuesta: 0,
+                justificacion: 'Según la página 10: Enunciado expresa el nombre; Cobertura geográfica indica el espacio territorial; Referencia temporal indica la fecha o periodo; Unidad de medida indica la magnitud constante.',
+                distractores: 'Las otras opciones invierten las definiciones correctas.',
+                ref: 'Página 10'
+            },
+            // 5. Consideración general sobre lenguaje (tipo a)
+            {
+                id: 5,
+                tipo: 'a',
+                pregunta: 'Según las consideraciones generales, ¿qué se recomienda respecto al lenguaje en los cuadros?',
+                opciones: [
+                    'Utilizar un lenguaje técnico especializado.',
+                    'Utilizar un lenguaje preciso y claro en todos los enunciados.',
+                    'Utilizar abreviaturas para ahorrar espacio.',
+                    'Utilizar mayúsculas en todas las palabras.'
+                ],
+                respuesta: 1,
+                justificacion: 'La recomendación 1.2.1.1 dice: "Utilizar un lenguaje preciso y claro en todos los enunciados que describen los títulos, descriptores de columna y renglón, notas, llamadas y fuentes."',
+                distractores: 'Lenguaje técnico no es lo mismo que preciso y claro; se debe evitar abreviaturas; el uso de mayúsculas solo en iniciales.',
+                ref: 'Página 11'
+            },
+            // 6. Uso de mayúsculas en títulos (tipo a)
+            {
+                id: 6,
+                tipo: 'a',
+                pregunta: 'De acuerdo con la recomendación 1.2.1.2, ¿cómo deben escribirse los textos en los diversos componentes del cuadro?',
+                opciones: [
+                    'Con mayúsculas sostenidas en todos los enunciados.',
+                    'Con mayúsculas y minúsculas, reservando la mayúscula a la inicial del enunciado y a los nombres propios.',
+                    'Con todas las letras en minúscula.',
+                    'Con la primera letra de cada palabra en mayúscula.'
+                ],
+                respuesta: 1,
+                justificacion: 'El punto 1.2.1.2 establece: "Escribir los textos con mayúsculas y minúsculas en los diversos componentes del cuadro... El uso de mayúsculas en estos elementos estará reservada a la inicial del enunciado y a los nombres propios."',
+                distractores: 'Mayúsculas sostenidas no es correcto; todas minúsculas o primera de cada palabra no es lo indicado.',
+                ref: 'Página 11'
+            },
+            // 7. Recomendación sobre número de variables (tipo a)
+            {
+                id: 7,
+                tipo: 'a',
+                pregunta: 'Según la recomendación 1.2.1.3, ¿qué se debe evitar al diseñar un cuadro?',
+                opciones: [
+                    'Utilizar más de tres variables en un mismo cuadro.',
+                    'Incluir notas a pie de cuadro.',
+                    'Usar siglas y acrónimos.',
+                    'Ordenar los conceptos en columnas.'
+                ],
+                respuesta: 0,
+                justificacion: 'El punto 1.2.1.3 dice: "Se recomienda, además, que en un cuadro no se cruce la información de más de tres variables."',
+                distractores: 'Las notas, siglas y ordenamiento son permitidos o recomendados en otros puntos.',
+                ref: 'Página 11'
+            },
+            // 8. Componentes mínimos a incluir (tipo c)
+            {
+                id: 8,
+                tipo: 'c',
+                pregunta: 'Según la recomendación 1.2.1.5, como mínimo se deben incluir cinco componentes del cuadro: Título, Columna matriz, Encabezado de la matriz de cifras, Matriz de cifras y ________.',
+                opciones: [
+                    'Fuente',
+                    'Nota',
+                    'Llamadas',
+                    'Indicaciones de orden'
+                ],
+                respuesta: 0,
+                justificacion: 'El punto 1.2.1.5 indica: "Incluir, como mínimo, los siguientes cinco componentes del cuadro estadístico: • Título. • Columna matriz. • Encabezado de la matriz de cifras. • Matriz de cifras • Fuente."',
+                distractores: 'Nota, llamadas e indicaciones de orden son opcionales o adicionales.',
+                ref: 'Página 11'
+            },
+            // 9. Uso de abreviaturas (tipo a)
+            {
+                id: 9,
+                tipo: 'a',
+                pregunta: '¿Qué se recomienda sobre el uso de abreviaturas en los cuadros?',
+                opciones: [
+                    'Usarlas siempre que sea posible para ahorrar espacio.',
+                    'Evitar su uso.',
+                    'Usarlas solo en las notas.',
+                    'Usarlas solo en los títulos.'
+                ],
+                respuesta: 1,
+                justificacion: 'El punto 1.2.1.6 dice: "Evitar el uso de abreviaturas."',
+                distractores: 'Las otras opciones contradicen la recomendación directa.',
+                ref: 'Página 11'
+            },
+            // 10. Siglas y acrónimos (tipo a)
+            {
+                id: 10,
+                tipo: 'a',
+                pregunta: 'Según la recomendación 1.2.1.7, ¿cómo deben escribirse las siglas y acrónimos?',
+                opciones: [
+                    'En mayúsculas y con puntos intermedios.',
+                    'En mayúsculas y sin puntos intermedios.',
+                    'En minúsculas y con puntos intermedios.',
+                    'En mayúsculas solo la primera letra.'
+                ],
+                respuesta: 1,
+                justificacion: 'El punto 1.2.1.7: "Las siglas y acrónimos deben ir en mayúsculas y sin puntos intermedios."',
+                distractores: 'Las otras opciones no cumplen con lo especificado.',
+                ref: 'Página 11'
+            },
+            // 11. Clasificaciones cuantitativas (tipo a)
+            {
+                id: 11,
+                tipo: 'a',
+                pregunta: 'En clasificaciones cuantitativas, ¿qué se debe usar según la recomendación 1.2.1.8?',
+                opciones: [
+                    'Números romanos.',
+                    'Letras.',
+                    'Números arábigos.',
+                    'Símbolos especiales.'
+                ],
+                respuesta: 2,
+                justificacion: 'El punto 1.2.1.8 dice: "En clasificaciones cuantitativas, usar números y no letras." (se refiere a números arábigos).',
+                distractores: 'Números romanos, letras o símbolos no son lo indicado.',
+                ref: 'Página 11'
+            },
+            // 12. Límites de intervalo (tipo c)
+            {
+                id: 12,
+                tipo: 'c',
+                pregunta: 'Los límites del intervalo en las clasificaciones cuantitativas deben unirse con la preposición ________.',
+                opciones: [
+                    'a',
+                    'y',
+                    'entre',
+                    'desde'
+                ],
+                respuesta: 0,
+                justificacion: 'El punto 1.2.1.9: "Los límites del intervalo en las clasificaciones cuantitativas deben unirse con la preposición “a”."',
+                distractores: 'Las otras preposiciones no son las indicadas.',
+                ref: 'Página 11'
+            },
+            // 13. Ubicación del título (tipo a)
+            {
+                id: 13,
+                tipo: 'a',
+                pregunta: 'Según la recomendación 1.2.2.1, ¿dónde debe ubicarse el título de un cuadro?',
+                opciones: [
+                    'En la parte inferior del cuadro, centrado.',
+                    'En la parte superior del cuadro, alineado a la izquierda.',
+                    'En la parte superior del cuadro, alineado a la derecha.',
+                    'En la parte inferior del cuadro, alineado a la izquierda.'
+                ],
+                respuesta: 1,
+                justificacion: 'El punto 1.2.2.1: "El título debe ubicarse en la parte superior del cuadro, alineado a la izquierda."',
+                distractores: 'Las otras opciones indican ubicaciones o alineaciones incorrectas.',
+                ref: 'Página 12'
+            },
+            // 14. Estructura de título con clasificaciones cruzadas (tipo a)
+            {
+                id: 14,
+                tipo: 'a',
+                pregunta: 'En caso de clasificaciones cruzadas, ¿cómo se recomienda enunciar el título?',
+                opciones: [
+                    'Primero la variable de columnas, luego "según" y la variable de renglones.',
+                    'Primero la categoría, luego "por" con las variables de renglones y "según" con las de columnas.',
+                    'Primero la variable de renglones, luego "por" y la de columnas.',
+                    'Sin preposiciones, solo enumerar las variables.'
+                ],
+                respuesta: 1,
+                justificacion: 'El punto 1.2.2.4 indica: "...se recomienda enunciar primero el nombre de la categoría, seguido de la preposición “por” y del nombre de las variables correspondientes a los renglones; después, los nombres de las variables correspondientes a las columnas, anteponiendo a ellas la preposición “según”."',
+                distractores: 'Las otras opciones no siguen el orden y las preposiciones recomendadas.',
+                ref: 'Página 13'
+            },
+            // 15. Cobertura geográfica en el título (tipo a)
+            {
+                id: 15,
+                tipo: 'a',
+                pregunta: 'Según el punto 1.2.2.15, ¿cuándo se omite la cobertura geográfica en el título?',
+                opciones: [
+                    'Cuando todos los cuadros tengan la misma cobertura geográfica y se especifique en el título del documento.',
+                    'Cuando la cobertura es nacional.',
+                    'Cuando la cobertura es estatal.',
+                    'Siempre que se incluya en la fuente.'
+                ],
+                respuesta: 0,
+                justificacion: 'El punto 1.2.2.15: "La cobertura geográfica se puede indicar bajo distintas formas y se omite cuando todos los cuadros de un documento tengan la misma cobertura geográfica y se especifique en el título del mismo."',
+                distractores: 'Las otras opciones no son las condiciones para omitirla.',
+                ref: 'Página 17'
+            },
+            // 16. Referencia temporal para años (tipo a)
+            {
+                id: 16,
+                tipo: 'a',
+                pregunta: 'Según la recomendación 1.2.2.18, ¿cómo se deben anotar los años?',
+                opciones: [
+                    'Con número y a dos dígitos.',
+                    'Con número y a cuatro dígitos.',
+                    'Con letras.',
+                    'Con números romanos.'
+                ],
+                respuesta: 1,
+                justificacion: 'El punto 1.2.2.18: "Los años se anotan con número y a cuatro dígitos."',
+                distractores: 'Las otras opciones no cumplen con lo especificado.',
+                ref: 'Página 18'
+            },
+            // 17. Formato de fecha (tipo c)
+            {
+                id: 17,
+                tipo: 'c',
+                pregunta: 'Las fechas se indican con la expresión: ________ de ________ de ________ (Día) (Nombre del mes) (Año correspondiente).',
+                opciones: [
+                    'Al',
+                    'El',
+                    'En',
+                    'A'
+                ],
+                respuesta: 0,
+                justificacion: 'El punto 1.2.2.19 dice: "Las fechas se indican con la expresión: Al de de (Día) (Nombre del mes) (Año correspondiente)"',
+                distractores: 'Las otras preposiciones no son las indicadas.',
+                ref: 'Página 18'
+            },
+            // 18. Unidad de medida: cuándo indicar (tipo a)
+            {
+                id: 18,
+                tipo: 'a',
+                pregunta: 'Según el punto 1.2.2.22, ¿cuándo debe indicarse la unidad de medida en el título?',
+                opciones: [
+                    'Siempre.',
+                    'Cuando se refiera a todos los datos del cuadro y no quede explícita en el enunciado de las categorías.',
+                    'Nunca, se indica en la matriz de cifras.',
+                    'Solo cuando sea porcentaje.'
+                ],
+                respuesta: 1,
+                justificacion: 'El punto 1.2.2.22: "La unidad de medida debe indicarse en el título siempre que se refiera a todos los datos del cuadro y no quede suficientemente explícita en el enunciado de las categorías o indicadores."',
+                distractores: 'Las otras opciones no reflejan la condición.',
+                ref: 'Página 20'
+            },
+            // 19. Columna matriz: partes (tipo b)
+            {
+                id: 19,
+                tipo: 'b',
+                pregunta: 'La columna matriz consta de dos partes: (pág. 10 y 21).\nPartes: 1) Encabezado de la columna matriz, 2) Descriptores de renglón.\nDefiniciones: a) Enuncian los conceptos a los que se refieren los datos de cada renglón, b) Enuncia las categorías, variables o indicadores que aparecen en los descriptores de renglón.',
+                opciones: [
+                    '1-b, 2-a',
+                    '1-a, 2-b',
+                    '1-b, 2-b',
+                    '1-a, 2-a'
+                ],
+                respuesta: 0,
+                justificacion: 'En la página 10: "B1 Encabezado de la columna matriz. Enuncia las categorías, variables o indicadores que aparecen en los descriptores de renglón." y "B2 Descriptores de renglón. Enuncian los conceptos a los que se refieren los datos de cada renglón."',
+                distractores: 'Las otras opciones invierten las definiciones.',
+                ref: 'Página 10 y 21'
+            },
+            // 20. Encabezado de columna matriz: alineación (tipo a)
+            {
+                id: 20,
+                tipo: 'a',
+                pregunta: 'Según el punto 1.2.3.1, ¿cómo debe ir el enunciado del encabezado de la columna matriz?',
+                opciones: [
+                    'Alineado a la derecha y en negritas.',
+                    'Alineado a la izquierda y en negritas.',
+                    'Centrado y en cursivas.',
+                    'Alineado a la izquierda y en cursivas.'
+                ],
+                respuesta: 1,
+                justificacion: 'El punto 1.2.3.1: "El enunciado del encabezado de la columna matriz debe ir en bold y estar alineado a la izquierda..."',
+                distractores: 'Las otras opciones indican alineación o estilo incorrectos.',
+                ref: 'Página 21'
+            },
+            // 21. Pie de cuadro: definición de nota (tipo a)
+            {
+                id: 21,
+                tipo: 'a',
+                pregunta: '¿Cuál es la función de la "Nota" en el pie de cuadro?',
+                opciones: [
+                    'Proporcionar información específica sobre un elemento particular.',
+                    'Indicar la procedencia de la información.',
+                    'Proporcionar información general sobre definiciones o referencias técnicas o metodológicas de los datos.',
+                    'Señalar la condición de estimada o preliminar de las cifras.'
+                ],
+                respuesta: 2,
+                justificacion: 'Según la página 10: "E1 Nota. Información general sobre definiciones o referencias técnicas o metodológicas de los datos estadísticos presentados en cada cuadro."',
+                distractores: 'Las llamadas son para información específica; la fuente indica procedencia; los símbolos indican condición.',
+                ref: 'Página 10'
+            },
+            // 22. Llamadas: propósito (tipo a)
+            {
+                id: 22,
+                tipo: 'a',
+                pregunta: '¿Para qué se utilizan las llamadas en un cuadro?',
+                opciones: [
+                    'Para aclaraciones conceptuales o numéricas sobre elementos específicos del cuadro.',
+                    'Para dar información general sobre metodología.',
+                    'Para citar la fuente de los datos.',
+                    'Para indicar el número de cuadro.'
+                ],
+                respuesta: 0,
+                justificacion: 'La página 10 define llamadas como: "Información específica aplicable a determinada parte o elemento del cuadro." y el punto 1.2.6.6 dice: "Se utilizan para aclaraciones conceptuales o numéricas sobre elementos específicos del cuadro."',
+                distractores: 'Las otras opciones corresponden a nota, fuente o indicaciones de orden.',
+                ref: 'Página 10 y 28'
+            },
+            // 23. Símbolos aclaratorios (tipo a)
+            {
+                id: 23,
+                tipo: 'a',
+                pregunta: '¿Qué son los símbolos aclaratorios en un cuadro?',
+                opciones: [
+                    'Signos convencionales que se indican mediante una letra o abreviatura en el contexto del cuadro.',
+                    'Las notas al pie de página.',
+                    'Los números de las columnas.',
+                    'Las siglas de las instituciones.'
+                ],
+                respuesta: 0,
+                justificacion: 'En la página 10: "E3 Símbolos aclaratorios. Son todos los signos convencionales que se indican mediante una letra o una abreviatura en el contexto del cuadro estadístico."',
+                distractores: 'Notas, números de columnas y siglas tienen definiciones distintas.',
+                ref: 'Página 10'
+            },
+            // 24. Fuentes: qué indican (tipo a)
+            {
+                id: 24,
+                tipo: 'a',
+                pregunta: '¿Qué indica la "Fuente" en un cuadro?',
+                opciones: [
+                    'La procedencia de la información contenida.',
+                    'Las definiciones conceptuales.',
+                    'Las aclaraciones metodológicas.',
+                    'El número de cuadro.'
+                ],
+                respuesta: 0,
+                justificacion: 'La página 10: "E4 Fuentes. Indica la procedencia de la información contenida en el cuadro estadístico."',
+                distractores: 'Las otras opciones son funciones de otros componentes.',
+                ref: 'Página 10'
+            },
+            // 25. Indicaciones de orden: número de cuadro (tipo a)
+            {
+                id: 25,
+                tipo: 'a',
+                pregunta: '¿Cómo debe anotarse el número de cuadro según la recomendación 1.2.8.1?',
+                opciones: [
+                    'Con numeración romana, antecedido por la palabra "Cuadro".',
+                    'Con numeración arábiga, antecedido por la palabra "Cuadro".',
+                    'Con numeración arábiga, antecedido por la palabra "Número".',
+                    'Con numeración romana, antecedido por la palabra "Número".'
+                ],
+                respuesta: 1,
+                justificacion: 'El punto 1.2.8.1: "Debe anotarse con numeración arábiga, antecedido por la palabra “Cuadro”. En ningún caso se debe anteponer la palabra “número”."',
+                distractores: 'Las otras opciones usan numeración romana o la palabra "número".',
+                ref: 'Página 36'
+            },
+            // 26. Ubicación del número de cuadro (tipo a)
+            {
+                id: 26,
+                tipo: 'a',
+                pregunta: 'Según el punto 1.2.8.2, ¿dónde se ubica el número de cuadro?',
+                opciones: [
+                    'En la parte superior izquierda, alineado a la izquierda.',
+                    'En la parte superior derecha, alineado al margen derecho.',
+                    'En la parte inferior centrado.',
+                    'En la parte superior centrado.'
+                ],
+                respuesta: 1,
+                justificacion: 'El punto 1.2.8.2: "Ubicar en la parte superior del cuadro al nivel de la primera línea del título, alineado al margen derecho..."',
+                distractores: 'Las otras ubicaciones y alineaciones no son las indicadas.',
+                ref: 'Página 36'
+            },
+            // 27. Continuidad vertical (tipo a)
+            {
+                id: 27,
+                tipo: 'a',
+                pregunta: 'En cuadros que se fraccionan en sentido vertical, ¿qué se anota en la parte inferior de la columna matriz?',
+                opciones: [
+                    'La palabra "Continúa" entre paréntesis.',
+                    'La palabra "Sigue" en cursivas.',
+                    'El número de parte.',
+                    'La palabra "Fin".'
+                ],
+                respuesta: 0,
+                justificacion: 'El punto 1.2.8.6: "...anotar en la parte inferior de la columna matriz la palabra “Continúa” entre paréntesis..."',
+                distractores: 'Las otras opciones no son las indicadas para continuidad vertical.',
+                ref: 'Página 37'
+            },
+            // 28. Consideración sobre nombres de entidades (tipo a)
+            {
+                id: 28,
+                tipo: 'a',
+                pregunta: 'Según la recomendación 1.2.1.10, ¿cómo debe citarse el país en los cuadros?',
+                opciones: [
+                    'México.',
+                    'Estados Unidos Mexicanos.',
+                    'República Mexicana.',
+                    'Nación Mexicana.'
+                ],
+                respuesta: 1,
+                justificacion: 'El punto 1.2.1.10: "Cuando se haga referencia al país, debe citarse como Estados Unidos Mexicanos."',
+                distractores: 'Las otras formas no son las oficiales indicadas.',
+                ref: 'Página 11'
+            },
+            // 29. Enunciado de la variable en singular (tipo a)
+            {
+                id: 29,
+                tipo: 'a',
+                pregunta: 'Según el punto 1.2.2.12, ¿cómo deben enunciarse las variables en el título?',
+                opciones: [
+                    'En plural.',
+                    'En singular.',
+                    'En mayúsculas.',
+                    'Con la primera letra mayúscula.'
+                ],
+                respuesta: 1,
+                justificacion: 'El punto 1.2.2.12: "Enunciar las variables en singular."',
+                distractores: 'Las otras opciones no son lo indicado.',
+                ref: 'Página 16'
+            },
+            // 30. Indicaciones de orden y continuidad horizontal (tipo c)
+            {
+                id: 30,
+                tipo: 'c',
+                pregunta: 'Para cuadros que se fraccionan en sentido horizontal, se anota el número ordinal y la palabra "parte" en minúsculas, y se ubica en el lado derecho, entre paréntesis, abajo de la especificación del número de cuadro y ________.',
+                opciones: [
+                    'alineado a la izquierda',
+                    'alineado a la derecha',
+                    'centrado',
+                    'en la parte inferior'
+                ],
+                respuesta: 1,
+                justificacion: 'El punto 1.2.8.7: "...ubicarlo en el lado derecho, entre paréntesis, abajo de la especificación del número de cuadro y alineado a la derecha."',
+                distractores: 'Las otras alineaciones no son las indicadas.',
+                ref: 'Página 39'
+            }
+        ];
+
+        // --------------------------------------------------------------
+        //  LÓGICA DE LA APLICACIÓN
+        // --------------------------------------------------------------
+        let currentIndex = 0;
+        let answers = new Array(questions.length).fill(null);
+        let verified = new Array(questions.length).fill(false);
+        let selectedOptionIndex = null;
+
+        const qTypeEl = document.getElementById('qType');
+        const qTextEl = document.getElementById('qText');
+        const optionsContainer = document.getElementById('optionsContainer');
+        const feedbackEl = document.getElementById('feedback');
+        const feedbackHeader = document.getElementById('feedbackHeader');
+        const justificationText = document.getElementById('justificationText');
+        const distractorsText = document.getElementById('distractorsText');
+        const refText = document.getElementById('refText');
+        const currentNum = document.getElementById('currentNum');
+        const totalNum = document.getElementById('totalNum');
+        const progressScore = document.getElementById('progressScore');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const checkBtn = document.getElementById('checkBtn');
+        const resetBtn = document.getElementById('resetBtn');
+        const resultContainer = document.getElementById('resultContainer');
+        const finalScore = document.getElementById('finalScore');
+
+        totalNum.textContent = questions.length;
+
+        function shuffleArray(arr) {
+            for (let i = arr.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+            return arr;
+        }
+
+        // Barajar opciones para cada pregunta
+        const shuffledData = questions.map(q => {
+            const opts = q.opciones.map((text, idx) => ({ text, idx }));
+            const shuffled = shuffleArray([...opts]);
+            const newOptions = shuffled.map(item => item.text);
+            const newAnswerIndex = shuffled.findIndex(item => item.idx === q.respuesta);
+            return {
+                ...q,
+                opciones: newOptions,
+                respuesta: newAnswerIndex
+            };
+        });
+
+        function renderQuestion(index) {
+            const q = shuffledData[index];
+            qTypeEl.textContent = `Tipo ${q.tipo.toUpperCase()}`;
+            qTextEl.textContent = q.pregunta;
+            optionsContainer.innerHTML = '';
+            feedbackEl.classList.remove('show');
+
+            q.opciones.forEach((text, idx) => {
+                const div = document.createElement('div');
+                div.className = 'option';
+                const radio = document.createElement('input');
+                radio.type = 'radio';
+                radio.name = 'question';
+                radio.value = idx;
+                radio.id = `opt_${idx}`;
+                const label = document.createElement('label');
+                label.htmlFor = `opt_${idx}`;
+                label.textContent = text;
+                div.appendChild(radio);
+                div.appendChild(label);
+                optionsContainer.appendChild(div);
+
+                if (answers[index] === idx) {
+                    radio.checked = true;
+                }
+                if (verified[index]) {
+                    radio.disabled = true;
+                    div.classList.add('disabled');
+                    if (idx === q.respuesta) {
+                        div.classList.add('correct');
+                    } else if (answers[index] === idx && idx !== q.respuesta) {
+                        div.classList.add('incorrect');
+                    }
+                }
+
+                radio.addEventListener('change', (e) => {
+                    if (!verified[index]) {
+                        selectedOptionIndex = parseInt(e.target.value);
+                        answers[index] = selectedOptionIndex;
+                    }
+                });
+            });
+
+            if (verified[index]) {
+                showFeedback(index);
+            }
+
+            currentNum.textContent = index + 1;
+            updateProgress();
+
+            prevBtn.disabled = index === 0;
+            nextBtn.disabled = index === questions.length - 1;
+            checkBtn.disabled = verified[index];
+
+            resultContainer.style.display = 'none';
+        }
+
+        function showFeedback(index) {
+            const q = shuffledData[index];
+            const isCorrect = answers[index] === q.respuesta;
+            feedbackEl.classList.add('show');
+            feedbackHeader.innerHTML = isCorrect
+                ? '<span class="correct-badge">✅ Correcto</span>'
+                : '<span class="incorrect-badge">❌ Incorrecto</span>';
+            justificationText.textContent = '🔍 ' + q.justificacion;
+            distractorsText.textContent = '📌 Análisis de distractores: ' + q.distractores;
+            refText.textContent = '📖 Referencia: ' + q.ref;
+        }
+
+        function updateProgress() {
+            const answered = answers.filter(a => a !== null).length;
+            const pct = Math.round((answered / questions.length) * 100);
+            progressScore.textContent = pct + '%';
+        }
+
+        function checkAnswer() {
+            const index = currentIndex;
+            const q = shuffledData[index];
+            if (answers[index] === null || answers[index] === undefined) {
+                alert('Selecciona una opción antes de verificar.');
+                return;
+            }
+            verified[index] = true;
+            const options = document.querySelectorAll('.option');
+            options.forEach((div, idx) => {
+                const radio = div.querySelector('input[type="radio"]');
+                radio.disabled = true;
+                div.classList.add('disabled');
+                if (idx === q.respuesta) {
+                    div.classList.add('correct');
+                } else if (answers[index] === idx && idx !== q.respuesta) {
+                    div.classList.add('incorrect');
+                }
+            });
+            checkBtn.disabled = true;
+            showFeedback(index);
+            updateProgress();
+
+            if (verified.every(v => v === true)) {
+                showFinalResult();
+            }
+        }
+
+        function showFinalResult() {
+            const correctas = shuffledData.filter((q, idx) => answers[idx] === q.respuesta).length;
+            const total = questions.length;
+            const pct = Math.round((correctas / total) * 100);
+            finalScore.textContent = pct + '% (' + correctas + '/' + total + ')';
+            resultContainer.style.display = 'block';
+        }
+
+        function goTo(index) {
+            if (index < 0 || index >= questions.length) return;
+            currentIndex = index;
+            renderQuestion(index);
+        }
+
+        prevBtn.addEventListener('click', () => {
+            if (currentIndex > 0) goTo(currentIndex - 1);
+        });
+
+        nextBtn.addEventListener('click', () => {
+            if (currentIndex < questions.length - 1) goTo(currentIndex + 1);
+        });
+
+        checkBtn.addEventListener('click', checkAnswer);
+
+        resetBtn.addEventListener('click', () => {
+            if (confirm('¿Reiniciar todas las respuestas?')) {
+                answers.fill(null);
+                verified.fill(false);
+                resultContainer.style.display = 'none';
+                goTo(0);
+                updateProgress();
+                checkBtn.disabled = false;
+            }
+        });
+
+        renderQuestion(0);
+    </script>
+</body>
+</html>
