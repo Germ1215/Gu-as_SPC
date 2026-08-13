@@ -1,0 +1,1447 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guía de Estudio - Proceso Estándar para Encuestas por Muestreo</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f4f7fb;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+        .container {
+            max-width: 880px;
+            width: 100%;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+            padding: 30px 25px;
+            transition: all 0.2s;
+        }
+        h1 {
+            font-size: 1.8rem;
+            color: #0a2a44;
+            margin-bottom: 8px;
+            border-bottom: 3px solid #1e6f9f;
+            padding-bottom: 12px;
+        }
+        .subtitle {
+            color: #2c5282;
+            font-size: 0.95rem;
+            margin-bottom: 25px;
+            font-weight: 500;
+            background: #e8f0fe;
+            padding: 8px 14px;
+            border-radius: 30px;
+            display: inline-block;
+        }
+        .progress-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            background: #e9edf2;
+            border-radius: 40px;
+            padding: 6px 16px 6px 20px;
+        }
+        .progress-text {
+            font-weight: 600;
+            color: #1a3a5e;
+        }
+        .progress-num {
+            background: #1e6f9f;
+            color: white;
+            border-radius: 30px;
+            padding: 4px 16px;
+            font-size: 0.9rem;
+        }
+        .question-box {
+            background: #f9fcff;
+            border-radius: 14px;
+            padding: 22px 20px 18px;
+            border: 1px solid #dde7f0;
+            min-height: 200px;
+        }
+        .q-type {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #4a6a85;
+            background: #dce7f2;
+            display: inline-block;
+            padding: 2px 14px;
+            border-radius: 30px;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+        .q-text {
+            font-size: 1.2rem;
+            font-weight: 500;
+            color: #0b2a44;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin: 12px 0 18px;
+        }
+        .option {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            background: white;
+            border: 1.5px solid #d0dce8;
+            border-radius: 10px;
+            padding: 12px 16px;
+            cursor: pointer;
+            transition: border 0.2s, background 0.2s;
+        }
+        .option:hover {
+            border-color: #7fa3c7;
+            background: #f0f6fe;
+        }
+        .option input[type="radio"] {
+            margin-top: 3px;
+            accent-color: #1e6f9f;
+            width: 18px;
+            height: 18px;
+            flex-shrink: 0;
+        }
+        .option label {
+            font-size: 1rem;
+            color: #1a334a;
+            cursor: pointer;
+            line-height: 1.4;
+            width: 100%;
+        }
+        .option.correct {
+            border-color: #2b7a4b;
+            background: #e2f3e6;
+        }
+        .option.incorrect {
+            border-color: #b33c3c;
+            background: #fde8e8;
+        }
+        .option.disabled {
+            cursor: default;
+            opacity: 0.9;
+        }
+        .feedback {
+            margin-top: 20px;
+            background: #f0f4fa;
+            border-left: 5px solid #1e6f9f;
+            padding: 16px 20px;
+            border-radius: 8px;
+            display: none;
+        }
+        .feedback.show {
+            display: block;
+        }
+        .feedback .correct-badge {
+            color: #1a7a4a;
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+        .feedback .incorrect-badge {
+            color: #b33c3c;
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+        .feedback .justification {
+            margin-top: 10px;
+            font-weight: 500;
+            color: #003366;
+        }
+        .feedback .distractors {
+            margin-top: 8px;
+            color: #2c3e50;
+            font-size: 0.95rem;
+            background: #f5f8fc;
+            padding: 10px 14px;
+            border-radius: 6px;
+        }
+        .feedback .ref {
+            margin-top: 8px;
+            font-size: 0.85rem;
+            color: #3a5f7a;
+            font-style: italic;
+        }
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 28px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .nav-left, .nav-right {
+            display: flex;
+            gap: 10px;
+        }
+        button {
+            background: white;
+            border: 1.5px solid #b0c8dd;
+            padding: 10px 22px;
+            border-radius: 30px;
+            font-weight: 600;
+            color: #1a3a5e;
+            cursor: pointer;
+            transition: background 0.2s, border 0.2s;
+            font-size: 0.95rem;
+        }
+        button:hover:not(:disabled) {
+            background: #e1ecf5;
+            border-color: #7fa3c7;
+        }
+        button:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+        .btn-primary {
+            background: #1e6f9f;
+            border-color: #1e6f9f;
+            color: white;
+        }
+        .btn-primary:hover:not(:disabled) {
+            background: #155a83;
+            border-color: #155a83;
+        }
+        .btn-check {
+            background: #2b7a4b;
+            border-color: #2b7a4b;
+            color: white;
+        }
+        .btn-check:hover:not(:disabled) {
+            background: #1f5e3a;
+            border-color: #1f5e3a;
+        }
+        .result-final {
+            margin-top: 25px;
+            background: #e2edf7;
+            border-radius: 14px;
+            padding: 20px;
+            text-align: center;
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #0a2a44;
+        }
+        @media (max-width: 600px) {
+            .container { padding: 18px 14px; }
+            .q-text { font-size: 1rem; }
+            .nav-buttons { flex-direction: column; align-items: stretch; }
+            .nav-left, .nav-right { justify-content: center; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="app">
+        <h1>📊 Proceso Estándar para Encuestas por Muestreo</h1>
+        <div class="subtitle">Autoevaluación · 60 preguntas · INEGI 2010</div>
+
+        <div class="progress-bar">
+            <span class="progress-text">Pregunta <span id="currentNum">1</span> de <span id="totalNum">60</span></span>
+            <span class="progress-num" id="progressScore">0%</span>
+        </div>
+
+        <div class="question-box" id="questionBox">
+            <div class="q-type" id="qType">Tipo A</div>
+            <div class="q-text" id="qText">Cargando pregunta...</div>
+            <div class="options" id="optionsContainer"></div>
+            <div class="feedback" id="feedback">
+                <div id="feedbackHeader"></div>
+                <div class="justification" id="justificationText"></div>
+                <div class="distractors" id="distractorsText"></div>
+                <div class="ref" id="refText"></div>
+            </div>
+        </div>
+
+        <div class="nav-buttons">
+            <div class="nav-left">
+                <button id="prevBtn" disabled>◀ Anterior</button>
+                <button id="resetBtn">⟳ Reiniciar</button>
+            </div>
+            <div class="nav-right">
+                <button id="checkBtn" class="btn-check">✔ Verificar</button>
+                <button id="nextBtn" class="btn-primary">Siguiente ▶</button>
+            </div>
+        </div>
+
+        <div id="resultContainer" style="display:none;" class="result-final">
+            🎯 Has completado la autoevaluación.<br>
+            <span id="finalScore">0%</span> de aciertos.
+        </div>
+    </div>
+
+    <script>
+        // --------------------------------------------------------------
+        //  BASE DE DATOS DE PREGUNTAS (60 preguntas)
+        //  basadas en el documento "Proceso Estándar para Encuestas por Muestreo"
+        //  páginas 1-33, incluyendo fases, macroactividades y glosario.
+        // --------------------------------------------------------------
+        const questions = [
+            // 1. Definición de proyecto estadístico (glosario) - tipo c
+            {
+                id: 1,
+                tipo: 'c',
+                pregunta: 'Según el glosario, un proyecto estadístico es el "Conjunto de actividades ________ y relacionadas para producir o integrar información estadística".',
+                opciones: [
+                    'ordenadas',
+                    'secuenciales',
+                    'planificadas',
+                    'estandarizadas'
+                ],
+                respuesta: 0,
+                justificacion: 'El glosario define proyecto estadístico como "Conjunto de actividades ordenadas y relacionadas para producir o integrar información estadística" (pág. 32).',
+                distractores: 'Secuenciales, planificadas y estandarizadas no son los términos exactos usados en la definición.',
+                ref: 'Página 32'
+            },
+            // 2. Fases del proceso (tipo b - relación)
+            {
+                id: 2,
+                tipo: 'b',
+                pregunta: 'Relacione las fases del proceso estándar para encuestas por muestreo con su propósito general (págs. 8-10).\nFases: 1) Planeación, 2) Diseño conceptual, 3) Diseño de la muestra, 4) Captación.\nPropósitos: a) Definir los conceptos y diseñar los instrumentos de captación, b) Determinar el método de muestreo y tamaño de muestra, c) Definir objetivos, estrategia y presupuesto, d) Ejecutar el operativo de recolección de datos.',
+                opciones: [
+                    '1-c, 2-a, 3-b, 4-d',
+                    '1-a, 2-b, 3-c, 4-d',
+                    '1-b, 2-c, 3-d, 4-a',
+                    '1-d, 2-c, 3-a, 4-b'
+                ],
+                respuesta: 0,
+                justificacion: 'Según las páginas 8-10: Planeación define objetivos y estrategia; Diseño conceptual define conceptos e instrumentos; Diseño de la muestra determina método y tamaño; Captación ejecuta el operativo.',
+                distractores: 'Las otras opciones asignan propósitos incorrectos a cada fase.',
+                ref: 'Páginas 8-10'
+            },
+            // 3. Naturaleza de actividades en un proyecto (tipo a)
+            {
+                id: 3,
+                tipo: 'a',
+                pregunta: 'Según la descripción general del proceso, ¿qué tipos de actividades interactúan en la generación de estadísticas básicas?',
+                opciones: [
+                    'Actividades técnicas y administrativas.',
+                    'Actividades de campo y de oficina.',
+                    'Actividades de muestreo y de censo.',
+                    'Actividades de captación y procesamiento.'
+                ],
+                respuesta: 0,
+                justificacion: 'El documento indica: "La generación de estadísticas básicas implica el diseño y ejecución de proyectos donde interactúan actividades tanto de naturaleza técnica, propias del campo estadístico, como administrativas..." (pág. 7).',
+                distractores: 'Las otras opciones son subdivisiones o tipos específicos, pero no la categoría general mencionada.',
+                ref: 'Página 7'
+            },
+            // 4. Productos de la planeación (tipo a)
+            {
+                id: 4,
+                tipo: 'a',
+                pregunta: '¿Cuál de los siguientes NO es un producto típico de la fase de planeación?',
+                opciones: [
+                    'Definición de objetivos y estrategia general.',
+                    'Programa general de actividades.',
+                    'Marco conceptual.',
+                    'Presupuesto global.'
+                ],
+                respuesta: 2,
+                justificacion: 'El marco conceptual es un producto del diseño conceptual, no de la planeación. Los productos de la planeación incluyen objetivos, estrategia, programa, estructura organizativa y presupuesto (pág. 8).',
+                distractores: 'Los otros son productos de la planeación mencionados en la página 8.',
+                ref: 'Página 8'
+            },
+            // 5. Definición de objetivos y estrategia general - actividades (tipo c)
+            {
+                id: 5,
+                tipo: 'c',
+                pregunta: 'La macroactividad "Definición de objetivos y estrategia general" incluye la determinación del tipo de encuesta, la definición de la temática, el establecimiento de la cobertura y desglose geográfico y la definición de la ________.',
+                opciones: [
+                    'estrategia general',
+                    'muestra',
+                    'validación',
+                    'captación'
+                ],
+                respuesta: 0,
+                justificacion: 'La página 12 enumera las actividades de esta macroactividad: 1.1.1 Determinación del tipo de encuesta, 1.1.2 Definición de la temática, 1.1.3 Establecimiento de la cobertura y desglose geográfico, 1.1.4 Definición de la estrategia general.',
+                distractores: 'Muestra, validación y captación son fases posteriores.',
+                ref: 'Página 12'
+            },
+            // 6. Programa general de actividades (tipo a)
+            {
+                id: 6,
+                tipo: 'a',
+                pregunta: '¿Qué se incluye en el programa general de actividades según el documento?',
+                opciones: [
+                    'Solo el calendario de actividades.',
+                    'El conjunto de actividades, objetivos específicos, secuencia de operaciones y tiempo requerido para cada una.',
+                    'La estructura organizativa y los puestos.',
+                    'La estimación de costos y fuentes de financiamiento.'
+                ],
+                respuesta: 1,
+                justificacion: 'La página 13 describe: "Comprende el conjunto de actividades, los objetivos específicos, la secuencia de operaciones y el tiempo requerido para cada una de ellas."',
+                distractores: 'Las otras opciones corresponden a otras macroactividades (control, organización, presupuesto).',
+                ref: 'Página 13'
+            },
+            // 7. Determinación de la estructura de organización (tipo a)
+            {
+                id: 7,
+                tipo: 'a',
+                pregunta: '¿Cuál es el propósito de la determinación de la estructura de organización?',
+                opciones: [
+                    'Establecer las funciones a cubrir y la estructura organizativa para su atención.',
+                    'Definir los objetivos del proyecto.',
+                    'Calcular el tamaño de la muestra.',
+                    'Diseñar los instrumentos de captación.'
+                ],
+                respuesta: 0,
+                justificacion: 'La página 13 indica: "De acuerdo con las necesidades de diseño y ejecución de la encuesta, se establecerán las funciones a cubrirse, así como la estructura organizativa para su atención..."',
+                distractores: 'Las otras opciones corresponden a otras fases.',
+                ref: 'Página 13'
+            },
+            // 8. Presupuestación global (tipo c)
+            {
+                id: 8,
+                tipo: 'c',
+                pregunta: 'La presupuestación global incluye la estimación del costo de la encuesta por cada fase y tipo de recursos, las fuentes de financiamiento y el ________ del presupuesto de inicio a término del proyecto.',
+                opciones: [
+                    'ejercicio',
+                    'control',
+                    'seguimiento',
+                    'ajuste'
+                ],
+                respuesta: 0,
+                justificacion: 'La página 13 dice: "...la presupuestación global del proyecto, en la que se estima el costo de la encuesta por cada fase y tipo de recursos, las fuentes de financiamiento y el ejercicio del presupuesto de inicio a término del proyecto."',
+                distractores: 'Control, seguimiento y ajuste son actividades posteriores al ejercicio presupuestal.',
+                ref: 'Página 13'
+            },
+            // 9. Control administrativo - definición (tipo b - relación)
+            {
+                id: 9,
+                tipo: 'b',
+                pregunta: 'Relacione los conceptos de control con su definición según el glosario (págs. 35-37).\nConceptos: 1) Control administrativo, 2) Control de avance, 3) Control de calidad en el llenado del cuestionario, 4) Control del operativo.\nDefiniciones: a) Medición y análisis de resultados con relación a metas y tiempos programados. b) Aseguramiento de que las actividades se lleven a cabo en tiempos programados y con calidad esperada. c) Conjunto de procedimientos de registro, análisis y evaluación de actividades. d) Medición y análisis de los resultados en los cuestionarios aplicados, con base en criterios de validación.',
+                opciones: [
+                    '1-c, 2-a, 3-d, 4-b',
+                    '1-a, 2-b, 3-c, 4-d',
+                    '1-b, 2-d, 3-a, 4-c',
+                    '1-d, 2-c, 3-b, 4-a'
+                ],
+                respuesta: 0,
+                justificacion: 'Según el glosario: Control administrativo = procedimientos de registro, análisis y evaluación; Control de avance = medición con relación a metas y tiempos; Control de calidad en llenado = medición de resultados en cuestionarios; Control del operativo = aseguramiento de actividades en tiempos y calidad.',
+                distractores: 'Las otras combinaciones asignan definiciones incorrectas.',
+                ref: 'Páginas 35-37'
+            },
+            // 10. Diseño conceptual - actividades (tipo a)
+            {
+                id: 10,
+                tipo: 'a',
+                pregunta: '¿Cuál de las siguientes NO es una actividad de la fase de diseño conceptual?',
+                opciones: [
+                    'Identificación de necesidades e integración del marco conceptual.',
+                    'Diseño del esquema para la presentación de resultados.',
+                    'Determinación del método de muestreo.',
+                    'Diseño y prueba de instrumentos de captación.'
+                ],
+                respuesta: 2,
+                justificacion: 'La determinación del método de muestreo corresponde a la fase 3 (Diseño de la Muestra). Las otras son macroactividades de la fase 2 (págs. 15-18).',
+                distractores: 'Las otras tres son macroactividades del diseño conceptual.',
+                ref: 'Páginas 15-18'
+            },
+            // 11. Integración del marco conceptual (tipo c)
+            {
+                id: 11,
+                tipo: 'c',
+                pregunta: 'El marco conceptual incluye la definición de temas, categorías, variables y sus ________.',
+                opciones: [
+                    'clasificaciones',
+                    'indicadores',
+                    'relaciones',
+                    'códigos'
+                ],
+                respuesta: 0,
+                justificacion: 'La página 16 indica: "Los conceptos que serán incluidos en el marco conceptual son: Temas, Categorías, Variables, Clasificaciones."',
+                distractores: 'Indicadores, relaciones y códigos son elementos derivados o de otras fases.',
+                ref: 'Página 16'
+            },
+            // 12. Definición de conceptos e integración del glosario (tipo a)
+            {
+                id: 12,
+                tipo: 'a',
+                pregunta: '¿Cuál es la utilidad del glosario integrado en el marco conceptual?',
+                opciones: [
+                    'Apoyar el diseño de instrumentos de captación y el tratamiento de datos durante el procesamiento.',
+                    'Servir como lista de verificación para la muestra.',
+                    'Definir los criterios de validación.',
+                    'Establecer el presupuesto del proyecto.'
+                ],
+                respuesta: 0,
+                justificacion: 'La página 16 dice: "El marco conceptual y las definiciones de los conceptos involucrados se concentran en un documento que permitirá apoyar el proceso hasta su culminación. Es una herramienta útil tanto en el diseño de los instrumentos de captación como para el tratamiento de los datos durante su procesamiento..."',
+                distractores: 'Las otras opciones no son funciones del glosario.',
+                ref: 'Página 16'
+            },
+            // 13. Diseño del esquema para la presentación de resultados (tipo a)
+            {
+                id: 13,
+                tipo: 'a',
+                pregunta: '¿Qué se determina en la macroactividad "Diseño del esquema para la presentación de resultados"?',
+                opciones: [
+                    'Los contenidos, formas y medios de presentación de los resultados.',
+                    'Los criterios de validación de los datos.',
+                    'El tamaño de la muestra.',
+                    'Los instrumentos de captación.'
+                ],
+                respuesta: 0,
+                justificacion: 'La página 16 dice: "En esta macroactividad se determinan de manera general los contenidos, formas y medios en que se presentan los resultados..."',
+                distractores: 'Las otras opciones corresponden a otras macroactividades.',
+                ref: 'Página 16'
+            },
+            // 14. Diseño y prueba de instrumentos de captación (tipo b - relación)
+            {
+                id: 14,
+                tipo: 'b',
+                pregunta: 'Relacione las actividades del diseño y prueba de instrumentos de captación con su propósito (págs. 16-18).\nActividades: 1) Redacción de preguntas, 2) Ordenamiento de preguntas, 3) Determinación del tipo de formato, 4) Pruebas y ajustes.\nPropósitos: a) Decidir entre formato impreso o electrónico y sus características, b) Verificar la efectividad del instrumento en condiciones similares a las reales, c) Elaborar enunciados claros y directos para cada variable, d) Agrupar temáticamente y usar pases o saltos para facilitar el llenado.',
+                opciones: [
+                    '1-c, 2-d, 3-a, 4-b',
+                    '1-d, 2-c, 3-b, 4-a',
+                    '1-a, 2-b, 3-c, 4-d',
+                    '1-b, 2-a, 3-d, 4-c'
+                ],
+                respuesta: 0,
+                justificacion: 'Según las páginas 16-18: Redacción de preguntas = elaborar enunciados claros; Ordenamiento = agrupar temáticamente y usar pases; Determinación del tipo de formato = decidir entre impreso/electrónico; Pruebas = verificar efectividad en condiciones similares.',
+                distractores: 'Las otras combinaciones no corresponden a las descripciones.',
+                ref: 'Páginas 16-18'
+            },
+            // 15. Criterios de validación (tipo a)
+            {
+                id: 15,
+                tipo: 'a',
+                pregunta: '¿Qué se hace en la definición de criterios de validación?',
+                opciones: [
+                    'Identificar datos que cumplen con requisitos de congruencia lógica y aritmética, completez e integridad.',
+                    'Diseñar los instrumentos de captación.',
+                    'Calcular el tamaño de la muestra.',
+                    'Establecer el presupuesto.'
+                ],
+                respuesta: 0,
+                justificacion: 'La página 18 define: "Conjunto de actividades para identificar, en la información captada, los datos que cumplen con los requisitos de congruencia lógica y aritmética, completez e integridad..."',
+                distractores: 'Las otras opciones corresponden a otras fases.',
+                ref: 'Página 18'
+            },
+            // 16. Determinación del método de muestreo (tipo a)
+            {
+                id: 16,
+                tipo: 'a',
+                pregunta: '¿Qué se debe analizar para determinar el método de muestreo?',
+                opciones: [
+                    'La población objetivo y el tipo de datos a captar.',
+                    'Los objetivos del proyecto y la cobertura geográfica.',
+                    'Los recursos presupuestales disponibles.',
+                    'Los criterios de validación.'
+                ],
+                respuesta: 0,
+                justificacion: 'La página 19 dice: "Dependiendo de la población objetivo y tipo de datos a captarse, se establece la modalidad metodológica a aplicar y los procedimientos de selección."',
+                distractores: 'Los otros elementos son consideraciones para el diseño de la muestra, pero la base es la población y tipo de datos.',
+                ref: 'Página 19'
+            },
+            // 17. Muestreo probabilístico vs no probabilístico (tipo a)
+            {
+                id: 17,
+                tipo: 'a',
+                pregunta: '¿Cuál es la principal diferencia entre el muestreo probabilístico y el no probabilístico?',
+                opciones: [
+                    'En el probabilístico se conoce la probabilidad de selección y la precisión de las estimaciones; en el no probabilístico no se conoce.',
+                    'El probabilístico usa marcos muestrales, el no probabilístico no.',
+                    'El probabilístico es más caro que el no probabilístico.',
+                    'El no probabilístico siempre es más preciso.'
+                ],
+                respuesta: 0,
+                justificacion: 'La página 19 indica: "En el muestreo probabilístico se conoce la probabilidad de selección de cada una de las unidades de muestra, y por lo tanto la precisión de las estimaciones;... en el muestreo no probabilístico no se puede conocer la precisión en las estimaciones."',
+                distractores: 'Las otras opciones no son diferencias fundamentales establecidas en el texto.',
+                ref: 'Página 19'
+            },
+            // 18. Preparación del marco muestral (tipo c)
+            {
+                id: 18,
+                tipo: 'c',
+                pregunta: 'La preparación del marco muestral se aplica para esquemas de muestreo ________ y requiere que el marco esté actualizado y cubra totalmente a la población objetivo.',
+                opciones: [
+                    'probabilístico',
+                    'no probabilístico',
+                    'mixto',
+                    'por conglomerados'
+                ],
+                respuesta: 0,
+                justificacion: 'La página 19 dice: "Se aplica para esquemas de muestreo probabilístico, mediante la integración de los materiales físicos como cartografía, directorios o listados..."',
+                distractores: 'No probabilístico y mixto no requieren marco muestral en el mismo sentido; por conglomerados es un tipo dentro del probabilístico.',
+                ref: 'Página 19'
+            },
+            // 19. Cálculo del tamaño de la muestra (tipo b - relación)
+            {
+                id: 19,
+                tipo: 'b',
+                pregunta: 'Relacione los elementos considerados para el cálculo del tamaño de la muestra según el tipo de muestreo (págs. 19-20).\nTipo: 1) Muestreo probabilístico, 2) Muestreo no probabilístico.\nElementos: a) Variabilidad de los datos, precisión requerida, nivel de confianza, tasa de no respuesta, b) Conceptos a recabar, objetivos de cobertura y criterios especiales.',
+                opciones: [
+                    '1-a, 2-b',
+                    '1-b, 2-a',
+                    '1-a, 2-a',
+                    '1-b, 2-b'
+                ],
+                respuesta: 0,
+                justificacion: 'En la página 20: para probabilístico se consideran variabilidad, precisión, confianza, tasa de no respuesta; para no probabilístico se consideran conceptos, cobertura y criterios especiales.',
+                distractores: 'Las otras opciones invierten o mezclan los elementos.',
+                ref: 'Página 20'
+            },
+            // 20. Factores de expansión (tipo a)
+            {
+                id: 20,
+                tipo: 'a',
+                pregunta: '¿Qué son los factores de expansión en el muestreo probabilístico?',
+                opciones: [
+                    'El inverso de la probabilidad de selección de la muestra.',
+                    'El tamaño de la muestra dividido por la población.',
+                    'El coeficiente de variación de los estimadores.',
+                    'El margen de error aceptable.'
+                ],
+                respuesta: 0,
+                justificacion: 'La página 20 define: "factores de expansión, definidos como el inverso de la probabilidad de selección de la muestra."',
+                distractores: 'Las otras opciones son conceptos diferentes (tamaño, variación, error).',
+                ref: 'Página 20'
+            },
+            // 21. Diseño de estimadores (tipo a)
+            {
+                id: 21,
+                tipo: 'a',
+                pregunta: '¿Para qué sirve el diseño de estimadores?',
+                opciones: [
+                    'Para calcular estimadores y sus indicadores de precisión durante el procesamiento.',
+                    'Para seleccionar la muestra.',
+                    'Para validar los datos.',
+                    'Para definir la estrategia operativa.'
+                ],
+                respuesta: 0,
+                justificacion: 'La página 20 indica: "Se definen y ajustan... las expresiones matemáticas que se aplicarán durante el procesamiento para el cálculo de estimadores y sus respectivos indicadores de precisión..."',
+                distractores: 'Las otras opciones corresponden a otras fases.',
+                ref: 'Página 20'
+            },
+            // 22. Diseño de la estrategia operativa (tipo a)
+            {
+                id: 22,
+                tipo: 'a',
+                pregunta: '¿Qué se establece en el diseño de la estrategia operativa?',
+                opciones: [
+                    'Procedimientos para captar los datos y los instrumentos para cuantificar avance y cumplimiento.',
+                    'La estrategia de comunicación y concertación.',
+                    'Los procedimientos de validación.',
+                    'El programa de productos.'
+                ],
+                respuesta: 0,
+                justificacion: 'La página 21 dice: "En esta macroactividad se establecen los conjuntos ordenados e integrados de procedimientos para captar los datos. Además se definen los instrumentos necesarios que permitan cuantificar el avance y cumplimiento de las metas..."',
+                distractores: 'Las otras opciones corresponden a otras macroactividades.',
+                ref: 'Página 21'
+            },
+            // 23. Determinación de la estructura operativa (tipo c)
+            {
+                id: 23,
+                tipo: 'c',
+                pregunta: 'La determinación de la estructura operativa incluye la identificación de necesidades de recursos humanos, considerando funciones, responsabilidades, tramos de control por puesto y su representación en un ________.',
+                opciones: [
+                    'organigrama',
+                    'manual',
+                    'calendario',
+                    'presupuesto'
+                ],
+                respuesta: 0,
+                justificacion: 'La página 21 dice: "...considerando las funciones, responsabilidades, tramos de control por puesto y su representación en un organigrama..."',
+                distractores: 'Manual, calendario y presupuesto son herramientas de otras actividades.',
+                ref: 'Página 21'
+            },
+            // 24. Control del operativo (tipo a)
+            {
+                id: 24,
+                tipo: 'a',
+                pregunta: '¿Cuál es el propósito del control del operativo?',
+                opciones: [
+                    'Asegurar que las actividades se lleven a cabo en tiempos programados, con lineamientos establecidos y con la calidad esperada.',
+                    'Seleccionar la muestra.',
+                    'Diseñar los instrumentos de captación.',
+                    'Definir los criterios de validación.'
+                ],
+                respuesta: 0,
+                justificacion: 'La página 22 dice: "El control del operativo consiste en asegurar que las actividades se lleven a cabo en los tiempos programados, con los lineamientos establecidos y que los resultados del operativo de captación tengan la calidad esperada..."',
+                distractores: 'Las otras opciones son actividades de otras fases.',
+                ref: 'Página 22'
+            },
+            // 25. Logística administrativa (tipo a)
+            {
+                id: 25,
+                tipo: 'a',
+                pregunta: '¿Qué aspectos cubre la logística administrativa?',
+                opciones: [
+                    'Requerimientos de bienes inmuebles, equipos, materiales, documentación y servicios, así como su distribución y devolución.',
+                    'La selección de la muestra.',
+                    'La validación de datos.',
+                    'La presentación de resultados.'
+                ],
+                respuesta: 0,
+                justificacion: 'La página 22 define: "Consiste en la determinación de medios y procedimientos para llevar a cabo la organización administrativa de la encuesta, identificando los requerimientos de bienes inmuebles, equipos, materiales, documentación y servicios para el proyecto, los procedimientos para su distribución y devolución..."',
+                distractores: 'Las otras opciones son de otras fases.',
+                ref: 'Página 22'
+            },
+            // 26. Pruebas de instrumentos y procedimientos (tipo a)
+            {
+                id: 26,
+                tipo: 'a',
+                pregunta: '¿Qué se busca con las pruebas de instrumentos y procedimientos?',
+                opciones: [
+                    'Proporcionar elementos para la toma de decisiones sobre adecuaciones.',
+                    'Calcular el tamaño de la muestra.',
+                    'Definir los criterios de validación.',
+                    'Elaborar el presupuesto.'
+                ],
+                respuesta: 0,
+                justificacion: 'La página 22 dice: "...pruebas de los cuestionarios y los procedimientos que se utilizarán en los operativos de captación, las cuales proporcionan elementos que apoyan la toma de decisiones respecto a la adecuación de los procedimientos y esquemas para el control del operativo."',
+                distractores: 'Las otras opciones son actividades de otras fases.',
+                ref: 'Página 22'
+            },
+            // 27. Manuales de procedimientos (tipo c)
+            {
+                id: 27,
+                tipo: 'c',
+                pregunta: 'Los manuales de procedimientos son documentos donde se identifican e integran todas las actividades de trabajo, tanto sustantivo como administrativo, con el objetivo de coordinar y sistematizar las funciones en un marco de ________ y eficiencia.',
+                opciones: [
+                    'transparencia',
+                    'calidad',
+                    'control',
+                    'organización'
+                ],
+                respuesta: 0,
+                justificacion: 'La página 22 dice: "Los manuales de procedimientos son documentos, donde se identifican e integran todas las actividades de trabajo, tanto sustantivo como administrativo, con el objetivo de coordinar y sistematizar las funciones en un marco de transparencia y eficiencia."',
+                distractores: 'Calidad, control y organización son objetivos complementarios, pero el texto usa "transparencia".',
+                ref: 'Página 22'
+            },
+            // 28. Estrategia para la integración de recursos humanos (tipo a)
+            {
+                id: 28,
+                tipo: 'a',
+                pregunta: '¿Qué contempla la integración de recursos humanos?',
+                opciones: [
+                    'Reclutamiento, selección y contratación del personal operativo.',
+                    'Capacitación del personal.',
+                    'Diseño de la estrategia operativa.',
+                    'Elaboración de manuales.'
+                ],
+                respuesta: 0,
+                justificacion: 'La página 22-23 indica: "La integración de los recursos humanos contempla el reclutamiento del personal para los puestos de la estructura operativa, la selección del personal y su contratación."',
+                distractores: 'Capacitación es una actividad posterior; diseño operativo y manuales son otras macroactividades.',
+                ref: 'Páginas 22-23'
+            },
+            // 29. Perfil de puestos (tipo a)
+            {
+                id: 29,
+                tipo: 'a',
+                pregunta: '¿Qué es el perfil de puestos en el contexto del reclutamiento?',
+                opciones: [
+                    'Un modelo o tipo ideal definido con base en los requisitos que debe reunir el personal para desempeñar las funciones del puesto.',
+                    'La descripción de las actividades del puesto.',
+                    'El salario asignado al puesto.',
+                    'La ubicación geográfica del puesto.'
+                ],
+                respuesta: 0,
+                justificacion: 'La página 23 dice: "El perfil de puestos es un insumo básico para el reclutamiento y constituye un modelo o tipo ideal, definido con base en los requisitos que debe reunir el personal para desempeñar adecuadamente las funciones propias del puesto."',
+                distractores: 'Las otras opciones no son la definición del perfil.',
+                ref: 'Página 23'
+            },
+            // 30. Estrategia de capacitación (tipo c)
+            {
+                id: 30,
+                tipo: 'c',
+                pregunta: 'El objetivo de la capacitación es proporcionar los conocimientos y desarrollar las habilidades necesarias en el personal para garantizar la correcta aplicación de los procedimientos operativos y los ________.',
+                opciones: [
+                    'instrumentos de captación',
+                    'manuales',
+                    'criterios de validación',
+                    'estimadores'
+                ],
+                respuesta: 0,
+                justificacion: 'La página 23 dice: "El objetivo de la capacitación es proporcionar los conocimientos y desarrollar las habilidades necesarias en el personal que participará en las distintas actividades, con el fin de garantizar la correcta aplicación de los procedimientos operativos y los instrumentos de captación."',
+                distractores: 'Manuales, criterios y estimadores son parte del proceso, pero el objetivo específico es la aplicación de procedimientos e instrumentos.',
+                ref: 'Página 23'
+            },
+            // 31. Estrategia para la comunicación y concertación (tipo b - relación)
+            {
+                id: 31,
+                tipo: 'b',
+                pregunta: 'Relacione los componentes de la estrategia para la comunicación y concertación con su propósito (págs. 23-24).\nComponentes: 1) Difusión del proyecto, 2) Concertación de apoyos, 3) Diseño de productos de comunicación.\nPropósitos: a) Sensibilizar a los informantes sobre la importancia de proporcionar datos, b) Obtener apoyo de organismos públicos o privados, c) Definir contenidos y tono del mensaje según el momento del operativo.',
+                opciones: [
+                    '1-a, 2-b, 3-c',
+                    '1-b, 2-c, 3-a',
+                    '1-c, 2-a, 3-b',
+                    '1-a, 2-c, 3-b'
+                ],
+                respuesta: 0,
+                justificacion: 'Según las páginas 23-24: Difusión busca sensibilizar; Concertación busca apoyos; Diseño de productos define contenidos y tono.',
+                distractores: 'Las otras opciones asignan propósitos incorrectos.',
+                ref: 'Páginas 23-24'
+            },
+            // 32. Soporte de operación para el procesamiento (tipo a)
+            {
+                id: 32,
+                tipo: 'a',
+                pregunta: '¿Qué se define en el diseño del soporte de operación para el procesamiento?',
+                opciones: [
+                    'El equipamiento de los centros de procesamiento y la estructura para el procesamiento.',
+                    'Los instrumentos de captación.',
+                    'La estrategia de comunicación.',
+                    'El marco conceptual.'
+                ],
+                respuesta: 0,
+                justificacion: 'La página 24 indica: "Sobre el equipamiento se definirán el alquiler o adquisición de locales, mobiliario y equipo para oficina, equipos de cómputo, periféricos e insumos informáticos..."; y "Consiste en definir puestos de la estructura orgánica, la plantilla de personal, los procedimientos para el reclutamiento..."',
+                distractores: 'Las otras opciones son de otras fases.',
+                ref: 'Página 24'
+            },
+            // 33. Procedimientos para la ejecución y control del procesamiento (tipo a)
+            {
+                id: 33,
+                tipo: 'a',
+                pregunta: '¿Qué incluyen los procedimientos para la ejecución y control del procesamiento?',
+                opciones: [
+                    'Procedimientos para almacenamiento y control de formatos, captura-codificación, validación y explotación de archivos.',
+                    'La selección de la muestra.',
+                    'La definición de la temática.',
+                    'La difusión del proyecto.'
+                ],
+                respuesta: 0,
+                justificacion: 'La página 24-25 detalla: Procedimientos para el almacenamiento y control de formatos; Procedimientos de captura codificación; Procedimientos para la validación; Procedimientos para la explotación de archivos.',
+                distractores: 'Las otras opciones son actividades de otras fases.',
+                ref: 'Páginas 24-25'
+            },
+            // 34. Desarrollo de sistemas informáticos (tipo a)
+            {
+                id: 34,
+                tipo: 'a',
+                pregunta: '¿Para qué se desarrollan los sistemas de captura y validación?',
+                opciones: [
+                    'Para contar con archivos de datos capturados y validados, y para revisar inconsistencias.',
+                    'Para seleccionar la muestra.',
+                    'Para diseñar los instrumentos de captación.',
+                    'Para la difusión de resultados.'
+                ],
+                respuesta: 0,
+                justificacion: 'La página 25 dice: "Consiste en diseñar y desarrollar los sistemas de captura... con la finalidad de contar con un archivo de datos capturado... Se deberán desarrollar también los sistemas de validación que se orientarán a la revisión de datos captados y capturados y la identificación y corrección de inconsistencias..."',
+                distractores: 'Las otras opciones son de otras fases.',
+                ref: 'Página 25'
+            },
+            // 35. Pruebas y ajustes en sistemas informáticos (tipo a)
+            {
+                id: 35,
+                tipo: 'a',
+                pregunta: '¿Qué se verifica en las pruebas y ajustes de sistemas informáticos?',
+                opciones: [
+                    'La eficacia de las aplicaciones en módulos como captura, codificación, validación, generación y edición de tabulados.',
+                    'La cobertura geográfica.',
+                    'El marco conceptual.',
+                    'Los manuales de procedimientos.'
+                ],
+                respuesta: 0,
+                justificacion: 'La página 25 dice: "...se necesita corroborar la eficacia de tales aplicaciones mediante la realización de pruebas en módulos como: captura, codificación, validación, generación y edición de tabulados."',
+                distractores: 'Las otras opciones son aspectos de otras fases.',
+                ref: 'Página 25'
+            },
+            // 36. Captación - preparación del operativo (tipo a)
+            {
+                id: 36,
+                tipo: 'a',
+                pregunta: '¿Qué se realiza en la preparación del operativo?',
+                opciones: [
+                    'Instalación de grupos de trabajo, recepción y revisión de la muestra, conformación de áreas, preparación de materiales, reclutamiento y capacitación.',
+                    'La validación de datos.',
+                    'El diseño de la muestra.',
+                    'La presentación de resultados.'
+                ],
+                respuesta: 0,
+                justificacion: 'La página 26-27 enumera las actividades: 5.1.1 Instalación y equipamiento de grupos de trabajo, 5.1.2 Recepción y revisión de la muestra, 5.1.3 Conformación de áreas y determinación del orden de cobertura, 5.1.4 Preparación y distribución de materiales, 5.1.5 Reclutamiento, selección y contratación de personal operativo, 5.1.6 Aplicación de la capacitación operativa.',
+                distractores: 'Las otras opciones son de otras fases.',
+                ref: 'Páginas 26-27'
+            },
+            // 37. Recepción y revisión de la muestra (tipo a)
+            {
+                id: 37,
+                tipo: 'a',
+                pregunta: '¿Qué se debe verificar en la recepción y revisión de la muestra?',
+                opciones: [
+                    'Que los datos del marco muestral correspondan entre sí y que el total de unidades concuerde con lo enviado.',
+                    'Que los instrumentos de captación estén impresos.',
+                    'Que el personal esté capacitado.',
+                    'Que los sistemas informáticos funcionen.'
+                ],
+                respuesta: 0,
+                justificacion: 'La página 26 dice: "Se debe corroborar que los datos correspondan entre sí y que el total de las unidades concuerde con lo enviado."',
+                distractores: 'Las otras opciones son actividades de otras fases.',
+                ref: 'Página 26'
+            },
+            // 38. Conformación de áreas y orden de cobertura (tipo c)
+            {
+                id: 38,
+                tipo: 'c',
+                pregunta: 'La conformación de áreas incluye la delimitación en la cartografía o directorios para distribuir adecuadamente los equipos de personal y cargas de trabajo, siguiendo los procedimientos del programa de ________.',
+                opciones: [
+                    'cobertura',
+                    'capacitación',
+                    'presupuesto',
+                    'comunicación'
+                ],
+                respuesta: 0,
+                justificacion: 'La página 26 dice: "...consiste en la delimitación que se realiza en la cartografía o directorios, con el fin de distribuir adecuadamente los equipos de personal y cargas de trabajo, siguiendo los procedimientos que se establecieron en el programa de cobertura."',
+                distractores: 'Capacitación, presupuesto y comunicación son otros programas.',
+                ref: 'Página 26'
+            },
+            // 39. Figuras operativas generales (tipo b - relación)
+            {
+                id: 39,
+                tipo: 'b',
+                pregunta: 'Relacione las figuras operativas generales con su función (pág. 27).\nFiguras: 1) Entrevistadores, 2) Verificadores o analistas, 3) Supervisores, 4) Jefes de área.\nFunciones: a) Revisan la calidad y consistencia de la información, b) Aplican los instrumentos de captación, c) Coordinan y supervisan a los equipos, d) Gestionan la operación en una zona geográfica.',
+                opciones: [
+                    '1-b, 2-a, 3-c, 4-d',
+                    '1-a, 2-b, 3-d, 4-c',
+                    '1-c, 2-d, 3-a, 4-b',
+                    '1-d, 2-c, 3-b, 4-a'
+                ],
+                respuesta: 0,
+                justificacion: 'Según la página 27: Entrevistadores aplican instrumentos; Verificadores revisan calidad; Supervisores supervisan; Jefes de área gestionan la operación en su zona.',
+                distractores: 'Las otras combinaciones asignan funciones incorrectas.',
+                ref: 'Página 27'
+            },
+            // 40. Levantamiento - asignación de cargas de trabajo (tipo a)
+            {
+                id: 40,
+                tipo: 'a',
+                pregunta: '¿Qué se hace en la asignación de cargas de trabajo durante el levantamiento?',
+                opciones: [
+                    'Entregar a cada entrevistador los directorios e instrumentos de captación correspondientes a las unidades que debe atender.',
+                    'Capacitar al personal.',
+                    'Validar los datos.',
+                    'Elaborar manuales.'
+                ],
+                respuesta: 0,
+                justificacion: 'La página 27 dice: "Consiste en entregar a cada entrevistador los directorios e instrumentos de captación que corresponden a las unidades de observación que debe atender..."',
+                distractores: 'Las otras opciones son actividades de otras fases.',
+                ref: 'Página 27'
+            },
+            // 41. Obtención de los datos (tipo a)
+            {
+                id: 41,
+                tipo: 'a',
+                pregunta: '¿Qué corresponde a la obtención de los datos en el levantamiento?',
+                opciones: [
+                    'Contactar al informante y obtener la información mediante la aplicación de los instrumentos de captación.',
+                    'Preparar los materiales.',
+                    'Seleccionar la muestra.',
+                    'Procesar los datos.'
+                ],
+                respuesta: 0,
+                justificacion: 'La página 27 dice: "Corresponde al momento en que se contacta al informante y se obtiene la información sobre cada unidad de observación seleccionada mediante la aplicación de los instrumentos de captación."',
+                distractores: 'Las otras opciones son de otras fases.',
+                ref: 'Página 27'
+            },
+            // 42. Control de las actividades de levantamiento (tipo a)
+            {
+                id: 42,
+                tipo: 'a',
+                pregunta: '¿Qué aspectos se supervisan en el control de las actividades de levantamiento?',
+                opciones: [
+                    'Organización de paquetes, calidad de la entrevista, aplicación de productos promocionales, entre otros.',
+                    'El tamaño de la muestra.',
+                    'Los criterios de validación.',
+                    'La presentación de resultados.'
+                ],
+                respuesta: 0,
+                justificacion: 'La página 28 menciona: "Los diferentes aspectos que se supervisan son: Que los paquetes estén organizados... La calidad de la técnica de entrevista... La aplicación y uso de los productos promocionales..."',
+                distractores: 'Las otras opciones son de otras fases.',
+                ref: 'Página 28'
+            },
+            // 43. Concentración de la información y envío a procesamiento (tipo c)
+            {
+                id: 43,
+                tipo: 'c',
+                pregunta: 'En la concentración de la información captada, los cuestionarios se organizan en paquetes con su respectiva etiqueta de identificación o cédula, para llevar el control y facilitar la distribución de cargas de trabajo durante el ________.',
+                opciones: [
+                    'procesamiento',
+                    'levantamiento',
+                    'análisis',
+                    'almacenamiento'
+                ],
+                respuesta: 0,
+                justificacion: 'La página 28 dice: "Se organizan en paquetes con su respectiva etiqueta de identificación o cédula, para llevar el control y facilitar la distribución de cargas de trabajo durante el procesamiento."',
+                distractores: 'Levantamiento, análisis y almacenamiento no son el destino directo de los paquetes.',
+                ref: 'Página 28'
+            },
+            // 44. Cierre del operativo - recuperación de materiales (tipo a)
+            {
+                id: 44,
+                tipo: 'a',
+                pregunta: '¿Qué se debe hacer con los materiales y equipos al término del operativo?',
+                opciones: [
+                    'Recuperarlos y devolverlos según los procedimientos establecidos.',
+                    'Desecharlos.',
+                    'Venderlos.',
+                    'Donarlos.'
+                ],
+                respuesta: 0,
+                justificacion: 'La página 29 dice: "Al término del operativo se solicita que los equipos, materiales y documentación no utilizada sean entregados por si son requeridos en operativos futuros y para impedir un mal uso de los mismos. Para su remisión, se harán paquetes por tipo de material, acompañados de una relación del contenido..."',
+                distractores: 'Las otras opciones no son las indicadas.',
+                ref: 'Página 29'
+            },
+            // 45. Informe del operativo (tipo a)
+            {
+                id: 45,
+                tipo: 'a',
+                pregunta: '¿Qué debe incluir el informe del operativo?',
+                opciones: [
+                    'Información objetiva sobre recursos humanos, apoyos, capacitación, materiales, supervisión, problemas y soluciones, y cifras del levantamiento.',
+                    'Solo las cifras de no respuesta.',
+                    'Solo los problemas presentados.',
+                    'Solo los aspectos positivos.'
+                ],
+                respuesta: 0,
+                justificacion: 'La página 29 indica: "...se debe elaborar un informe de trabajo que sea objetivo, claro y preciso sobre temas en: recursos humanos, consecución de apoyos, capacitación, recepción, organización y distribución de materiales, instrumentos de captación, supervisión, cartografía, formatos de control, etcétera. Asimismo, en el informe se debe incluir los problemas que se presentaron con más frecuencia durante la captación y sus soluciones..."',
+                distractores: 'Las otras opciones son incompletas.',
+                ref: 'Página 29'
+            },
+            // 46. Procesamiento - preparación (tipo a)
+            {
+                id: 46,
+                tipo: 'a',
+                pregunta: '¿Qué actividades incluye la preparación en el procesamiento?',
+                opciones: [
+                    'Instalación de grupos de trabajo, capacitación, recepción de materiales, organización de documentos fuente y distribución de cargas de trabajo.',
+                    'Captura y codificación de datos.',
+                    'Validación de datos.',
+                    'Obtención de archivos de datos.'
+                ],
+                respuesta: 0,
+                justificacion: 'La página 30 enumera: 6.1.1 Instalación de grupos de trabajo, 6.1.2 Capacitación, 6.1.3 Recepción de materiales y verificación de la información, 6.1.4 Organización y preparación de documentos fuente, 6.1.5 Distribución de cargas de trabajo.',
+                distractores: 'Las otras opciones son macroactividades posteriores del procesamiento.',
+                ref: 'Página 30'
+            },
+            // 47. Captura - codificación (tipo a)
+            {
+                id: 47,
+                tipo: 'a',
+                pregunta: '¿Cuál es la finalidad de la captura de datos?',
+                opciones: [
+                    'Transferir los datos objeto de captación a medios electrónicos.',
+                    'Asignar códigos a las respuestas.',
+                    'Validar la información.',
+                    'Generar tabulados.'
+                ],
+                respuesta: 0,
+                justificacion: 'La página 31 dice: "Esta actividad tiene como finalidad transferir los datos objeto de captación a medios electrónicos a través de diversas alternativas..."',
+                distractores: 'Asignar códigos es la codificación; validar y generar tabulados son actividades posteriores.',
+                ref: 'Página 31'
+            },
+            // 48. Codificación (tipo a)
+            {
+                id: 48,
+                tipo: 'a',
+                pregunta: '¿Qué es la codificación?',
+                opciones: [
+                    'La asignación de códigos de clasificación a las respuestas contenidas en el cuestionario.',
+                    'La transferencia de datos a medios electrónicos.',
+                    'La revisión de consistencia de los datos.',
+                    'La generación de archivos de datos.'
+                ],
+                respuesta: 0,
+                justificacion: 'La página 31 define: "Consiste en la asignación de códigos de clasificación a las respuestas contenidas en el cuestionario de la encuesta."',
+                distractores: 'Las otras opciones son otras actividades del procesamiento.',
+                ref: 'Página 31'
+            },
+            // 49. Validación - verificación de integridad y congruencia (tipo c)
+            {
+                id: 49,
+                tipo: 'c',
+                pregunta: 'La verificación de la integridad y congruencia de la captura consiste en la revisión, detección y solución de errores cometidos en la codificación y/o en la captura, y se realiza con apoyo de programas de cómputo para detectar omisiones o ________ lógicas entre algunos datos.',
+                opciones: [
+                    'relaciones',
+                    'inconsistencias',
+                    'duplicados',
+                    'errores'
+                ],
+                respuesta: 0,
+                justificacion: 'La página 31 dice: "Esta actividad consiste en la revisión, detección y solución de los errores cometidos en la codificación y/o en la captura y la mayoría de las veces se realiza con apoyo de programas de cómputo para detectar omisiones en la captura de datos de los instrumentos de captación o relaciones lógicas entre algunos datos."',
+                distractores: 'Inconsistencias, duplicados y errores son problemas que se detectan, pero el texto menciona "relaciones lógicas".',
+                ref: 'Página 31'
+            },
+            // 50. Verificación de la referencia geográfica (tipo a)
+            {
+                id: 50,
+                tipo: 'a',
+                pregunta: '¿Cuál es el objetivo de la verificación de la referencia geográfica?',
+                opciones: [
+                    'Asegurar la congruencia entre las referencias geográficas del catálogo y las de los instrumentos de captación con la información recabada.',
+                    'Validar los datos numéricos.',
+                    'Corregir errores de codificación.',
+                    'Generar los factores de expansión.'
+                ],
+                respuesta: 0,
+                justificacion: 'La página 31 dice: "El objetivo es asegurar la congruencia entre las referencias asignadas en el catálogo geográfico utilizado en la encuesta al nivel de desglose aplicado y las referencias geográficas de los instrumentos de captación con la información recabada."',
+                distractores: 'Las otras opciones son de otras actividades de validación o procesamiento.',
+                ref: 'Página 31'
+            },
+            // 51. Aplicación de sistemas de validación (tipo a)
+            {
+                id: 51,
+                tipo: 'a',
+                pregunta: '¿Qué se hace en la aplicación de sistemas de validación?',
+                opciones: [
+                    'Se lleva a cabo el proceso de validación por medio de sistemas computarizados diseñados para identificar datos aceptables y depurar errores.',
+                    'Se selecciona la muestra.',
+                    'Se diseñan los instrumentos de captación.',
+                    'Se elaboran los manuales.'
+                ],
+                respuesta: 0,
+                justificacion: 'La página 31 dice: "En esta actividad se lleva a cabo el proceso de validación por medio de sistemas computarizados diseñados para identificar los datos que se consideran aceptables y depurar los posibles errores contenidos en la base de datos..."',
+                distractores: 'Las otras opciones son de otras fases.',
+                ref: 'Página 31'
+            },
+            // 52. Tipos de problemas en validación (tipo b - relación)
+            {
+                id: 52,
+                tipo: 'b',
+                pregunta: 'Relacione los tipos de problemas en validación con su solución según el documento (pág. 32).\nProblemas: 1) Omisiones, 2) Valores fuera de rango, 3) Multirrespuestas, 4) Inconsistencias.\nSoluciones: a) Reconsulta, imputación, asignación de valor no especificado, cancelación de respuesta u otras.',
+                opciones: [
+                    '1-a, 2-a, 3-a, 4-a',
+                    '1-a, 2-b, 3-c, 4-d',
+                    '1-b, 2-c, 3-d, 4-a',
+                    '1-c, 2-d, 3-a, 4-b'
+                ],
+                respuesta: 0,
+                justificacion: 'La página 32 indica que para todos estos problemas se establecen soluciones de acuerdo con las posibilidades de reconsulta, imputación, asignación de valor no especificado, cancelación de respuesta u otras. No se asignan soluciones específicas a cada tipo en el texto.',
+                distractores: 'Las otras opciones asignan soluciones específicas que no se corresponden con el texto.',
+                ref: 'Página 32'
+            },
+            // 53. Integración final de archivos validados (tipo a)
+            {
+                id: 53,
+                tipo: 'a',
+                pregunta: '¿Qué se verifica en la integración final de archivos validados?',
+                opciones: [
+                    'La consistencia estructural de los archivos de microdatos, como número de registros, variables y denominaciones.',
+                    'La cobertura geográfica.',
+                    'La muestra seleccionada.',
+                    'El presupuesto.'
+                ],
+                respuesta: 0,
+                justificacion: 'La página 32 dice: "Consiste en verificar la consistencia estructural de los archivos de microdatos como el número de registros, variables y las denominaciones asignadas según el sistema de códigos utilizado..."',
+                distractores: 'Las otras opciones son de otras fases.',
+                ref: 'Página 32'
+            },
+            // 54. Análisis y ajuste de estimadores y factores de la muestra final (tipo a)
+            {
+                id: 54,
+                tipo: 'a',
+                pregunta: '¿Por qué se ajustan los estimadores y factores de la muestra final?',
+                opciones: [
+                    'Por posibles afectaciones de la cobertura de unidades de muestreo o ciertas variables, provocando un comportamiento distinto a lo esperado.',
+                    'Por errores de captura.',
+                    'Por cambios en los objetivos.',
+                    'Por problemas de presupuesto.'
+                ],
+                respuesta: 0,
+                justificacion: 'La página 32 dice: "...se realizan los ajustes necesarios a los estimadores y factores de la muestra final de acuerdo con posibles afectaciones de la cobertura de unidades de muestreo o ciertas variables, provocando un comportamiento distinto a lo esperado."',
+                distractores: 'Las otras opciones no son las causas mencionadas.',
+                ref: 'Página 32'
+            },
+            // 55. Presentación de resultados - programa de productos (tipo a)
+            {
+                id: 55,
+                tipo: 'a',
+                pregunta: '¿Qué se debe considerar en el programa de productos de la presentación de resultados?',
+                opciones: [
+                    'Estudios de mercado, combinación de medios, elaboración de prototipos, y formas y medios de presentación.',
+                    'Solo los cuadros estadísticos.',
+                    'Solo los gráficos.',
+                    'Solo los archivos de datos.'
+                ],
+                respuesta: 0,
+                justificacion: 'La página 33 menciona: "Estudios de mercado (segmentación), Determinación de la combinación de medios para difundir los productos, Elaboración de prototipos..." y también se refiere a formas (cuadros, gráficas, mapas, textos) y medios (impresos, electrónicos).',
+                distractores: 'Las otras opciones son parciales o incorrectas.',
+                ref: 'Página 33'
+            },
+            // 56. Documentación y evaluación del proceso (tipo a)
+            {
+                id: 56,
+                tipo: 'a',
+                pregunta: '¿Qué se busca con la documentación y evaluación del proceso?',
+                opciones: [
+                    'Cumplir con requisitos de transparencia y aportar elementos para mejorar futuros procesos.',
+                    'Solo cumplir con la normatividad.',
+                    'Solo documentar los metadatos.',
+                    'Solo evaluar los resultados.'
+                ],
+                respuesta: 0,
+                justificacion: 'La página 34 dice: "Para cumplir con los requisitos de transparencia en la generación de las estadísticas y aportar elementos para incorporar mejoras a los procesos, se realiza un conjunto integral de informes sobre los metadatos de la encuesta..."',
+                distractores: 'Las otras opciones son parciales; la documentación y evaluación tiene ambos propósitos.',
+                ref: 'Página 34'
+            },
+            // 57. Evaluación del proceso (tipo a)
+            {
+                id: 57,
+                tipo: 'a',
+                pregunta: '¿Qué aspectos se deben analizar en la evaluación del proceso?',
+                opciones: [
+                    'Problemas de no respuesta, cobertura, sesgos, aspectos conceptuales, validación, procedimientos y diseño de la muestra.',
+                    'Solo los problemas de no respuesta.',
+                    'Solo la cobertura geográfica.',
+                    'Solo los errores de muestreo.'
+                ],
+                respuesta: 0,
+                justificacion: 'La página 34 dice: "...es necesario analizar la calidad de los datos e indicar sus limitaciones, distinguiendo los problemas de no respuesta, de cobertura, de sesgos en las respuestas de los informantes, de los aspectos conceptuales, de la validación, de los procedimientos y del diseño de la muestra."',
+                distractores: 'Las otras opciones son incompletas.',
+                ref: 'Página 34'
+            },
+            // 58. Definición de glosario: Control de cobertura (tipo c)
+            {
+                id: 58,
+                tipo: 'c',
+                pregunta: 'El control de cobertura se define como la medición y análisis de los resultados con relación a la correcta ubicación y captación tanto de áreas geográficas seleccionadas como de las unidades de observación, a fin de corregir errores de ________ o duplicidades.',
+                opciones: [
+                    'omisión',
+                    'codificación',
+                    'muestreo',
+                    'captura'
+                ],
+                respuesta: 0,
+                justificacion: 'El glosario (pág. 35) define: "Control de cobertura. Medición y análisis de los resultados obtenidos con relación a la correcta ubicación y captación tanto de áreas geográficas seleccionadas, como de las unidades de observación, a fin de corregir errores de omisión o duplicidades."',
+                distractores: 'Codificación, muestreo y captura son otras actividades, no el error que corrige el control de cobertura.',
+                ref: 'Página 35'
+            },
+            // 59. Definición de glosario: Supervisión (tipo a)
+            {
+                id: 59,
+                tipo: 'a',
+                pregunta: 'Según el glosario, ¿qué es la supervisión?',
+                opciones: [
+                    'La observación del desempeño del personal en las distintas funciones, con fines de evaluación y apoyo al mejoramiento de su trabajo.',
+                    'La verificación de la calidad de los datos.',
+                    'El control de la cobertura geográfica.',
+                    'La capacitación del personal.'
+                ],
+                respuesta: 0,
+                justificacion: 'El glosario (pág. 33) define: "Supervisión. Es la observación del desempeño del personal en las distintas funciones, con fines de evaluación y apoyo al mejoramiento de su trabajo."',
+                distractores: 'Las otras opciones son conceptos relacionados pero no son la definición de supervisión.',
+                ref: 'Página 33'
+            },
+            // 60. Definición de glosario: Variable (tipo c)
+            {
+                id: 60,
+                tipo: 'c',
+                pregunta: 'Según el glosario, una variable es un "concepto que admite distintos valores para la caracterización o ________ de un elemento o un conjunto".',
+                opciones: [
+                    'clasificación',
+                    'medición',
+                    'análisis',
+                    'descripción'
+                ],
+                respuesta: 0,
+                justificacion: 'El glosario (pág. 33) define: "Variable. Concepto que admite distintos valores para la caracterización o clasificación de un elemento o un conjunto."',
+                distractores: 'Medición, análisis y descripción son actividades relacionadas, pero la definición usa "clasificación".',
+                ref: 'Página 33'
+            }
+        ];
+
+        // --------------------------------------------------------------
+        //  LÓGICA DE LA APLICACIÓN
+        // --------------------------------------------------------------
+        let currentIndex = 0;
+        let answers = new Array(questions.length).fill(null);
+        let verified = new Array(questions.length).fill(false);
+        let selectedOptionIndex = null;
+
+        const qTypeEl = document.getElementById('qType');
+        const qTextEl = document.getElementById('qText');
+        const optionsContainer = document.getElementById('optionsContainer');
+        const feedbackEl = document.getElementById('feedback');
+        const feedbackHeader = document.getElementById('feedbackHeader');
+        const justificationText = document.getElementById('justificationText');
+        const distractorsText = document.getElementById('distractorsText');
+        const refText = document.getElementById('refText');
+        const currentNum = document.getElementById('currentNum');
+        const totalNum = document.getElementById('totalNum');
+        const progressScore = document.getElementById('progressScore');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const checkBtn = document.getElementById('checkBtn');
+        const resetBtn = document.getElementById('resetBtn');
+        const resultContainer = document.getElementById('resultContainer');
+        const finalScore = document.getElementById('finalScore');
+
+        totalNum.textContent = questions.length;
+
+        function shuffleArray(arr) {
+            for (let i = arr.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+            return arr;
+        }
+
+        // Barajar opciones para cada pregunta
+        const shuffledData = questions.map(q => {
+            const opts = q.opciones.map((text, idx) => ({ text, idx }));
+            const shuffled = shuffleArray([...opts]);
+            const newOptions = shuffled.map(item => item.text);
+            const newAnswerIndex = shuffled.findIndex(item => item.idx === q.respuesta);
+            return {
+                ...q,
+                opciones: newOptions,
+                respuesta: newAnswerIndex
+            };
+        });
+
+        function renderQuestion(index) {
+            const q = shuffledData[index];
+            qTypeEl.textContent = `Tipo ${q.tipo.toUpperCase()}`;
+            qTextEl.textContent = q.pregunta;
+            optionsContainer.innerHTML = '';
+            feedbackEl.classList.remove('show');
+
+            q.opciones.forEach((text, idx) => {
+                const div = document.createElement('div');
+                div.className = 'option';
+                const radio = document.createElement('input');
+                radio.type = 'radio';
+                radio.name = 'question';
+                radio.value = idx;
+                radio.id = `opt_${idx}`;
+                const label = document.createElement('label');
+                label.htmlFor = `opt_${idx}`;
+                label.textContent = text;
+                div.appendChild(radio);
+                div.appendChild(label);
+                optionsContainer.appendChild(div);
+
+                if (answers[index] === idx) {
+                    radio.checked = true;
+                }
+                if (verified[index]) {
+                    radio.disabled = true;
+                    div.classList.add('disabled');
+                    if (idx === q.respuesta) {
+                        div.classList.add('correct');
+                    } else if (answers[index] === idx && idx !== q.respuesta) {
+                        div.classList.add('incorrect');
+                    }
+                }
+
+                radio.addEventListener('change', (e) => {
+                    if (!verified[index]) {
+                        selectedOptionIndex = parseInt(e.target.value);
+                        answers[index] = selectedOptionIndex;
+                    }
+                });
+            });
+
+            if (verified[index]) {
+                showFeedback(index);
+            }
+
+            currentNum.textContent = index + 1;
+            updateProgress();
+
+            prevBtn.disabled = index === 0;
+            nextBtn.disabled = index === questions.length - 1;
+            checkBtn.disabled = verified[index];
+
+            resultContainer.style.display = 'none';
+        }
+
+        function showFeedback(index) {
+            const q = shuffledData[index];
+            const isCorrect = answers[index] === q.respuesta;
+            feedbackEl.classList.add('show');
+            feedbackHeader.innerHTML = isCorrect
+                ? '<span class="correct-badge">✅ Correcto</span>'
+                : '<span class="incorrect-badge">❌ Incorrecto</span>';
+            justificationText.textContent = '🔍 ' + q.justificacion;
+            distractorsText.textContent = '📌 Análisis de distractores: ' + q.distractores;
+            refText.textContent = '📖 Referencia: ' + q.ref;
+        }
+
+        function updateProgress() {
+            const answered = answers.filter(a => a !== null).length;
+            const pct = Math.round((answered / questions.length) * 100);
+            progressScore.textContent = pct + '%';
+        }
+
+        function checkAnswer() {
+            const index = currentIndex;
+            const q = shuffledData[index];
+            if (answers[index] === null || answers[index] === undefined) {
+                alert('Selecciona una opción antes de verificar.');
+                return;
+            }
+            verified[index] = true;
+            const options = document.querySelectorAll('.option');
+            options.forEach((div, idx) => {
+                const radio = div.querySelector('input[type="radio"]');
+                radio.disabled = true;
+                div.classList.add('disabled');
+                if (idx === q.respuesta) {
+                    div.classList.add('correct');
+                } else if (answers[index] === idx && idx !== q.respuesta) {
+                    div.classList.add('incorrect');
+                }
+            });
+            checkBtn.disabled = true;
+            showFeedback(index);
+            updateProgress();
+
+            if (verified.every(v => v === true)) {
+                showFinalResult();
+            }
+        }
+
+        function showFinalResult() {
+            const correctas = shuffledData.filter((q, idx) => answers[idx] === q.respuesta).length;
+            const total = questions.length;
+            const pct = Math.round((correctas / total) * 100);
+            finalScore.textContent = pct + '% (' + correctas + '/' + total + ')';
+            resultContainer.style.display = 'block';
+        }
+
+        function goTo(index) {
+            if (index < 0 || index >= questions.length) return;
+            currentIndex = index;
+            renderQuestion(index);
+        }
+
+        prevBtn.addEventListener('click', () => {
+            if (currentIndex > 0) goTo(currentIndex - 1);
+        });
+
+        nextBtn.addEventListener('click', () => {
+            if (currentIndex < questions.length - 1) goTo(currentIndex + 1);
+        });
+
+        checkBtn.addEventListener('click', checkAnswer);
+
+        resetBtn.addEventListener('click', () => {
+            if (confirm('¿Reiniciar todas las respuestas?')) {
+                answers.fill(null);
+                verified.fill(false);
+                resultContainer.style.display = 'none';
+                goTo(0);
+                updateProgress();
+                checkBtn.disabled = false;
+            }
+        });
+
+        renderQuestion(0);
+    </script>
+</body>
+</html>
