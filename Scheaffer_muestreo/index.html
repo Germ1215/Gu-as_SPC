@@ -1,0 +1,897 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guía de autoevaluación - Elementos de Muestreo</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            background: #f4f7fa;
+            font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 20px;
+        }
+        .quiz-container {
+            max-width: 820px;
+            width: 100%;
+            background: white;
+            border-radius: 28px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12), 0 6px 12px rgba(0, 0, 0, 0.05);
+            padding: 30px 35px;
+            transition: 0.2s;
+        }
+        h1 {
+            font-size: 1.9rem;
+            font-weight: 600;
+            color: #0b2b4a;
+            border-left: 6px solid #2a7de1;
+            padding-left: 18px;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            color: #3e5f7a;
+            font-size: 0.95rem;
+            margin-bottom: 25px;
+            padding-left: 24px;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 12px;
+        }
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+        }
+        .question-counter {
+            background: #eef2f7;
+            padding: 4px 16px;
+            border-radius: 40px;
+            font-weight: 500;
+            font-size: 0.9rem;
+            color: #1f3a57;
+        }
+        .question-text {
+            font-size: 1.2rem;
+            font-weight: 500;
+            color: #0a1e32;
+            margin: 16px 0 20px 0;
+            line-height: 1.5;
+        }
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin: 18px 0 22px 0;
+        }
+        .option-label {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            background: #f9fbfd;
+            padding: 12px 18px;
+            border-radius: 14px;
+            border: 1.5px solid #e2e8f0;
+            cursor: pointer;
+            transition: background 0.1s, border 0.1s;
+            font-size: 1rem;
+        }
+        .option-label:hover {
+            background: #f0f4fe;
+            border-color: #b3cbf5;
+        }
+        .option-label input[type="radio"] {
+            width: 18px;
+            height: 18px;
+            accent-color: #1a6ed8;
+            flex-shrink: 0;
+            margin: 0;
+        }
+        .option-label.selected {
+            background: #e6effb;
+            border-color: #2a7de1;
+        }
+        .option-label.correct-answer {
+            background: #dff0d8;
+            border-color: #2e8b57;
+        }
+        .option-label.wrong-answer {
+            background: #f8d7da;
+            border-color: #b02a37;
+        }
+        .feedback-box {
+            background: #f0f4fa;
+            border-radius: 16px;
+            padding: 18px 22px;
+            margin: 18px 0 20px 0;
+            border-left: 5px solid #2a7de1;
+            display: none;
+        }
+        .feedback-box.show {
+            display: block;
+        }
+        .feedback-box .correct-badge {
+            color: #0d6e2b;
+            font-weight: 600;
+        }
+        .feedback-box .wrong-badge {
+            color: #b02a37;
+            font-weight: 600;
+        }
+        .feedback-box .justification {
+            margin-top: 10px;
+            font-size: 0.96rem;
+            line-height: 1.5;
+        }
+        .feedback-box .distractor {
+            margin-top: 8px;
+            font-size: 0.92rem;
+            color: #2c3e50;
+            background: #e9eef3;
+            padding: 8px 14px;
+            border-radius: 10px;
+        }
+        .nav-bar {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            margin-top: 10px;
+        }
+        .nav-buttons {
+            display: flex;
+            gap: 10px;
+        }
+        .btn {
+            background: white;
+            border: 1px solid #cbd5e1;
+            padding: 10px 20px;
+            border-radius: 40px;
+            font-weight: 500;
+            font-size: 0.95rem;
+            color: #1a2d44;
+            cursor: pointer;
+            transition: 0.1s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .btn-primary {
+            background: #1a6ed8;
+            border-color: #1a6ed8;
+            color: white;
+        }
+        .btn-primary:hover {
+            background: #135bb5;
+            border-color: #135bb5;
+        }
+        .btn-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .btn-outline:hover {
+            background: #f1f5f9;
+        }
+        .btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+        .btn-success {
+            background: #1f8b4c;
+            border-color: #1f8b4c;
+            color: white;
+        }
+        .btn-success:hover {
+            background: #17733e;
+        }
+        .results {
+            background: #e8f0fe;
+            border-radius: 20px;
+            padding: 18px 24px;
+            margin-top: 20px;
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: 500;
+            color: #0b2b4a;
+        }
+        .progress {
+            height: 6px;
+            background: #e2e8f0;
+            border-radius: 10px;
+            margin: 18px 0 6px 0;
+            overflow: hidden;
+        }
+        .progress-bar {
+            height: 100%;
+            background: #2a7de1;
+            width: 0%;
+            transition: width 0.2s;
+        }
+        @media (max-width: 600px) {
+            .quiz-container { padding: 20px 16px; }
+            .nav-bar { flex-direction: column; align-items: stretch; }
+            .nav-buttons { justify-content: center; flex-wrap: wrap; }
+            .btn { padding: 8px 14px; font-size: 0.9rem; }
+        }
+    </style>
+</head>
+<body>
+<div class="quiz-container" id="app">
+    <h1>📊 Guía de autoevaluación</h1>
+    <div class="subtitle">Muestreo irrestricto aleatorio y estratificado • Secciones 4.3, 4.4, 5.3, 5.4</div>
+
+    <div class="progress"><div class="progress-bar" id="progressBar"></div></div>
+
+    <div id="questionArea">
+        <div class="question-header">
+            <span class="question-counter" id="questionCounter">Pregunta 1 / 30</span>
+            <span style="font-size:0.9rem; color:#3a5a7a;" id="statusTag">● Sin responder</span>
+        </div>
+        <div class="question-text" id="questionText">Cargando pregunta...</div>
+        <div class="options" id="optionsContainer"></div>
+        <div class="feedback-box" id="feedbackBox">
+            <div id="feedbackContent"></div>
+        </div>
+    </div>
+
+    <div class="nav-bar">
+        <div class="nav-buttons">
+            <button class="btn btn-outline" id="prevBtn" disabled>◀ Anterior</button>
+            <button class="btn btn-outline" id="nextBtn">Siguiente ▶</button>
+        </div>
+        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+            <button class="btn btn-primary" id="checkBtn">✔ Verificar</button>
+            <button class="btn btn-success" id="resetBtn">⟳ Reiniciar</button>
+        </div>
+    </div>
+
+    <div id="resultsArea" style="display:none;">
+        <div class="results" id="resultsContent"></div>
+    </div>
+</div>
+
+<script>
+    // --------------------------------------------------------------
+    // 30 PREGUNTAS (tipos a, b, c) basadas en las secciones indicadas
+    // --------------------------------------------------------------
+    const questions = [
+        // 1. Tipo a
+        {
+            type: 'a',
+            text: '¿Cuál es el estimador insesgado de la media poblacional en muestreo irrestricto aleatorio?',
+            options: [
+                'A) \\(\\bar{y} = \\frac{\\sum y_i}{n}\\)',
+                'B) \\(\\hat{\\mu} = \\frac{N}{n}\\sum y_i\\)',
+                'C) \\(\\bar{y} = \\frac{\\sum y_i}{N}\\)',
+                'D) \\(\\hat{\\mu} = \\frac{n}{N}\\sum y_i\\)'
+            ],
+            correct: 'A',
+            justification: 'Según la página 43, el estimador de la media poblacional es \\(\\bar{y} = \\frac{\\sum y_i}{n}\\), y es insesgado: \\(E(\\bar{y}) = \\mu\\).',
+            distractors: 'B) corresponde al estimador del total \\(N\\bar{y}\\) (pág. 51). C) usa N en lugar de n. D) es una combinación incorrecta de factores.'
+        },
+        // 2. Tipo b (relación)
+        {
+            type: 'b',
+            text: 'Relacione cada símbolo con su definición correcta en muestreo irrestricto aleatorio: 1) \\(V(\\bar{y})\\)  2) \\(\\hat{V}(\\bar{y})\\)  3) \\(s^2\\)  4) \\((N-n)/N\\)',
+            options: [
+                'A) 1-B, 2-C, 3-A, 4-D',
+                'B) 1-C, 2-B, 3-A, 4-D',
+                'C) 1-B, 2-A, 3-C, 4-D',
+                'D) 1-A, 2-B, 3-C, 4-D'
+            ],
+            correct: 'A',
+            justification: 'Según pág. 43-45: \\(V(\\bar{y})\\) es la varianza verdadera (B); \\(\\hat{V}(\\bar{y})\\) es la varianza estimada (C); \\(s^2\\) es la varianza muestral (A); \\((N-n)/N\\) es la corrección por población finita (D).',
+            distractors: 'Las otras opciones intercambian definiciones de varianza verdadera y estimada, o confunden \\(s^2\\) con otros términos.'
+        },
+        // 3. Tipo c
+        {
+            type: 'c',
+            text: 'La varianza del estimador de la media poblacional en muestreo irrestricto aleatorio está dada por \\(V(\\bar{y}) = \\frac{\\sigma^2}{n} \\left(\\frac{\\text{______}}{\\text{______}}\\right)\\).',
+            options: [
+                'A) \\(N-1 / N\\)',
+                'B) \\(N-n / N\\)',
+                'C) \\(N-n / N-1\\)',
+                'D) \\(N-1 / n\\)'
+            ],
+            correct: 'C',
+            justification: 'Página 43: \\(V(\\bar{y}) = \\frac{\\sigma^2}{n} \\cdot \\frac{N-n}{N-1}\\).',
+            distractors: 'A) usa N-1/N (incorrecto); B) usa N-n/N (corresponde a la varianza estimada, no a la verdadera); D) mezcla N-1 con n.'
+        },
+        // 4. Tipo a
+        {
+            type: 'a',
+            text: 'El límite para el error de estimación de la media poblacional en muestreo irrestricto aleatorio se calcula como:',
+            options: [
+                'A) \\(2\\sqrt{\\frac{s^2}{n}}\\)',
+                'B) \\(2\\sqrt{\\frac{s^2}{n} \\cdot \\frac{N-n}{N}}\\)',
+                'C) \\(2\\sqrt{\\frac{\\sigma^2}{n} \\cdot \\frac{N-n}{N-1}}\\)',
+                'D) \\(\\sqrt{\\frac{s^2}{n} \\cdot \\frac{N-n}{N}}\\)'
+            ],
+            correct: 'B',
+            justification: 'Página 46: el límite es \\(2\\sqrt{\\hat{V}(\\bar{y})} = 2\\sqrt{\\frac{s^2}{n} \\cdot \\frac{N-n}{N}}\\).',
+            distractors: 'A) omite la cpf; C) usa \\(\\sigma^2\\) y factor verdadero, pero el límite se calcula con la varianza estimada; D) falta el factor 2.'
+        },
+        // 5. Tipo c
+        {
+            type: 'c',
+            text: 'El estimador del total poblacional en muestreo irrestricto aleatorio es:',
+            options: [
+                'A) \\(\\hat{\\tau} = n\\bar{y}\\)',
+                'B) \\(\\hat{\\tau} = N\\bar{y}\\)',
+                'C) \\(\\hat{\\tau} = \\frac{N}{n}\\sum y_i\\)',
+                'D) \\(\\hat{\\tau} = \\frac{n}{N}\\sum y_i\\)'
+            ],
+            correct: 'B',
+            justification: 'Página 51: \\(\\hat{\\tau} = N\\bar{y}\\).',
+            distractors: 'A) usa n en lugar de N; C) es equivalente a B pero no es la forma directa; D) es inverso.'
+        },
+        // 6. Tipo b
+        {
+            type: 'b',
+            text: 'Relacione los estimadores con sus varianzas estimadas en muestreo irrestricto aleatorio: 1) \\(\\hat{V}(\\bar{y})\\)  2) \\(\\hat{V}(\\hat{\\tau})\\)',
+            options: [
+                'A) 1-B, 2-A',
+                'B) 1-A, 2-B',
+                'C) 1-B, 2-C',
+                'D) 1-C, 2-A'
+            ],
+            correct: 'A',
+            justification: 'Página 46 y 51: \\(\\hat{V}(\\bar{y}) = \\frac{s^2}{n} \\frac{N-n}{N}\\) (B); \\(\\hat{V}(\\hat{\\tau}) = N^2 \\hat{V}(\\bar{y}) = N^2 \\frac{s^2}{n} \\frac{N-n}{N}\\) (A).',
+            distractors: 'Las otras opciones invierten o usan términos incorrectos.'
+        },
+        // 7. Tipo a
+        {
+            type: 'a',
+            text: 'Para estimar la media poblacional \\(\\mu\\) con un límite \\(B\\), la fórmula del tamaño de muestra requerido es \\(n = \\frac{N\\sigma^2}{(N-1)D + \\sigma^2}\\). ¿Qué representa \\(D\\)?',
+            options: [
+                'A) \\(D = B/2\\)',
+                'B) \\(D = B^2/4\\)',
+                'C) \\(D = 4B^2\\)',
+                'D) \\(D = \\sigma^2/n\\)'
+            ],
+            correct: 'B',
+            justification: 'Página 53: \\(D = B^2/4\\).',
+            distractors: 'A) es B/2 (incorrecto); C) es 4B²; D) involucra \\(\\sigma^2\\) y n.'
+        },
+        // 8. Tipo c
+        {
+            type: 'c',
+            text: 'En la fórmula para el tamaño de muestra requerido para estimar el total poblacional \\(\\tau\\) con límite \\(B\\), \\(D = \\frac{\\text{______}}{4N^2}\\).',
+            options: [
+                'A) \\(B\\)',
+                'B) \\(B^2\\)',
+                'C) \\(2B\\)',
+                'D) \\(B^2/4\\)'
+            ],
+            correct: 'B',
+            justification: 'Página 54: \\(D = \\frac{B^2}{4N^2}\\).',
+            distractors: 'A) falta el cuadrado; C) es 2B; D) es B²/4 pero sin N².'
+        },
+        // 9. Tipo a
+        {
+            type: 'a',
+            text: '¿Cuándo se puede omitir la corrección por población finita en el cálculo de la varianza estimada de la media?',
+            options: [
+                'A) Cuando n es mayor que 20% de N.',
+                'B) Cuando \\(n/N \\le 0.05\\).',
+                'C) Cuando N es desconocido.',
+                'D) Siempre que n > 30.'
+            ],
+            correct: 'B',
+            justification: 'Página 46: se puede despreciar si \\(n \\le (1/20)N\\), es decir \\(n/N \\le 0.05\\).',
+            distractors: 'A) es lo opuesto (mayor que 20%); C) N desconocido no justifica omitir la cpf; D) n>30 no es criterio.'
+        },
+        // 10. Tipo b
+        {
+            type: 'b',
+            text: 'Asocie las fórmulas con su uso: 1) \\(s^2 = \\frac{\\sum (y_i-\\bar{y})^2}{n-1}\\)  2) \\(\\hat{V}(\\bar{y}) = \\frac{s^2}{n} \\frac{N-n}{N}\\)  3) \\(\\hat{\\tau} = N\\bar{y}\\)',
+            options: [
+                'A) 1-B, 2-C, 3-A',
+                'B) 1-A, 2-B, 3-C',
+                'C) 1-C, 2-B, 3-A',
+                'D) 1-B, 2-A, 3-C'
+            ],
+            correct: 'A',
+            justification: '1) varianza muestral (B); 2) varianza estimada de la media (C); 3) estimador del total (A).',
+            distractors: 'Las otras opciones confunden los roles de las fórmulas.'
+        },
+        // 11. Tipo c
+        {
+            type: 'c',
+            text: 'En muestreo aleatorio estratificado, el estimador de la media poblacional es \\(\\bar{y}_{st} = \\frac{1}{N} \\sum_{i=1}^{L} \\text{______}\\).',
+            options: [
+                'A) \\(N_i \\bar{y}_i\\)',
+                'B) \\(n_i \\bar{y}_i\\)',
+                'C) \\(N_i \\sigma_i\\)',
+                'D) \\(n_i \\sigma_i\\)'
+            ],
+            correct: 'A',
+            justification: 'Página 82: \\(\\bar{y}_{st} = \\frac{1}{N} \\sum N_i \\bar{y}_i\\).',
+            distractors: 'B) usa n_i; C) y D) usan \\(\\sigma_i\\) (desviación estándar).'
+        },
+        // 12. Tipo a
+        {
+            type: 'a',
+            text: 'La varianza estimada de \\(\\bar{y}_{st}\\) está dada por:',
+            options: [
+                'A) \\(\\frac{1}{N^2} \\sum N_i^2 \\frac{N_i - n_i}{N_i} \\frac{s_i^2}{n_i}\\)',
+                'B) \\(\\frac{1}{N} \\sum N_i \\frac{s_i^2}{n_i}\\)',
+                'C) \\(\\sum \\frac{N_i^2}{n_i} s_i^2\\)',
+                'D) \\(\\frac{1}{N^2} \\sum N_i^2 \\frac{s_i^2}{n_i} \\frac{N_i}{N_i - n_i}\\)'
+            ],
+            correct: 'A',
+            justification: 'Página 82: \\(\\hat{V}(\\bar{y}_{st}) = \\frac{1}{N^2} \\sum N_i^2 \\frac{N_i - n_i}{N_i} \\frac{s_i^2}{n_i}\\).',
+            distractors: 'B) falta el cuadrado de N_i y el factor; C) omite la cpf y el denominador N²; D) invierte la cpf.'
+        },
+        // 13. Tipo c
+        {
+            type: 'c',
+            text: 'El estimador del total poblacional en muestreo estratificado es \\(\\hat{\\tau}_{st} =\\)',
+            options: [
+                'A) \\(N\\bar{y}_{st}\\)',
+                'B) \\(\\sum N_i \\bar{y}_i\\)',
+                'C) Ambas A y B son correctas.',
+                'D) \\(\\sum n_i \\bar{y}_i\\)'
+            ],
+            correct: 'C',
+            justification: 'Página 84: \\(\\hat{\\tau}_{st} = N\\bar{y}_{st} = \\sum N_i \\bar{y}_i\\).',
+            distractors: 'D) usa n_i en lugar de N_i.'
+        },
+        // 14. Tipo b
+        {
+            type: 'b',
+            text: 'Relacione cada término con su fórmula en muestreo estratificado: 1) \\(\\bar{y}_{st}\\)  2) \\(\\hat{V}(\\bar{y}_{st})\\)  3) \\(\\hat{\\tau}_{st}\\)',
+            options: [
+                'A) 1-B, 2-C, 3-A',
+                'B) 1-A, 2-C, 3-B',
+                'C) 1-B, 2-A, 3-C',
+                'D) 1-C, 2-B, 3-A'
+            ],
+            correct: 'A',
+            justification: '1) \\(\\bar{y}_{st} = \\frac{1}{N}\\sum N_i\\bar{y}_i\\) (B); 2) varianza estimada (C); 3) \\(\\hat{\\tau}_{st} = \\sum N_i\\bar{y}_i\\) (A).',
+            distractors: 'Confunden estimador de media con total o con varianza.'
+        },
+        // 15. Tipo a
+        {
+            type: 'a',
+            text: 'En la fórmula del tamaño de muestra para estratificado, \\(n = \\frac{\\sum N_i^2 \\sigma_i^2 / w_i}{N^2 D + \\sum N_i \\sigma_i^2}\\), el término \\(w_i\\) representa:',
+            options: [
+                'A) La fracción de la población en el estrato i.',
+                'B) La fracción de observaciones asignadas al estrato i.',
+                'C) La varianza del estrato i.',
+                'D) El tamaño del estrato i.'
+            ],
+            correct: 'B',
+            justification: 'Página 86: \\(w_i\\) es la fracción de observaciones asignadas al estrato i.',
+            distractors: 'A) sería \\(N_i/N\\); C) es \\(\\sigma_i^2\\); D) es \\(N_i\\).'
+        },
+        // 16. Tipo c
+        {
+            type: 'c',
+            text: 'Para estimar \\(\\mu\\) en muestreo estratificado con límite \\(B\\), \\(D = \\frac{\\text{______}}{4}\\).',
+            options: [
+                'A) \\(B\\)',
+                'B) \\(B^2\\)',
+                'C) \\(2B\\)',
+                'D) \\(B/2\\)'
+            ],
+            correct: 'B',
+            justification: 'Página 86: \\(D = B^2/4\\) para estimar \\(\\mu\\).',
+            distractors: 'A) falta el cuadrado; C) es 2B; D) es B/2.'
+        },
+        // 17. Tipo a
+        {
+            type: 'a',
+            text: '¿Cuál es la expresión correcta para la varianza estimada del total poblacional en muestreo estratificado?',
+            options: [
+                'A) \\(\\hat{V}(\\hat{\\tau}_{st}) = \\sum N_i^2 \\frac{N_i - n_i}{N_i} \\frac{s_i^2}{n_i}\\)',
+                'B) \\(\\hat{V}(\\hat{\\tau}_{st}) = N^2 \\frac{s^2}{n} \\frac{N-n}{N}\\)',
+                'C) \\(\\hat{V}(\\hat{\\tau}_{st}) = \\sum N_i \\frac{s_i^2}{n_i}\\)',
+                'D) \\(\\hat{V}(\\hat{\\tau}_{st}) = \\frac{1}{N^2} \\sum N_i^2 \\frac{N_i - n_i}{N_i} \\frac{s_i^2}{n_i}\\)'
+            ],
+            correct: 'A',
+            justification: 'Página 84: \\(\\hat{V}(\\hat{\\tau}_{st}) = \\sum N_i^2 \\frac{N_i - n_i}{N_i} \\frac{s_i^2}{n_i}\\).',
+            distractors: 'B) es la fórmula para irrestricto aleatorio; C) omite el cuadrado; D) es la varianza de la media, no del total.'
+        },
+        // 18. Tipo b
+        {
+            type: 'b',
+            text: 'Asocie el parámetro con el estimador correspondiente en muestreo irrestricto aleatorio: 1) \\(\\mu\\)  2) \\(\\tau\\)  3) \\(V(\\bar{y})\\)',
+            options: [
+                'A) 1-B, 2-A, 3-C',
+                'B) 1-A, 2-B, 3-C',
+                'C) 1-B, 2-C, 3-A',
+                'D) 1-C, 2-B, 3-A'
+            ],
+            correct: 'A',
+            justification: '1) \\(\\mu\\) se estima con \\(\\bar{y}\\) (B); 2) \\(\\tau\\) con \\(N\\bar{y}\\) (A); 3) varianza verdadera (C).',
+            distractors: 'Confunden media con total o varianza.'
+        },
+        // 19. Tipo c
+        {
+            type: 'c',
+            text: 'En la fórmula de tamaño de muestra para estimar \\(\\tau\\) en muestreo irrestricto aleatorio, \\(D = \\frac{B^2}{4N^2}\\). Esto se debe a que la varianza de \\(\\hat{\\tau}\\) es \\(N^2\\) veces la varianza de \\(\\bar{y}\\), y se iguala \\(2\\sqrt{V(\\hat{\\tau})}\\) a \\(B\\).',
+            options: [
+                'A) Verdadero',
+                'B) Falso',
+                'C) No se menciona',
+                'D) Depende del tamaño de la población'
+            ],
+            correct: 'A',
+            justification: 'Página 54: se deduce de \\(V(\\hat{\\tau}) = N^2 V(\\bar{y})\\) y al resolver para n se obtiene \\(D = B^2/(4N^2)\\).',
+            distractors: 'B) es falso, es correcto; C) sí se menciona; D) no depende.'
+        },
+        // 20. Tipo a
+        {
+            type: 'a',
+            text: 'Si no se dispone de información previa para estimar \\(\\sigma^2\\), ¿cómo se puede obtener una aproximación para el tamaño de muestra en muestreo irrestricto aleatorio?',
+            options: [
+                'A) Usando la amplitud de variación dividida entre 4.',
+                'B) Usando la varianza muestral de una muestra piloto.',
+                'C) Suponiendo \\(\\sigma^2 = 1\\).',
+                'D) Tanto A como B son correctas.'
+            ],
+            correct: 'D',
+            justification: 'Página 53: se puede estimar \\(\\sigma\\) con el rango/4 o con estudios previos (muestra piloto).',
+            distractors: 'C) es una suposición arbitraria no recomendada.'
+        },
+        // 21. Tipo b
+        {
+            type: 'b',
+            text: 'Relacione los conceptos de muestreo estratificado con sus fórmulas: 1) Media del estrato i  2) Total del estrato i  3) Varianza muestral del estrato i',
+            options: [
+                'A) 1-B, 2-A, 3-C',
+                'B) 1-A, 2-B, 3-C',
+                'C) 1-B, 2-C, 3-A',
+                'D) 1-C, 2-B, 3-A'
+            ],
+            correct: 'A',
+            justification: 'Media del estrato: \\(\\mu_i\\) (B); total del estrato: \\(N_i\\mu_i\\) (A); varianza muestral: \\(s_i^2\\) (C).',
+            distractors: 'Confunden media y total.'
+        },
+        // 22. Tipo c
+        {
+            type: 'c',
+            text: 'El límite para el error de estimación de \\(\\bar{y}_{st}\\) es \\(2\\sqrt{\\hat{V}(\\bar{y}_{st})}\\), donde \\(\\hat{V}(\\bar{y}_{st}) = \\frac{1}{N^2} \\sum_{i=1}^L N_i^2 \\left(\\frac{\\text{______}}{N_i}\\right) \\frac{s_i^2}{n_i}\\).',
+            options: [
+                'A) \\(N_i - n_i\\)',
+                'B) \\(N_i\\)',
+                'C) \\(n_i\\)',
+                'D) \\(N_i - 1\\)'
+            ],
+            correct: 'A',
+            justification: 'Página 82: el factor es \\((N_i - n_i)/N_i\\), por lo que el numerador es \\(N_i - n_i\\).',
+            distractors: 'B) sería 1; C) sería \\(n_i/N_i\\); D) \\(N_i-1\\) no aparece en esa fórmula.'
+        },
+        // 23. Tipo a
+        {
+            type: 'a',
+            text: 'En la asignación de muestra en estratificado, si los costos y varianzas son iguales en todos los estratos, la asignación óptima es:',
+            options: [
+                'A) Asignación de Neyman.',
+                'B) Asignación proporcional.',
+                'C) Asignación igual.',
+                'D) Asignación aleatoria.'
+            ],
+            correct: 'B',
+            justification: 'Página 94: cuando costos y varianzas son iguales, la asignación de Neyman se reduce a la proporcional.',
+            distractors: 'A) es óptima cuando varianzas difieren; C) igual no es necesariamente óptima; D) no es un método de asignación.'
+        },
+        // 24. Tipo c
+        {
+            type: 'c',
+            text: 'El tamaño de muestra total en estratificado se calcula como \\(n = \\frac{\\sum N_i^2 \\sigma_i^2 / w_i}{N^2 D + \\sum N_i \\sigma_i^2}\\). Si \\(w_i = N_i/N\\), la fórmula se simplifica a \\(n = \\frac{\\sum N_i \\sigma_i^2}{ND + \\frac{1}{N}\\sum N_i \\sigma_i^2}\\). Esta es la fórmula para asignación ______.',
+            options: [
+                'A) Óptima',
+                'B) Proporcional',
+                'C) de Neyman',
+                'D) Uniforme'
+            ],
+            correct: 'B',
+            justification: 'Página 94: con \\(w_i = N_i/N\\) (asignación proporcional) se obtiene esa simplificación.',
+            distractors: 'A) óptima con costos; C) Neyman cuando \\(w_i \\propto N_i\\sigma_i\\); D) no existe.'
+        },
+        // 25. Tipo b
+        {
+            type: 'b',
+            text: 'Relacione el método de asignación con su característica: 1) Asignación proporcional  2) Asignación de Neyman  3) Asignación óptima (con costos)',
+            options: [
+                'A) 1-B, 2-A, 3-C',
+                'B) 1-A, 2-B, 3-C',
+                'C) 1-B, 2-C, 3-A',
+                'D) 1-C, 2-B, 3-A'
+            ],
+            correct: 'A',
+            justification: '1) proporcional: \\(n_i = n N_i/N\\) (B); 2) Neyman: \\(n_i = n \\frac{N_i\\sigma_i}{\\sum N_i\\sigma_i}\\) (A); 3) con costos: \\(n_i = n \\frac{N_i\\sigma_i/\\sqrt{c_i}}{\\sum N_i\\sigma_i/\\sqrt{c_i}}\\) (C).',
+            distractors: 'Confunden las fórmulas de asignación.'
+        },
+        // 26. Tipo a
+        {
+            type: 'a',
+            text: 'Al estimar el total poblacional en muestreo estratificado, el límite para el error de estimación es:',
+            options: [
+                'A) \\(2\\sqrt{\\hat{V}(\\hat{\\tau}_{st})}\\)',
+                'B) \\(2\\sqrt{\\hat{V}(\\bar{y}_{st})}\\)',
+                'C) \\(2\\sqrt{\\frac{1}{N}\\hat{V}(\\hat{\\tau}_{st})}\\)',
+                'D) \\(2\\sqrt{N\\hat{V}(\\bar{y}_{st})}\\)'
+            ],
+            correct: 'A',
+            justification: 'Página 85: el límite es \\(2\\sqrt{\\hat{V}(\\hat{\\tau}_{st})}\\).',
+            distractors: 'B) es para la media; C) y D) son combinaciones incorrectas.'
+        },
+        // 27. Tipo c
+        {
+            type: 'c',
+            text: 'En la fórmula del tamaño de muestra para estratificado, \\(\\sum N_i \\sigma_i^2\\) aparece en el denominador. Esta suma representa:',
+            options: [
+                'A) La suma ponderada de las varianzas poblacionales de los estratos.',
+                'B) La varianza total de la población.',
+                'C) El total de elementos en la población.',
+                'D) La suma de las desviaciones estándar de los estratos.'
+            ],
+            correct: 'A',
+            justification: 'Página 86: \\(\\sum N_i \\sigma_i^2\\) es la suma de \\(N_i\\) por la varianza de cada estrato.',
+            distractors: 'B) no es la varianza total; C) es \\(N\\); D) usa desviaciones estándar, no varianzas.'
+        },
+        // 28. Tipo b
+        {
+            type: 'b',
+            text: 'Asocie el símbolo con su significado en muestreo estratificado: 1) \\(L\\)  2) \\(N_i\\)  3) \\(n_i\\)  4) \\(\\bar{y}_i\\)',
+            options: [
+                'A) 1-C, 2-D, 3-B, 4-A',
+                'B) 1-C, 2-B, 3-D, 4-A',
+                'C) 1-D, 2-C, 3-B, 4-A',
+                'D) 1-C, 2-D, 3-A, 4-B'
+            ],
+            correct: 'A',
+            justification: '\\(L\\) = número de estratos (C); \\(N_i\\) = tamaño del estrato i (D); \\(n_i\\) = tamaño de muestra del estrato i (B); \\(\\bar{y}_i\\) = media muestral del estrato i (A).',
+            distractors: 'Confunden \\(N_i\\) y \\(n_i\\), o \\(\\bar{y}_i\\) con otros símbolos.'
+        },
+        // 29. Tipo a
+        {
+            type: 'a',
+            text: '¿Cuál es la relación entre la varianza estimada de \\(\\bar{y}_{st}\\) y la varianza estimada del total \\(\\hat{\\tau}_{st}\\)?',
+            options: [
+                'A) \\(\\hat{V}(\\hat{\\tau}_{st}) = N^2 \\hat{V}(\\bar{y}_{st})\\)',
+                'B) \\(\\hat{V}(\\hat{\\tau}_{st}) = N \\hat{V}(\\bar{y}_{st})\\)',
+                'C) \\(\\hat{V}(\\hat{\\tau}_{st}) = \\hat{V}(\\bar{y}_{st}) / N^2\\)',
+                'D) \\(\\hat{V}(\\hat{\\tau}_{st}) = \\hat{V}(\\bar{y}_{st}) / N\\)'
+            ],
+            correct: 'A',
+            justification: 'Página 84: \\(\\hat{V}(\\hat{\\tau}_{st}) = N^2 \\hat{V}(\\bar{y}_{st})\\).',
+            distractors: 'B) falta un factor N; C) y D) son inversas.'
+        },
+        // 30. Tipo c
+        {
+            type: 'c',
+            text: 'En muestreo irrestricto aleatorio, el factor de corrección por población finita es \\(\\frac{N-n}{N}\\). Este factor se aplica a la varianza estimada de \\(\\bar{y}\\) y \\(\\hat{\\tau}\\). Si \\(n\\) es pequeño en relación con \\(N\\), este factor se aproxima a:',
+            options: [
+                'A) 0',
+                'B) 1',
+                'C) \\(N/n\\)',
+                'D) \\(n/N\\)'
+            ],
+            correct: 'B',
+            justification: 'Página 46: si \\(n/N \\le 0.05\\), la cpf es aproximadamente 1.',
+            distractors: 'A) sería si n≈N; C) y D) son inversos o proporciones.'
+        }
+    ];
+
+    // --------------------------------------------------------------
+    // Lógica de la aplicación
+    // --------------------------------------------------------------
+    const totalQuestions = questions.length;
+    let currentIndex = 0;
+    let selectedAnswers = new Array(totalQuestions).fill(null); // 'A'..'D' o null
+    let verifiedStatus = new Array(totalQuestions).fill(false);
+    let correctCount = 0;
+
+    const questionText = document.getElementById('questionText');
+    const optionsContainer = document.getElementById('optionsContainer');
+    const feedbackBox = document.getElementById('feedbackBox');
+    const feedbackContent = document.getElementById('feedbackContent');
+    const questionCounter = document.getElementById('questionCounter');
+    const statusTag = document.getElementById('statusTag');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const checkBtn = document.getElementById('checkBtn');
+    const resetBtn = document.getElementById('resetBtn');
+    const progressBar = document.getElementById('progressBar');
+    const resultsArea = document.getElementById('resultsArea');
+    const resultsContent = document.getElementById('resultsContent');
+
+    function renderQuestion(index) {
+        const q = questions[index];
+        // Renderizar texto (con soporte para LaTeX simple, pero lo mostramos como texto)
+        questionText.textContent = q.text;
+        // Opciones
+        optionsContainer.innerHTML = '';
+        q.options.forEach((opt, idx) => {
+            const label = document.createElement('label');
+            label.className = 'option-label';
+            const radio = document.createElement('input');
+            radio.type = 'radio';
+            radio.name = 'question';
+            radio.value = String.fromCharCode(65 + idx); // A, B, C, D
+            radio.addEventListener('change', () => {
+                // al seleccionar, guardar y actualizar estilo
+                selectedAnswers[currentIndex] = radio.value;
+                // quitar clase selected de todos, poner en este
+                document.querySelectorAll('.option-label').forEach(el => el.classList.remove('selected'));
+                label.classList.add('selected');
+                // Si ya estaba verificado, ocultar feedback y cambiar estado
+                if (verifiedStatus[currentIndex]) {
+                    verifiedStatus[currentIndex] = false;
+                    feedbackBox.classList.remove('show');
+                    updateStatusAndProgress();
+                }
+            });
+            // Si ya hay una respuesta seleccionada, marcarla
+            if (selectedAnswers[currentIndex] === radio.value) {
+                radio.checked = true;
+                label.classList.add('selected');
+            }
+            label.appendChild(radio);
+            label.append(' ' + opt);
+            optionsContainer.appendChild(label);
+        });
+
+        // Actualizar contador y estado
+        questionCounter.textContent = `Pregunta ${index+1} / ${totalQuestions}`;
+        updateStatusAndProgress();
+
+        // Mostrar/ocultar feedback según si está verificado
+        if (verifiedStatus[index]) {
+            showFeedback(index);
+        } else {
+            feedbackBox.classList.remove('show');
+        }
+
+        // Habilitar/deshabilitar botones
+        prevBtn.disabled = (index === 0);
+        nextBtn.disabled = (index === totalQuestions - 1);
+
+        // Botón verificar: habilitado solo si hay selección
+        const hasSelection = selectedAnswers[index] !== null;
+        checkBtn.disabled = !hasSelection;
+        // Si ya está verificado, deshabilitar verificar
+        if (verifiedStatus[index]) checkBtn.disabled = true;
+    }
+
+    function updateStatusAndProgress() {
+        const index = currentIndex;
+        const answered = selectedAnswers[index] !== null;
+        const verified = verifiedStatus[index];
+        if (verified) {
+            statusTag.textContent = '✓ Verificada';
+            statusTag.style.color = '#0d6e2b';
+        } else if (answered) {
+            statusTag.textContent = '● Respondida';
+            statusTag.style.color = '#b68b1a';
+        } else {
+            statusTag.textContent = '● Sin responder';
+            statusTag.style.color = '#3a5a7a';
+        }
+        // Progress
+        const totalAnswered = selectedAnswers.filter(a => a !== null).length;
+        const progress = (totalAnswered / totalQuestions) * 100;
+        progressBar.style.width = progress + '%';
+    }
+
+    function showFeedback(index) {
+        const q = questions[index];
+        const userAnswer = selectedAnswers[index];
+        const isCorrect = (userAnswer === q.correct);
+        let html = '';
+        if (isCorrect) {
+            html += `<div class="correct-badge">✅ Correcto</div>`;
+        } else {
+            html += `<div class="wrong-badge">❌ Incorrecto</div>`;
+        }
+        html += `<div class="justification"><strong>Justificación:</strong> ${q.justification}</div>`;
+        if (q.distractors) {
+            html += `<div class="distractor"><strong>Análisis de distractores:</strong> ${q.distractors}</div>`;
+        }
+        feedbackContent.innerHTML = html;
+        feedbackBox.classList.add('show');
+        // Marcar opciones como correctas/incorrectas visualmente
+        const labels = document.querySelectorAll('.option-label');
+        labels.forEach((label, idx) => {
+            const letter = String.fromCharCode(65 + idx);
+            label.classList.remove('correct-answer', 'wrong-answer');
+            if (letter === q.correct) {
+                label.classList.add('correct-answer');
+            } else if (letter === userAnswer && userAnswer !== q.correct) {
+                label.classList.add('wrong-answer');
+            }
+        });
+        // Deshabilitar radios
+        document.querySelectorAll('input[name="question"]').forEach(inp => inp.disabled = true);
+        // Actualizar contador de aciertos (recalcular)
+        correctCount = 0;
+        for (let i = 0; i < totalQuestions; i++) {
+            if (verifiedStatus[i] && selectedAnswers[i] === questions[i].correct) correctCount++;
+        }
+    }
+
+    function verifyCurrent() {
+        const index = currentIndex;
+        if (selectedAnswers[index] === null) {
+            alert('Selecciona una opción primero.');
+            return;
+        }
+        if (verifiedStatus[index]) {
+            alert('Esta pregunta ya fue verificada.');
+            return;
+        }
+        verifiedStatus[index] = true;
+        showFeedback(index);
+        updateStatusAndProgress();
+        checkBtn.disabled = true;
+        // Recalcular correctCount
+        correctCount = 0;
+        for (let i = 0; i < totalQuestions; i++) {
+            if (verifiedStatus[i] && selectedAnswers[i] === questions[i].correct) correctCount++;
+        }
+        // Si todas verificadas, mostrar resultados
+        if (verifiedStatus.every(v => v === true)) {
+            showFinalResults();
+        }
+    }
+
+    function showFinalResults() {
+        const percentage = (correctCount / totalQuestions) * 100;
+        resultsContent.innerHTML = `✅ Has completado el cuestionario.<br> 
+            <span style="font-size:2rem;">${correctCount} / ${totalQuestions}</span><br>
+            <span style="font-size:1.4rem;">${percentage.toFixed(1)}% de aciertos</span>`;
+        resultsArea.style.display = 'block';
+    }
+
+    function resetQuiz() {
+        selectedAnswers = new Array(totalQuestions).fill(null);
+        verifiedStatus = new Array(totalQuestions).fill(false);
+        correctCount = 0;
+        currentIndex = 0;
+        resultsArea.style.display = 'none';
+        feedbackBox.classList.remove('show');
+        renderQuestion(0);
+        // Habilitar radios
+        document.querySelectorAll('input[name="question"]').forEach(inp => inp.disabled = false);
+        checkBtn.disabled = true;
+    }
+
+    // Navegación
+    function goToPrev() {
+        if (currentIndex > 0) {
+            currentIndex--;
+            renderQuestion(currentIndex);
+        }
+    }
+
+    function goToNext() {
+        if (currentIndex < totalQuestions - 1) {
+            currentIndex++;
+            renderQuestion(currentIndex);
+        }
+    }
+
+    // Event listeners
+    prevBtn.addEventListener('click', goToPrev);
+    nextBtn.addEventListener('click', goToNext);
+    checkBtn.addEventListener('click', verifyCurrent);
+    resetBtn.addEventListener('click', resetQuiz);
+
+    // Inicializar
+    renderQuestion(0);
+</script>
+</body>
+</html>
