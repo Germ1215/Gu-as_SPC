@@ -1,0 +1,1182 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guía de autoevaluación - Ley SNIEG</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            background: #f0f4f8;
+            font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 880px;
+            width: 100%;
+            background: #ffffff;
+            border-radius: 28px;
+            box-shadow: 0 12px 30px rgba(0,0,0,0.10);
+            padding: 30px 32px;
+            transition: 0.2s;
+        }
+        h1 {
+            font-size: 1.9rem;
+            font-weight: 600;
+            color: #0a2a44;
+            border-left: 6px solid #1a6ed8;
+            padding-left: 18px;
+            margin-bottom: 6px;
+        }
+        .sub {
+            color: #2f5577;
+            font-size: 0.95rem;
+            padding-left: 24px;
+            border-bottom: 1px solid #e0e7ef;
+            padding-bottom: 14px;
+            margin-bottom: 20px;
+        }
+        .progress {
+            height: 6px;
+            background: #e2e8f0;
+            border-radius: 10px;
+            margin: 6px 0 16px 0;
+            overflow: hidden;
+        }
+        .progress-bar {
+            height: 100%;
+            background: #1a6ed8;
+            width: 0%;
+            transition: width 0.2s;
+        }
+        .q-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            flex-wrap: wrap;
+            margin-bottom: 10px;
+        }
+        .q-counter {
+            background: #eef2f7;
+            padding: 4px 16px;
+            border-radius: 40px;
+            font-weight: 500;
+            font-size: 0.9rem;
+            color: #1a3a5a;
+        }
+        .q-status {
+            font-size: 0.9rem;
+            color: #4a6a8a;
+        }
+        .q-text {
+            font-size: 1.2rem;
+            font-weight: 500;
+            color: #0a1e32;
+            margin: 14px 0 18px 0;
+            line-height: 1.5;
+        }
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin: 12px 0 18px 0;
+        }
+        .opt-label {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            background: #f9fbfd;
+            padding: 12px 18px;
+            border-radius: 14px;
+            border: 1.5px solid #e2e8f0;
+            cursor: pointer;
+            transition: background 0.1s, border 0.1s;
+            font-size: 1rem;
+        }
+        .opt-label:hover {
+            background: #f0f4fe;
+            border-color: #b3cbf5;
+        }
+        .opt-label input[type="radio"] {
+            width: 18px;
+            height: 18px;
+            accent-color: #1a6ed8;
+            flex-shrink: 0;
+            margin: 0;
+        }
+        .opt-label.selected {
+            background: #e6effb;
+            border-color: #1a6ed8;
+        }
+        .opt-label.correct-highlight {
+            background: #dff0d8;
+            border-color: #2e8b57;
+        }
+        .opt-label.wrong-highlight {
+            background: #f8d7da;
+            border-color: #b02a37;
+        }
+        .feedback {
+            background: #f0f4fa;
+            border-radius: 16px;
+            padding: 18px 22px;
+            margin: 16px 0 18px 0;
+            border-left: 5px solid #1a6ed8;
+            display: none;
+        }
+        .feedback.show {
+            display: block;
+        }
+        .feedback .badge-correct {
+            color: #0d6e2b;
+            font-weight: 600;
+        }
+        .feedback .badge-wrong {
+            color: #b02a37;
+            font-weight: 600;
+        }
+        .feedback .justify {
+            margin-top: 8px;
+            font-size: 0.96rem;
+            line-height: 1.5;
+        }
+        .feedback .distractor {
+            margin-top: 8px;
+            font-size: 0.92rem;
+            background: #e9eef3;
+            padding: 8px 14px;
+            border-radius: 10px;
+            color: #1f3a57;
+        }
+        .nav {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            margin-top: 6px;
+        }
+        .nav-buttons {
+            display: flex;
+            gap: 10px;
+        }
+        .btn {
+            background: white;
+            border: 1px solid #cbd5e1;
+            padding: 10px 20px;
+            border-radius: 40px;
+            font-weight: 500;
+            font-size: 0.95rem;
+            color: #1a2d44;
+            cursor: pointer;
+            transition: 0.1s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .btn-primary {
+            background: #1a6ed8;
+            border-color: #1a6ed8;
+            color: white;
+        }
+        .btn-primary:hover {
+            background: #135bb5;
+            border-color: #135bb5;
+        }
+        .btn-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .btn-outline:hover {
+            background: #f1f5f9;
+        }
+        .btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+        .btn-success {
+            background: #1f8b4c;
+            border-color: #1f8b4c;
+            color: white;
+        }
+        .btn-success:hover {
+            background: #17733e;
+        }
+        .results {
+            background: #e8f0fe;
+            border-radius: 20px;
+            padding: 18px 24px;
+            margin-top: 20px;
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: 500;
+            color: #0b2b4a;
+        }
+        .relacion-lista {
+            background: #f5f8fc;
+            padding: 12px 16px;
+            border-radius: 12px;
+            margin: 8px 0 12px 0;
+            font-size: 0.95rem;
+            border-left: 3px solid #1a6ed8;
+        }
+        .relacion-lista span {
+            display: inline-block;
+            margin-right: 18px;
+        }
+        @media (max-width: 600px) {
+            .container { padding: 18px 16px; }
+            .nav { flex-direction: column; align-items: stretch; }
+            .nav-buttons { justify-content: center; flex-wrap: wrap; }
+            .btn { padding: 8px 14px; font-size: 0.9rem; }
+        }
+    </style>
+</head>
+<body>
+<div class="container" id="app">
+    <h1>📘 Ley del SNIEG</h1>
+    <div class="sub">Autoevaluación · Artículos seleccionados</div>
+
+    <div class="progress"><div class="progress-bar" id="progressBar"></div></div>
+
+    <div id="questionArea">
+        <div class="q-header">
+            <span class="q-counter" id="qCounter">Pregunta 1 / 50</span>
+            <span class="q-status" id="qStatus">● Sin responder</span>
+        </div>
+        <div class="q-text" id="qText">Cargando pregunta...</div>
+        <div id="relacionList" class="relacion-lista" style="display:none;"></div>
+        <div class="options" id="optionsContainer"></div>
+        <div class="feedback" id="feedbackBox">
+            <div id="feedbackContent"></div>
+        </div>
+    </div>
+
+    <div class="nav">
+        <div class="nav-buttons">
+            <button class="btn btn-outline" id="prevBtn" disabled>◀ Anterior</button>
+            <button class="btn btn-outline" id="nextBtn">Siguiente ▶</button>
+        </div>
+        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+            <button class="btn btn-primary" id="checkBtn">✔ Verificar</button>
+            <button class="btn btn-success" id="resetBtn">⟳ Reiniciar</button>
+        </div>
+    </div>
+
+    <div id="resultsArea" style="display:none;">
+        <div class="results" id="resultsContent"></div>
+    </div>
+</div>
+
+<script>
+// --------------------------------------------------------------
+// 50 PREGUNTAS basadas en la Ley SNIEG (artículos especificados)
+// Tipos: a) distractores, b) relación, c) completar
+// --------------------------------------------------------------
+const questions = [
+    // 1. Art. 3 - principios rectores
+    {
+        type: 'c',
+        text: 'Los principios rectores del Sistema Nacional de Información Estadística y Geográfica son accesibilidad, transparencia, objetividad e ______.',
+        options: [
+            'A) independencia',
+            'B) confidencialidad',
+            'C) oportunidad',
+            'D) veracidad'
+        ],
+        correct: 'A',
+        justification: 'Artículo 3: "Serán principios rectores del Sistema los de accesibilidad, transparencia, objetividad e independencia."',
+        distractors: 'B) confidencialidad es un principio para los datos, no del Sistema; C) oportunidad es una característica de la información, no principio rector; D) veracidad es cualidad de la información, no principio rector.'
+    },
+    // 2. Art. 4 - objetivos del Sistema
+    {
+        type: 'a',
+        text: '¿Cuál de los siguientes NO es un objetivo del Sistema Nacional de Información Estadística y Geográfica según el artículo 4?',
+        options: [
+            'A) Producir Información',
+            'B) Difundir oportunamente la Información',
+            'C) Promover el conocimiento y uso de la Información',
+            'D) Sancionar a los informantes que no proporcionen datos'
+        ],
+        correct: 'D',
+        justification: 'Artículo 4: los objetivos son I. Producir Información; II. Difundir oportunamente la Información; III. Promover el conocimiento y uso de la Información; IV. Conservar la Información. La sanción es un tema del Título Cuarto (faltas administrativas), no un objetivo del Sistema.',
+        distractors: 'A, B y C son objetivos explícitos del artículo 4.'
+    },
+    // 3. Art. 2 - definición de Información Estadística
+    {
+        type: 'c',
+        text: 'La Información Estadística se define como el conjunto de resultados cuantitativos o datos que se obtienen de las Actividades Estadísticas y Geográficas en materia estadística, tomando como base los datos primarios obtenidos de los ______.',
+        options: [
+            'A) Informantes del Sistema',
+            'B) registros administrativos',
+            'C) censos nacionales',
+            'D) encuestas nacionales'
+        ],
+        correct: 'A',
+        justification: 'Artículo 2, fracción III: "...tomando como base los datos primarios obtenidos de los Informantes del Sistema sobre hechos que son relevantes..."',
+        distractors: 'B) los registros administrativos son una fuente, pero la definición se refiere a los Informantes; C) los censos son un tipo de actividad; D) las encuestas son otro instrumento.'
+    },
+    // 4. Art. 2 - definición de Información Geográfica
+    {
+        type: 'a',
+        text: 'La Información Geográfica es el conjunto organizado de datos espaciales georreferenciados, que mediante símbolos y códigos genera conocimiento acerca de:',
+        options: [
+            'A) las condiciones físico-ambientales, recursos naturales y obras de naturaleza antrópica del territorio nacional',
+            'B) los fenómenos económicos, demográficos y sociales',
+            'C) la gestión y desempeño de las instituciones públicas',
+            'D) los indicadores de gobierno y seguridad pública'
+        ],
+        correct: 'A',
+        justification: 'Artículo 2, fracción IV: "...genera el conocimiento acerca de las condiciones físico-ambientales, de los recursos naturales y de las obras de naturaleza antrópica del territorio nacional."',
+        distractors: 'B) corresponde a Información Estadística; C) y D) son temas del Subsistema de Gobierno, Seguridad Pública e Impartición de Justicia.'
+    },
+    // 5. Art. 5 - integración del Sistema
+    {
+        type: 'b',
+        text: 'Relacione los elementos que integran el Sistema Nacional de Información Estadística y Geográfica según el artículo 5:',
+        options: [
+            'A) 1-C, 2-B, 3-A',
+            'B) 1-A, 2-C, 3-B',
+            'C) 1-B, 2-A, 3-C',
+            'D) 1-C, 2-A, 3-B'
+        ],
+        correct: 'A',
+        justification: 'Artículo 5: I. El Consejo Consultivo Nacional (C); II. Los Subsistemas Nacionales de Información (B); III. El Instituto (A).',
+        distractors: 'Las otras opciones confunden los roles del Consejo, los Subsistemas y el Instituto.',
+        relacionItems: '1) Consejo Consultivo Nacional  2) Subsistemas Nacionales de Información  3) Instituto',
+        relacionOpciones: 'A) INEGI   B) Subsistemas   C) Consejo Consultivo'
+    },
+    // 6. Art. 7 - organización y coordinación
+    {
+        type: 'c',
+        text: 'La organización, planeación, funcionamiento y coordinación de las Actividades Estadísticas y Geográficas se sujetarán a esta Ley, a los programas previstos en el artículo 9 y a las disposiciones de carácter general que expida el ______.',
+        options: [
+            'A) Consejo Consultivo Nacional',
+            'B) Instituto',
+            'C) Presidente de la República',
+            'D) Congreso de la Unión'
+        ],
+        correct: 'B',
+        justification: 'Artículo 7: "...se sujetarán a esta Ley, a los programas previstos en el artículo 9 de esta Ley y a las disposiciones de carácter general que expida al efecto el Instituto..."',
+        distractors: 'A) el Consejo es consultivo; C) el Presidente no expide esas disposiciones; D) el Congreso expide leyes, no disposiciones generales del Sistema.'
+    },
+    // 7. Art. 8 - participación de las Unidades
+    {
+        type: 'a',
+        text: 'Las Unidades del Estado participan en el Sistema a través de los siguientes órganos, EXCEPTO:',
+        options: [
+            'A) El Consejo Consultivo Nacional',
+            'B) Los Comités Ejecutivos de los Subsistemas',
+            'C) Los Comités Técnicos Especializados',
+            'D) La Junta de Gobierno del Instituto'
+        ],
+        correct: 'D',
+        justification: 'Artículo 8: las Unidades participan a través de I. El Consejo Consultivo Nacional; II. Los Comités Ejecutivos; III. Los Comités Técnicos Especializados. La Junta de Gobierno es el órgano superior de dirección del Instituto, no un órgano de participación de las Unidades.',
+        distractors: 'A, B y C son los órganos señalados en el artículo 8.'
+    },
+    // 8. Art. 17 - Subsistemas Nacionales
+    {
+        type: 'c',
+        text: 'El Sistema contará con los siguientes Subsistemas Nacionales de Información: Demográfica y Social; Económica; Geográfica y del Medio Ambiente; y ______.',
+        options: [
+            'A) de Gobierno, Seguridad Pública e Impartición de Justicia',
+            'B) de Gobierno y Seguridad Pública',
+            'C) de Impartición de Justicia',
+            'D) de Gobierno'
+        ],
+        correct: 'A',
+        justification: 'Artículo 17, fracción IV: "Gobierno, Seguridad Pública e Impartición de Justicia". La reforma de 2018 adicionó este Subsistema.',
+        distractors: 'B) omite Impartición de Justicia; C) omite Gobierno y Seguridad Pública; D) es incompleto.'
+    },
+    // 9. Art. 18 - acuerdo de creación de Subsistema
+    {
+        type: 'a',
+        text: 'En el acuerdo de creación de un Subsistema, la Junta de Gobierno deberá señalar como mínimo su infraestructura de información, los indicadores clave y:',
+        options: [
+            'A) las fuentes de las que se obtendrá la información básica',
+            'B) el presupuesto asignado',
+            'C) los miembros del Comité Ejecutivo',
+            'D) el calendario de publicación'
+        ],
+        correct: 'A',
+        justification: 'Artículo 18: "...deberá señalar como mínimo su infraestructura de información, los indicadores clave que deberá producir y las fuentes de las que se obtendrá... la información básica para dichos indicadores."',
+        distractors: 'B) el presupuesto no se menciona en ese artículo; C) los miembros del Comité se definen en otros artículos; D) el calendario es un asunto de publicación, no de creación.'
+    },
+    // 10. Art. 19 - partes de los Subsistemas
+    {
+        type: 'b',
+        text: 'Relacione los componentes que forman parte de los Subsistemas según el artículo 19:',
+        options: [
+            'A) 1-C, 2-A, 3-B',
+            'B) 1-A, 2-B, 3-C',
+            'C) 1-B, 2-C, 3-A',
+            'D) 1-C, 2-B, 3-A'
+        ],
+        correct: 'A',
+        justification: 'Artículo 19: forman parte de los Subsistemas: los Comités Ejecutivos (C), los Comités Técnicos Especializados (A) y las Unidades del Estado (B).',
+        distractors: 'Las otras opciones confunden el orden o los roles.',
+        relacionItems: '1) Comités Ejecutivos  2) Comités Técnicos Especializados  3) Unidades del Estado',
+        relacionOpciones: 'A) Comités Técnicos Especializados   B) Unidades del Estado   C) Comités Ejecutivos'
+    },
+    // 11. Art. 28 - elaboración de indicadores del Subsistema Geográfico y del Medio Ambiente
+    {
+        type: 'c',
+        text: 'El Instituto elaborará los indicadores del Subsistema Nacional de Información Geográfica y del Medio Ambiente a partir de la información básica proveniente del Sistema Nacional de Información Ambiental y de Recursos Naturales, de un sistema integrado de inventarios y encuestas, y de ______.',
+        options: [
+            'A) los registros administrativos',
+            'B) los censos económicos',
+            'C) las cuentas nacionales',
+            'D) los índices de precios'
+        ],
+        correct: 'A',
+        justification: 'Artículo 28, fracción III: "Los registros administrativos que permitan obtener Información en la materia."',
+        distractors: 'B) los censos económicos pertenecen al Subsistema Económico; C) las cuentas nacionales son facultad exclusiva del INEGI; D) los índices de precios son facultad exclusiva del INEGI.'
+    },
+    // 12. Art. 52 - naturaleza del INEGI
+    {
+        type: 'a',
+        text: 'El Instituto Nacional de Estadística y Geografía es un organismo público con autonomía técnica y de gestión, personalidad jurídica y patrimonio propios, responsable de normar y coordinar el Sistema, así como de realizar las Actividades a que se refiere el artículo ______.',
+        options: [
+            'A) 59',
+            'B) 55',
+            'C) 77',
+            'D) 81'
+        ],
+        correct: 'A',
+        justification: 'Artículo 52: "...responsable de normar y coordinar el Sistema Nacional de Información Estadística y Geográfica, así como de realizar las Actividades a que se refiere el artículo 59 de esta Ley."',
+        distractors: 'B) artículo 55 funciones generales; C) artículo 77 atribuciones de la Junta de Gobierno; D) artículo 81 atribuciones del Presidente.'
+    },
+    // 13. Art. 53 - objetivo prioritario del INEGI
+    {
+        type: 'c',
+        text: 'El Instituto tendrá como objetivo prioritario realizar las acciones tendientes a lograr que la Información de Interés Nacional se sujete a los principios enunciados en el artículo ______.',
+        options: [
+            'A) 2',
+            'B) 3',
+            'C) 4',
+            'D) 5'
+        ],
+        correct: 'B',
+        justification: 'Artículo 53: "...realizar las acciones tendientes a lograr que la Información de Interés Nacional se sujete a los principios enunciados en el artículo 3 de esta Ley."',
+        distractors: 'A) artículo 2 definiciones; C) artículo 4 objetivos del Sistema; D) artículo 5 integración del Sistema.'
+    },
+    // 14. Art. 54 - acciones del INEGI
+    {
+        type: 'a',
+        text: 'El Instituto, conforme a los principios constitucionales que rigen al Sistema, realizará acciones tendientes a lograr la adecuación conceptual de la Información a las necesidades del desarrollo, que la Información sea comparable en el tiempo y en el espacio, y:',
+        options: [
+            'A) la adecuación de los procedimientos estadísticos y geográficos a estándares internacionales',
+            'B) la difusión gratuita de toda la información',
+            'C) la sanción a los informantes que no cooperen',
+            'D) la elaboración de los índices nacionales de precios'
+        ],
+        correct: 'A',
+        justification: 'Artículo 54, fracción III: "La adecuación de los procedimientos estadísticos y geográficos a estándares internacionales, para facilitar su comparación."',
+        distractors: 'B) no es una acción del artículo 54; C) corresponde a faltas administrativas; D) es una facultad exclusiva del artículo 59.'
+    },
+    // 15. Art. 55 - funciones del Instituto como unidad coordinadora
+    {
+        type: 'b',
+        text: 'Relacione las funciones del Instituto como unidad central coordinadora del Sistema según el artículo 55:',
+        options: [
+            'A) 1-C, 2-B, 3-A',
+            'B) 1-A, 2-C, 3-B',
+            'C) 1-B, 2-A, 3-C',
+            'D) 1-C, 2-A, 3-B'
+        ],
+        correct: 'A',
+        justification: 'Artículo 55: I. Normar y coordinar el Sistema (C); II. Normar y coordinar las Actividades de las Unidades (B); III. Solicitar a las Unidades información para la integración de los programas (A).',
+        distractors: 'Las otras opciones invierten el orden de las funciones.',
+        relacionItems: '1) Normar y coordinar el Sistema  2) Normar y coordinar las Actividades de las Unidades  3) Solicitar información para programas',
+        relacionOpciones: 'A) Solicitar información para programas   B) Normar y coordinar Actividades de Unidades   C) Normar y coordinar el Sistema'
+    },
+    // 16. Art. 56 - catálogo nacional de indicadores
+    {
+        type: 'c',
+        text: 'El Instituto establecerá en coordinación con las Unidades un catálogo nacional de indicadores, ajustándose a lo dispuesto en los artículos 22, 25 y ______ de esta Ley.',
+        options: [
+            'A) 28',
+            'B) 26',
+            'C) 27',
+            'D) 29'
+        ],
+        correct: 'A',
+        justification: 'Artículo 56: "...ajustándose a lo dispuesto en los artículos 22, 25 y 28 de esta Ley." (corresponden a los Subsistemas Demográfico y Social, Económico, y Geográfico y del Medio Ambiente).',
+        distractors: 'B) artículo 26 se refiere a la componente geográfica; C) artículo 27 al componente del medio ambiente; D) artículo 29 a los Comités Ejecutivos.'
+    },
+    // 17. Art. 57 - normas técnicas
+    {
+        type: 'a',
+        text: 'El Instituto deberá elaborar y someter a consideración del Comité Ejecutivo correspondiente las normas técnicas y metodologías necesarias para realizar las Actividades Estadísticas y Geográficas cuando la Unidad que corresponda no las proponga oportunamente o estas no tomen en cuenta:',
+        options: [
+            'A) los estándares nacionales e internacionales o las mejores prácticas en la materia',
+            'B) los principios de accesibilidad y transparencia',
+            'C) las necesidades del Sistema',
+            'D) los objetivos del Instituto'
+        ],
+        correct: 'A',
+        justification: 'Artículo 57: "...cuando la Unidad que corresponda no las proponga oportunamente o estas no tomen en cuenta los estándares nacionales e internacionales o, en su caso, las mejores prácticas en la materia."',
+        distractors: 'B) son principios rectores, no criterios para normas técnicas; C) es muy general; D) es vago.'
+    },
+    // 18. Art. 58 - regulación de captación, procesamiento y publicación
+    {
+        type: 'c',
+        text: 'El Instituto regulará, mediante la expedición de disposiciones de carácter general, la captación, procesamiento y publicación de la Información, para el debido funcionamiento del Sistema o ______ las que utilicen las Unidades para tales efectos.',
+        options: [
+            'A) autorizará',
+            'B) supervisará',
+            'C) evaluará',
+            'D) modificará'
+        ],
+        correct: 'A',
+        justification: 'Artículo 58, primer párrafo: "...para el debido funcionamiento del Sistema o autorizará las que utilicen las Unidades para tales efectos."',
+        distractors: 'B) supervisar es una función posterior; C) evaluar no se menciona en ese artículo; D) modificar no corresponde.'
+    },
+    // 19. Art. 59 - facultades exclusivas del INEGI
+    {
+        type: 'a',
+        text: '¿Cuál de las siguientes NO es una facultad exclusiva del Instituto según el artículo 59?',
+        options: [
+            'A) Elaborar el catálogo nacional de indicadores',
+            'B) Realizar los censos nacionales',
+            'C) Integrar el sistema de cuentas nacionales',
+            'D) Elaborar los índices nacionales de precios'
+        ],
+        correct: 'A',
+        justification: 'Artículo 59: facultades exclusivas: I. Realizar los censos nacionales; II. Integrar el sistema de cuentas nacionales; III. Elaborar los índices nacionales de precios (IPC e INPP). El catálogo nacional de indicadores es una función del artículo 56, no una facultad exclusiva.',
+        distractors: 'B, C y D son facultades exclusivas del artículo 59.'
+    },
+    // 20. Art. 60 - autorización para fotografías aéreas
+    {
+        type: 'c',
+        text: 'Sólo con la autorización del Instituto y previa opinión favorable de las autoridades competentes, las personas físicas o morales nacionales podrán captar fotografías aéreas con cámaras métricas o de reconocimiento y de otras imágenes por percepción remota dentro del espacio aéreo nacional, debiendo entregar al Instituto un informe detallado y ______ cuando éste se lo requiera.',
+        options: [
+            'A) una copia de los trabajos',
+            'B) los derechos correspondientes',
+            'C) la documentación de las cámaras',
+            'D) el plan de vuelo'
+        ],
+        correct: 'A',
+        justification: 'Artículo 60: "...debiendo entregar al Instituto un informe detallado de los trabajos que hubieren realizado, así como una copia de los mismos cuando éste último se los requiera."',
+        distractors: 'B) no se menciona pago; C) no se requiere; D) no se exige en el artículo.'
+    },
+    // 21. Art. 61 - personas extranjeras
+    {
+        type: 'a',
+        text: 'Las personas físicas y morales extranjeras requerirán autorización del Instituto para efectuar actividades tendientes a captar fotografías aéreas con cámaras métricas o de reconocimiento y de otras imágenes por percepción remota dentro del espacio aéreo nacional, y para:',
+        options: [
+            'A) levantar información estadística y geográfica',
+            'B) realizar censos nacionales',
+            'C) integrar el sistema de cuentas nacionales',
+            'D) elaborar índices de precios'
+        ],
+        correct: 'A',
+        justification: 'Artículo 61, fracción II: "Levantar información estadística y geográfica."',
+        distractors: 'B, C y D son facultades exclusivas del INEGI, no pueden ser realizadas por extranjeros.'
+    },
+    // 22. Art. 62 - promoción de métodos y normas técnicas
+    {
+        type: 'c',
+        text: 'El Instituto promoverá la adopción de métodos y normas técnicas en la captación de los datos objeto de registro, en coordinación con las autoridades a las que competa administrar directorios, catastros, registros públicos, padrones, inventarios y demás ______ que permitan obtener Información.',
+        options: [
+            'A) registros administrativos',
+            'B) censos',
+            'C) encuestas',
+            'D) sistemas de información'
+        ],
+        correct: 'A',
+        justification: 'Artículo 62: "...padrones, inventarios y demás registros administrativos que permitan obtener Información."',
+        distractors: 'B) los censos son facultad del INEGI; C) las encuestas son instrumentos; D) es muy general.'
+    },
+    // 23. Art. 63 - colaboración con el Instituto
+    {
+        type: 'a',
+        text: 'Para el desarrollo de las Actividades Estadísticas y Geográficas colaborarán con el Instituto los poderes Ejecutivo, Legislativo y Judicial de la Federación y de las entidades federativas; los organismos constitucionales autónomos; las autoridades municipales y de las demarcaciones territoriales; las Unidades del Estado; las instituciones, agrupaciones u organizaciones sociales y privadas, y ______.',
+        options: [
+            'A) los particulares',
+            'B) el Consejo Consultivo Nacional',
+            'C) la Junta de Gobierno',
+            'D) el Presidente de la República'
+        ],
+        correct: 'A',
+        justification: 'Artículo 63, fracción VI: "Los particulares."',
+        distractors: 'B) el Consejo es un órgano del Sistema; C) la Junta es órgano de dirección; D) el Presidente no se menciona en ese artículo.'
+    },
+    // 24. Art. 64 - apoyo obligatorio del Instituto
+    {
+        type: 'c',
+        text: 'Previo cumplimiento de formalidades y acuerdo favorable de su Junta de Gobierno, el Instituto deberá brindar el apoyo que le soliciten el Ejecutivo Federal y el Senado en materia de tratados, convenios o acuerdos internacionales cuando se establezcan derechos y obligaciones en materia de Información, así como aquellos que versen sobre ______.',
+        options: [
+            'A) límites del territorio nacional',
+            'B) seguridad nacional',
+            'C) política económica',
+            'D) relaciones exteriores'
+        ],
+        correct: 'A',
+        justification: 'Artículo 64, fracción I: "...así como aquellos que versen sobre límites del territorio nacional."',
+        distractors: 'B) la seguridad nacional es un tema de restricción de información; C) no se menciona; D) es muy general.'
+    },
+    // 25. Art. 65 - apoyo facultativo del Instituto
+    {
+        type: 'a',
+        text: 'El Instituto podrá brindar apoyo, previo acuerdo de su Junta de Gobierno, a los poderes Legislativo y Judicial federales y legislativos de las entidades federativas, en la definición de límites de las entidades federativas, municipios y demarcaciones territoriales, así como asesorar y apoyar en la identificación física de tales límites. También podrá apoyar al Congreso de la Unión, gobiernos de las entidades federativas y autoridades competentes para el levantamiento geodésico y para realizar el registro de los límites territoriales, y podrá apoyar a las autoridades locales para la organización de los ______.',
+        options: [
+            'A) catastros de los municipios',
+            'B) censos de población',
+            'C) encuestas económicas',
+            'D) registros de propiedad'
+        ],
+        correct: 'A',
+        justification: 'Artículo 65, fracción III: "...para la organización de los catastros de los municipios..."',
+        distractors: 'B) los censos son facultad exclusiva del INEGI; C) no se menciona; D) no corresponde.'
+    },
+    // 26. Art. 66 - ejercicio de funciones del Instituto
+    {
+        type: 'c',
+        text: 'El ejercicio de las funciones del Instituto corresponde, en el ámbito de sus respectivas competencias, a la Junta de Gobierno y al ______.',
+        options: [
+            'A) Presidente del Instituto',
+            'B) Consejo Consultivo Nacional',
+            'C) Comité Ejecutivo',
+            'D) Secretario Técnico'
+        ],
+        correct: 'A',
+        justification: 'Artículo 66: "...a la Junta de Gobierno y al Presidente del Instituto."',
+        distractors: 'B) el Consejo es consultivo; C) los Comités son de los Subsistemas; D) no existe esa figura.'
+    },
+    // 27. Art. 67 - integración de la Junta de Gobierno
+    {
+        type: 'a',
+        text: 'La Junta de Gobierno es el órgano superior de dirección del Instituto, y estará integrada por cinco miembros designados por el Presidente de la República con la aprobación de la Cámara de Senadores o, en los recesos, de la ______.',
+        options: [
+            'A) Comisión Permanente',
+            'B) Cámara de Diputados',
+            'C) Suprema Corte de Justicia',
+            'D) Secretaría de Gobernación'
+        ],
+        correct: 'A',
+        justification: 'Artículo 67: "...con la aprobación de la Cámara de Senadores o, en los recesos de esta última, de la Comisión Permanente."',
+        distractors: 'B) la Cámara de Diputados no interviene en la designación; C) la SCJN no; D) la SEGOB no.'
+    },
+    // 28. Art. 68 - duración de los cargos
+    {
+        type: 'b',
+        text: 'Relacione el cargo con su duración según el artículo 68:',
+        options: [
+            'A) 1-B, 2-A',
+            'B) 1-A, 2-B',
+            'C) 1-A, 2-C',
+            'D) 1-C, 2-A'
+        ],
+        correct: 'A',
+        justification: 'Artículo 68: "El Presidente del Instituto durará en su cargo seis años y los vicepresidentes de la Junta de Gobierno ocho años."',
+        distractors: 'Las otras opciones invierten las duraciones.',
+        relacionItems: '1) Presidente del Instituto  2) Vicepresidentes de la Junta de Gobierno',
+        relacionOpciones: 'A) 6 años   B) 8 años   C) 4 años'
+    },
+    // 29. Art. 77 - atribuciones de la Junta de Gobierno (fracción II)
+    {
+        type: 'c',
+        text: 'Corresponderá a la Junta de Gobierno determinar la Información que se considerará de Interés Nacional de conformidad con lo dispuesto en el artículo ______ de esta Ley.',
+        options: [
+            'A) 78',
+            'B) 79',
+            'C) 80',
+            'D) 81'
+        ],
+        correct: 'A',
+        justification: 'Artículo 77, fracción II: "Determinar la Información que se considerará de Interés Nacional de conformidad con lo dispuesto en el artículo 78 de la presente Ley."',
+        distractors: 'B) artículo 79 trata de los sectores de atención; C) artículo 80 atribuciones del Presidente; D) artículo 81 facultad del Presidente para asignar sectores.'
+    },
+    // 30. Art. 77 - atribuciones de la Junta de Gobierno (fracción IV)
+    {
+        type: 'a',
+        text: 'La Junta de Gobierno tiene la atribución de determinar la Información que deba ser de divulgación restringida por motivos de ______.',
+        options: [
+            'A) seguridad nacional',
+            'B) confidencialidad',
+            'C) reserva fiscal',
+            'D) privacidad'
+        ],
+        correct: 'A',
+        justification: 'Artículo 77, fracción IV: "Determinar la Información que deba ser de divulgación restringida por motivos de seguridad nacional."',
+        distractors: 'B) confidencialidad es un principio general; C) no se menciona; D) no es un motivo en ese artículo.'
+    },
+    // 31. Art. 77 - atribuciones de la Junta de Gobierno (fracción V)
+    {
+        type: 'c',
+        text: 'La Junta de Gobierno determinará, atendiendo a las necesidades del Sistema, la creación de otros Subsistemas en términos de lo dispuesto en el último párrafo del artículo ______ de esta Ley.',
+        options: [
+            'A) 17',
+            'B) 18',
+            'C) 19',
+            'D) 20'
+        ],
+        correct: 'A',
+        justification: 'Artículo 77, fracción V: "...en términos de lo dispuesto en el último párrafo del artículo 17 de esta Ley."',
+        distractors: 'B) artículo 18 trata del acuerdo de creación; C) artículo 19 partes de los Subsistemas; D) artículo 20 infraestructura del Subsistema Demográfico.'
+    },
+    // 32. Art. 77 - atribuciones de la Junta (fracción VIII)
+    {
+        type: 'a',
+        text: 'La Junta de Gobierno normará el funcionamiento del Sistema y regulará la captación, procesamiento y publicación de la Información que se genere, con base en los dictámenes que, en su caso, emita el ______ correspondiente.',
+        options: [
+            'A) Comité Ejecutivo',
+            'B) Consejo Consultivo Nacional',
+            'C) Presidente del Instituto',
+            'D) Comité Técnico Especializado'
+        ],
+        correct: 'A',
+        justification: 'Artículo 77, fracción VIII: "...con base en los dictámenes que, en su caso, emita el Comité Ejecutivo correspondiente."',
+        distractors: 'B) el Consejo opina sobre programas, no emite dictámenes para regular; C) el Presidente propone; D) los Comités Técnicos son de apoyo.'
+    },
+    // 33. Art. 77 - atribuciones de la Junta (fracción XI)
+    {
+        type: 'c',
+        text: 'La Junta de Gobierno aprobará al final de cada año el calendario que contenga las fechas de publicación de Información de Interés Nacional a que habrá de sujetarse el Instituto, en el año ______.',
+        options: [
+            'A) inmediato siguiente',
+            'B) en curso',
+            'C) subsecuente',
+            'D) actual'
+        ],
+        correct: 'A',
+        justification: 'Artículo 77, fracción XI: "...en el año inmediato siguiente."',
+        distractors: 'B) no es el año en curso; C) podría ser cualquier subsecuente; D) no es específico.'
+    },
+    // 34. Art. 81 - facultad del Presidente para asignar sectores
+    {
+        type: 'a',
+        text: 'El Presidente del Instituto tiene la facultad de determinar el sector que deberá atender y coordinar cada uno de los vicepresidentes de la Junta de Gobierno como parte de su labor ordinaria y cotidiana dentro del Instituto, de entre los sectores señalados en el artículo ______.',
+        options: [
+            'A) 79',
+            'B) 78',
+            'C) 77',
+            'D) 80'
+        ],
+        correct: 'A',
+        justification: 'Artículo 81: "...de entre los cuatro sectores señalados en el artículo 79 de esta Ley."',
+        distractors: 'B) artículo 78 criterios de Información de Interés Nacional; C) artículo 77 atribuciones de la Junta; D) artículo 80 atribuciones del Presidente.'
+    },
+    // 35. Art. 97 - sistema de compilación normativa
+    {
+        type: 'c',
+        text: 'El Instituto implementará un sistema de compilación normativa, en el que se conservarán los textos de las normas que en el ejercicio de sus funciones ______.',
+        options: [
+            'A) expida',
+            'B) reciba',
+            'C) evalúe',
+            'D) publique'
+        ],
+        correct: 'A',
+        justification: 'Artículo 97: "...en el que se conservarán los textos de las normas que en el ejercicio de sus funciones expida."',
+        distractors: 'B) no es un sistema de recepción; C) no se menciona; D) publicar es parte de la difusión, pero el sistema conserva lo que expide.'
+    },
+    // 36. Art. 36 - funciones de capacitación del INEGI
+    {
+        type: 'b',
+        text: 'Relacione las funciones del Instituto para apoyar la capacitación y actualización según el artículo 36:',
+        options: [
+            'A) 1-B, 2-A, 3-C',
+            'B) 1-A, 2-C, 3-B',
+            'C) 1-C, 2-B, 3-A',
+            'D) 1-B, 2-C, 3-A'
+        ],
+        correct: 'A',
+        justification: 'Artículo 36: I. Elaborar programa de formación (B); II. Realizar estudios relativos al Sistema (A); III. Realizar investigaciones sobre nuevas metodologías (C).',
+        distractors: 'Las otras opciones confunden las funciones.',
+        relacionItems: '1) Programa de formación de servidores públicos  2) Estudios relativos al Sistema  3) Investigaciones sobre nuevas metodologías',
+        relacionOpciones: 'A) Realizar estudios relativos al Sistema   B) Elaborar programa de formación   C) Realizar investigaciones sobre nuevas metodologías'
+    },
+    // 37. Art. 36 - funciones de capacitación (continuación)
+    {
+        type: 'a',
+        text: 'El Instituto podrá realizar las funciones de analizar y adecuar al ámbito nacional las recomendaciones que emitan los organismos internacionales para la generación de Información; actuar como consultor técnico; realizar estudios de legislación en materia estadística y geográfica; y ______.',
+        options: [
+            'A) capacitar a los servidores públicos de las Unidades del Estado',
+            'B) sancionar a los informantes que no respondan',
+            'C) elaborar los índices nacionales de precios',
+            'D) realizar los censos nacionales'
+        ],
+        correct: 'A',
+        justification: 'Artículo 36, fracción VII: "Capacitar a los servidores públicos de las Unidades del Estado."',
+        distractors: 'B) la sanción es del Título IV; C) y D) son facultades exclusivas del artículo 59.'
+    },
+    // 38. Art. 4 - objetivos del Sistema (revisión)
+    {
+        type: 'c',
+        text: 'Uno de los objetivos del Sistema es conservar la Información. Esto se menciona en el artículo 4, fracción ______.',
+        options: [
+            'A) I',
+            'B) II',
+            'C) III',
+            'D) IV'
+        ],
+        correct: 'D',
+        justification: 'Artículo 4: fracción IV. Conservar la Información.',
+        distractors: 'A) I. Producir; B) II. Difundir; C) III. Promover el conocimiento y uso.'
+    },
+    // 39. Art. 77 - atribuciones de la Junta (fracción X)
+    {
+        type: 'a',
+        text: 'Corresponde a la Junta de Gobierno aprobar el programa anual de trabajo del Instituto, el anteproyecto de presupuesto anual, el establecimiento y cierre de oficinas regionales, y el nombramiento y remoción de los servidores públicos que ocupen los dos niveles jerárquicos inferiores al de miembro de la Junta de Gobierno. Esta facultad está en la fracción ______ del artículo 77.',
+        options: [
+            'A) X',
+            'B) IX',
+            'C) XI',
+            'D) XII'
+        ],
+        correct: 'A',
+        justification: 'Artículo 77, fracción X: contiene todas esas atribuciones.',
+        distractors: 'B) IX es aprobar el Reglamento Interior; C) XI es el calendario de publicación; D) XII es expedir lineamientos y autorizaciones.'
+    },
+    // 40. Art. 78 - criterios para Información de Interés Nacional
+    {
+        type: 'c',
+        text: 'Para que una Información sea considerada de Interés Nacional, debe satisfacer cuatro criterios: ser de temas específicos, resultar necesaria para sustentar políticas públicas, ser generada en forma regular y periódica, y ______.',
+        options: [
+            'A) elaborarse con base en una metodología científicamente sustentada',
+            'B) ser aprobada por el Consejo Consultivo Nacional',
+            'C) ser de acceso gratuito',
+            'D) ser publicada en el Diario Oficial'
+        ],
+        correct: 'A',
+        justification: 'Artículo 78, fracción IV: "Se elabore con base en una metodología científicamente sustentada."',
+        distractors: 'B) la aprobación del Consejo no es un criterio; C) no se menciona; D) la publicación no es criterio.'
+    },
+    // 41. Art. 77 - atribuciones de la Junta (fracción VII)
+    {
+        type: 'a',
+        text: 'La Junta de Gobierno aprobará los indicadores generados por los ______, según el artículo 77, fracción VII.',
+        options: [
+            'A) Subsistemas',
+            'B) Comités Técnicos Especializados',
+            'C) Unidades del Estado',
+            'D) el Instituto'
+        ],
+        correct: 'A',
+        justification: 'Artículo 77, fracción VII: "Aprobar los indicadores generados por los Subsistemas."',
+        distractors: 'B) los Comités Técnicos apoyan, pero no generan indicadores; C) las Unidades proponen, pero no son los que generan los indicadores del Subsistema; D) el Instituto elabora, pero la aprobación es de la Junta.'
+    },
+    // 42. Art. 68 - periodos escalonados de los vicepresidentes
+    {
+        type: 'c',
+        text: 'Los periodos de los vicepresidentes de la Junta de Gobierno serán escalonados, sucediéndose cada dos años e iniciándose el primero de enero del primer, tercer y ______ año del periodo del Ejecutivo Federal.',
+        options: [
+            'A) quinto',
+            'B) segundo',
+            'C) cuarto',
+            'D) sexto'
+        ],
+        correct: 'A',
+        justification: 'Artículo 68: "...e iniciándose el primero de enero del primer, tercer y quinto año del periodo del Ejecutivo Federal."',
+        distractors: 'B) segundo no es; C) cuarto no es; D) sexto no existe en ese periodo.'
+    },
+    // 43. Art. 77 - atribuciones de la Junta (fracción VI)
+    {
+        type: 'a',
+        text: 'La Junta de Gobierno determinará qué Unidades serán invitadas como miembros de los Comités Técnicos Especializados, conforme a la fracción ______ del artículo 77.',
+        options: [
+            'A) VI',
+            'B) V',
+            'C) VII',
+            'D) VIII'
+        ],
+        correct: 'A',
+        justification: 'Artículo 77, fracción VI: "Determinar qué Unidades serán invitadas, como miembros de los Comités Técnicos Especializados..."',
+        distractors: 'B) V es creación de Subsistemas; C) VII es aprobar indicadores; D) VIII es normar el funcionamiento.'
+    },
+    // 44. Art. 77 - atribuciones de la Junta (fracción IX)
+    {
+        type: 'c',
+        text: 'Corresponde a la Junta de Gobierno aprobar el ______ del Instituto, según la fracción IX del artículo 77.',
+        options: [
+            'A) Reglamento Interior',
+            'B) Programa Anual',
+            'C) Presupuesto',
+            'D) Código de Ética'
+        ],
+        correct: 'A',
+        justification: 'Artículo 77, fracción IX: "Aprobar el Reglamento Interior del Instituto."',
+        distractors: 'B) el Programa Anual es parte de la fracción X; C) el presupuesto es parte de la fracción X; D) el código de ética se menciona en el artículo 7.'
+    },
+    // 45. Art. 77 - atribuciones de la Junta (fracción XIII)
+    {
+        type: 'a',
+        text: 'La Junta de Gobierno aprobará la imposición de sanciones administrativas por infracciones a la Ley. Esta facultad podrá delegarse en el Presidente o en otros servidores públicos, considerando la naturaleza de la infracción o el monto de las multas. Esto está en la fracción ______ del artículo 77.',
+        options: [
+            'A) XIII',
+            'B) XII',
+            'C) XIV',
+            'D) XV'
+        ],
+        correct: 'A',
+        justification: 'Artículo 77, fracción XIII: contiene exactamente esa atribución.',
+        distractors: 'B) XII es autorizaciones; C) XIV es políticas de administración; D) XV es nombrar secretario de actas.'
+    },
+    // 46. Art. 81 - coordinación de sectores
+    {
+        type: 'c',
+        text: 'Al tomar las decisiones sobre qué sector debe atender cada vicepresidente, el Presidente deberá tener en cuenta los antecedentes laborales y académicos de cada uno de los miembros de la ______.',
+        options: [
+            'A) Junta de Gobierno',
+            'B) Consejo Consultivo Nacional',
+            'C) Comité Ejecutivo',
+            'D) Instituto'
+        ],
+        correct: 'A',
+        justification: 'Artículo 81, segundo párrafo: "...el Presidente deberá tener en cuenta los antecedentes laborales y académicos de cada uno de los miembros de la Junta de Gobierno."',
+        distractors: 'B) el Consejo es consultivo; C) los Comités son de los Subsistemas; D) es muy general.'
+    },
+    // 47. Art. 55 - funciones del Instituto (fracción IV)
+    {
+        type: 'a',
+        text: 'El Instituto tiene la función de solicitar a las Unidades la Información que éstas hayan obtenido en el ámbito de sus respectivas competencias y sea necesaria para el Sistema. Esta función está en el artículo 55, fracción ______.',
+        options: [
+            'A) IV',
+            'B) III',
+            'C) V',
+            'D) II'
+        ],
+        correct: 'A',
+        justification: 'Artículo 55, fracción IV: "Solicitar a las Unidades la Información que éstas hayan obtenido en el ámbito de sus respectivas competencias y sea necesaria para el Sistema..."',
+        distractors: 'B) III es solicitar información para programas; C) V es otras que le correspondan; D) II es normar y coordinar Actividades.'
+    },
+    // 48. Art. 77 - atribuciones de la Junta (fracción XVI)
+    {
+        type: 'c',
+        text: 'La Junta de Gobierno resolverá sobre otros asuntos relacionados con la aplicación de esta Ley, que cualquiera de sus miembros someta a su consideración, según la fracción ______ del artículo 77.',
+        options: [
+            'A) XVI',
+            'B) XV',
+            'C) XVII',
+            'D) XIV'
+        ],
+        correct: 'A',
+        justification: 'Artículo 77, fracción XVI: "Resolver sobre otros asuntos relacionados con la aplicación de esta Ley, que cualquiera de sus miembros someta a su consideración..."',
+        distractors: 'B) XV es nombrar secretario de actas; C) XVII son las demás que resulten de la Ley; D) XIV es políticas de administración.'
+    },
+    // 49. Art. 77 - atribuciones de la Junta (fracción XII)
+    {
+        type: 'a',
+        text: 'La Junta de Gobierno expedirá los lineamientos generales, otorgará las autorizaciones y establecerá los registros a que se refieren los artículos 58, 60, 61, 93 y 95 de esta Ley, según la fracción ______ del artículo 77.',
+        options: [
+            'A) XII',
+            'B) XI',
+            'C) X',
+            'D) IX'
+        ],
+        correct: 'A',
+        justification: 'Artículo 77, fracción XII: "Expedir los lineamientos generales, otorgar las autorizaciones y establecer los registros a que se refieren los artículos 58, 60 y 61 y los artículos 93 y 95 de esta Ley..."',
+        distractors: 'B) XI es calendario de publicación; C) X es programa anual y presupuesto; D) IX es Reglamento Interior.'
+    },
+    // 50. Art. 77 - atribuciones de la Junta (fracción XVII)
+    {
+        type: 'c',
+        text: 'Corresponderá a la Junta de Gobierno las demás atribuciones que resulten de esta Ley y de otras disposiciones legales aplicables, según la fracción ______ del artículo 77.',
+        options: [
+            'A) XVII',
+            'B) XVI',
+            'C) XV',
+            'D) XIV'
+        ],
+        correct: 'A',
+        justification: 'Artículo 77, fracción XVII: "Las demás que resulten de esta Ley y de otras disposiciones legales aplicables."',
+        distractors: 'B) XVI es resolver otros asuntos; C) XV es nombrar secretario de actas; D) XIV es políticas de administración.'
+    }
+];
+
+// --------------------------------------------------------------
+// Lógica de la aplicación
+// --------------------------------------------------------------
+const total = questions.length;
+let current = 0;
+let selected = new Array(total).fill(null);
+let verified = new Array(total).fill(false);
+let correctCount = 0;
+
+const qText = document.getElementById('qText');
+const optionsContainer = document.getElementById('optionsContainer');
+const feedbackBox = document.getElementById('feedbackBox');
+const feedbackContent = document.getElementById('feedbackContent');
+const qCounter = document.getElementById('qCounter');
+const qStatus = document.getElementById('qStatus');
+const prevBtn = document.getElementById('prevBtn');
+const nextBtn = document.getElementById('nextBtn');
+const checkBtn = document.getElementById('checkBtn');
+const resetBtn = document.getElementById('resetBtn');
+const progressBar = document.getElementById('progressBar');
+const resultsArea = document.getElementById('resultsArea');
+const resultsContent = document.getElementById('resultsContent');
+const relacionList = document.getElementById('relacionList');
+
+function renderQuestion(index) {
+    const q = questions[index];
+    qText.textContent = q.text;
+
+    if (q.type === 'b' && q.relacionItems) {
+        relacionList.style.display = 'block';
+        relacionList.innerHTML = `<strong>Relacionar:</strong> ${q.relacionItems} <br> <strong>Opciones:</strong> ${q.relacionOpciones}`;
+    } else {
+        relacionList.style.display = 'none';
+    }
+
+    optionsContainer.innerHTML = '';
+    q.options.forEach((opt, idx) => {
+        const label = document.createElement('label');
+        label.className = 'opt-label';
+        const radio = document.createElement('input');
+        radio.type = 'radio';
+        radio.name = 'question';
+        radio.value = String.fromCharCode(65 + idx);
+        radio.addEventListener('change', () => {
+            selected[current] = radio.value;
+            document.querySelectorAll('.opt-label').forEach(el => el.classList.remove('selected'));
+            label.classList.add('selected');
+            if (verified[current]) {
+                verified[current] = false;
+                feedbackBox.classList.remove('show');
+                updateStatusAndProgress();
+            }
+        });
+        if (selected[current] === radio.value) {
+            radio.checked = true;
+            label.classList.add('selected');
+        }
+        label.appendChild(radio);
+        label.append(' ' + opt);
+        optionsContainer.appendChild(label);
+    });
+
+    qCounter.textContent = `Pregunta ${index+1} / ${total}`;
+    updateStatusAndProgress();
+
+    if (verified[index]) {
+        showFeedback(index);
+    } else {
+        feedbackBox.classList.remove('show');
+    }
+
+    prevBtn.disabled = (index === 0);
+    nextBtn.disabled = (index === total - 1);
+    checkBtn.disabled = (selected[index] === null || verified[index]);
+}
+
+function updateStatusAndProgress() {
+    const idx = current;
+    if (verified[idx]) {
+        qStatus.textContent = '✓ Verificada';
+        qStatus.style.color = '#0d6e2b';
+    } else if (selected[idx] !== null) {
+        qStatus.textContent = '● Respondida';
+        qStatus.style.color = '#b68b1a';
+    } else {
+        qStatus.textContent = '● Sin responder';
+        qStatus.style.color = '#4a6a8a';
+    }
+    const answered = selected.filter(a => a !== null).length;
+    const pct = (answered / total) * 100;
+    progressBar.style.width = pct + '%';
+    correctCount = 0;
+    for (let i=0; i<total; i++) {
+        if (verified[i] && selected[i] === questions[i].correct) correctCount++;
+    }
+}
+
+function showFeedback(index) {
+    const q = questions[index];
+    const userAns = selected[index];
+    const isCorrect = (userAns === q.correct);
+    let html = '';
+    if (isCorrect) {
+        html += `<div class="badge-correct">✅ Correcto</div>`;
+    } else {
+        html += `<div class="badge-wrong">❌ Incorrecto</div>`;
+    }
+    html += `<div class="justify"><strong>Justificación:</strong> ${q.justification}</div>`;
+    if (q.distractors) {
+        html += `<div class="distractor"><strong>Análisis de distractores:</strong> ${q.distractors}</div>`;
+    }
+    feedbackContent.innerHTML = html;
+    feedbackBox.classList.add('show');
+
+    const labels = document.querySelectorAll('.opt-label');
+    labels.forEach((label, idx) => {
+        const letter = String.fromCharCode(65 + idx);
+        label.classList.remove('correct-highlight', 'wrong-highlight');
+        if (letter === q.correct) {
+            label.classList.add('correct-highlight');
+        } else if (letter === userAns && userAns !== q.correct) {
+            label.classList.add('wrong-highlight');
+        }
+    });
+    document.querySelectorAll('input[name="question"]').forEach(inp => inp.disabled = true);
+    checkBtn.disabled = true;
+    correctCount = 0;
+    for (let i=0; i<total; i++) {
+        if (verified[i] && selected[i] === questions[i].correct) correctCount++;
+    }
+    if (verified.every(v => v === true)) {
+        showFinalResults();
+    }
+}
+
+function verifyCurrent() {
+    const idx = current;
+    if (selected[idx] === null) {
+        alert('Selecciona una opción primero.');
+        return;
+    }
+    if (verified[idx]) {
+        alert('Esta pregunta ya fue verificada.');
+        return;
+    }
+    verified[idx] = true;
+    showFeedback(idx);
+    updateStatusAndProgress();
+}
+
+function showFinalResults() {
+    const pct = (correctCount / total) * 100;
+    resultsContent.innerHTML = `✅ Has completado el cuestionario.<br>
+        <span style="font-size:2rem;">${correctCount} / ${total}</span><br>
+        <span style="font-size:1.4rem;">${pct.toFixed(1)}% de aciertos</span>`;
+    resultsArea.style.display = 'block';
+}
+
+function resetQuiz() {
+    selected = new Array(total).fill(null);
+    verified = new Array(total).fill(false);
+    correctCount = 0;
+    current = 0;
+    resultsArea.style.display = 'none';
+    feedbackBox.classList.remove('show');
+    renderQuestion(0);
+    document.querySelectorAll('input[name="question"]').forEach(inp => inp.disabled = false);
+    checkBtn.disabled = false;
+}
+
+function goPrev() {
+    if (current > 0) { current--; renderQuestion(current); }
+}
+function goNext() {
+    if (current < total-1) { current++; renderQuestion(current); }
+}
+
+prevBtn.addEventListener('click', goPrev);
+nextBtn.addEventListener('click', goNext);
+checkBtn.addEventListener('click', verifyCurrent);
+resetBtn.addEventListener('click', resetQuiz);
+
+renderQuestion(0);
+</script>
+</body>
+</html>
