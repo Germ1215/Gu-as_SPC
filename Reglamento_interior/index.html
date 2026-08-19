@@ -1,0 +1,897 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guía de autoevaluación - Reglamento Interior del INEGI</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            background: #f0f4f8;
+            font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 880px;
+            width: 100%;
+            background: #ffffff;
+            border-radius: 28px;
+            box-shadow: 0 12px 30px rgba(0,0,0,0.10);
+            padding: 30px 32px;
+            transition: 0.2s;
+        }
+        h1 {
+            font-size: 1.9rem;
+            font-weight: 600;
+            color: #0a2a44;
+            border-left: 6px solid #1a6ed8;
+            padding-left: 18px;
+            margin-bottom: 6px;
+        }
+        .sub {
+            color: #2f5577;
+            font-size: 0.95rem;
+            padding-left: 24px;
+            border-bottom: 1px solid #e0e7ef;
+            padding-bottom: 14px;
+            margin-bottom: 20px;
+        }
+        .progress {
+            height: 6px;
+            background: #e2e8f0;
+            border-radius: 10px;
+            margin: 6px 0 16px 0;
+            overflow: hidden;
+        }
+        .progress-bar {
+            height: 100%;
+            background: #1a6ed8;
+            width: 0%;
+            transition: width 0.2s;
+        }
+        .q-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            flex-wrap: wrap;
+            margin-bottom: 10px;
+        }
+        .q-counter {
+            background: #eef2f7;
+            padding: 4px 16px;
+            border-radius: 40px;
+            font-weight: 500;
+            font-size: 0.9rem;
+            color: #1a3a5a;
+        }
+        .q-status {
+            font-size: 0.9rem;
+            color: #4a6a8a;
+        }
+        .q-text {
+            font-size: 1.2rem;
+            font-weight: 500;
+            color: #0a1e32;
+            margin: 14px 0 18px 0;
+            line-height: 1.5;
+        }
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin: 12px 0 18px 0;
+        }
+        .opt-label {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            background: #f9fbfd;
+            padding: 12px 18px;
+            border-radius: 14px;
+            border: 1.5px solid #e2e8f0;
+            cursor: pointer;
+            transition: background 0.1s, border 0.1s;
+            font-size: 1rem;
+        }
+        .opt-label:hover {
+            background: #f0f4fe;
+            border-color: #b3cbf5;
+        }
+        .opt-label input[type="radio"] {
+            width: 18px;
+            height: 18px;
+            accent-color: #1a6ed8;
+            flex-shrink: 0;
+            margin: 0;
+        }
+        .opt-label.selected {
+            background: #e6effb;
+            border-color: #1a6ed8;
+        }
+        .opt-label.correct-highlight {
+            background: #dff0d8;
+            border-color: #2e8b57;
+        }
+        .opt-label.wrong-highlight {
+            background: #f8d7da;
+            border-color: #b02a37;
+        }
+        .feedback {
+            background: #f0f4fa;
+            border-radius: 16px;
+            padding: 18px 22px;
+            margin: 16px 0 18px 0;
+            border-left: 5px solid #1a6ed8;
+            display: none;
+        }
+        .feedback.show {
+            display: block;
+        }
+        .feedback .badge-correct {
+            color: #0d6e2b;
+            font-weight: 600;
+        }
+        .feedback .badge-wrong {
+            color: #b02a37;
+            font-weight: 600;
+        }
+        .feedback .justify {
+            margin-top: 8px;
+            font-size: 0.96rem;
+            line-height: 1.5;
+        }
+        .feedback .distractor {
+            margin-top: 8px;
+            font-size: 0.92rem;
+            background: #e9eef3;
+            padding: 8px 14px;
+            border-radius: 10px;
+            color: #1f3a57;
+        }
+        .nav {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            margin-top: 6px;
+        }
+        .nav-buttons {
+            display: flex;
+            gap: 10px;
+        }
+        .btn {
+            background: white;
+            border: 1px solid #cbd5e1;
+            padding: 10px 20px;
+            border-radius: 40px;
+            font-weight: 500;
+            font-size: 0.95rem;
+            color: #1a2d44;
+            cursor: pointer;
+            transition: 0.1s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .btn-primary {
+            background: #1a6ed8;
+            border-color: #1a6ed8;
+            color: white;
+        }
+        .btn-primary:hover {
+            background: #135bb5;
+            border-color: #135bb5;
+        }
+        .btn-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .btn-outline:hover {
+            background: #f1f5f9;
+        }
+        .btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+        .btn-success {
+            background: #1f8b4c;
+            border-color: #1f8b4c;
+            color: white;
+        }
+        .btn-success:hover {
+            background: #17733e;
+        }
+        .results {
+            background: #e8f0fe;
+            border-radius: 20px;
+            padding: 18px 24px;
+            margin-top: 20px;
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: 500;
+            color: #0b2b4a;
+        }
+        .relacion-lista {
+            background: #f5f8fc;
+            padding: 12px 16px;
+            border-radius: 12px;
+            margin: 8px 0 12px 0;
+            font-size: 0.95rem;
+            border-left: 3px solid #1a6ed8;
+        }
+        .relacion-lista span {
+            display: inline-block;
+            margin-right: 18px;
+        }
+        @media (max-width: 600px) {
+            .container { padding: 18px 16px; }
+            .nav { flex-direction: column; align-items: stretch; }
+            .nav-buttons { justify-content: center; flex-wrap: wrap; }
+            .btn { padding: 8px 14px; font-size: 0.9rem; }
+        }
+    </style>
+</head>
+<body>
+<div class="container" id="app">
+    <h1>📘 Reglamento Interior del INEGI</h1>
+    <div class="sub">Autoevaluación · Artículos 1-12, 2, 40, 42</div>
+
+    <div class="progress"><div class="progress-bar" id="progressBar"></div></div>
+
+    <div id="questionArea">
+        <div class="q-header">
+            <span class="q-counter" id="qCounter">Pregunta 1 / 30</span>
+            <span class="q-status" id="qStatus">● Sin responder</span>
+        </div>
+        <div class="q-text" id="qText">Cargando pregunta...</div>
+        <div id="relacionList" class="relacion-lista" style="display:none;"></div>
+        <div class="options" id="optionsContainer"></div>
+        <div class="feedback" id="feedbackBox">
+            <div id="feedbackContent"></div>
+        </div>
+    </div>
+
+    <div class="nav">
+        <div class="nav-buttons">
+            <button class="btn btn-outline" id="prevBtn" disabled>◀ Anterior</button>
+            <button class="btn btn-outline" id="nextBtn">Siguiente ▶</button>
+        </div>
+        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+            <button class="btn btn-primary" id="checkBtn">✔ Verificar</button>
+            <button class="btn btn-success" id="resetBtn">⟳ Reiniciar</button>
+        </div>
+    </div>
+
+    <div id="resultsArea" style="display:none;">
+        <div class="results" id="resultsContent"></div>
+    </div>
+</div>
+
+<script>
+// --------------------------------------------------------------
+// 30 PREGUNTAS basadas en el Reglamento Interior del INEGI
+// Artículos: 1, 2, 3, 4-12, 40, 42
+// Tipos: a) distractores, b) relación, c) completar
+// --------------------------------------------------------------
+const questions = [
+    // 1. Art. 1 - objeto del Reglamento
+    {
+        type: 'c',
+        text: 'El Reglamento Interior del INEGI tiene por objeto reglamentar la forma y términos en que el Instituto ejercerá las atribuciones que la Constitución, la Ley del SNIEG, así como otras leyes, reglamentos, decretos y acuerdos de la ______ le confieren.',
+        options: [
+            'A) Junta de Gobierno',
+            'B) Presidente de la República',
+            'C) Consejo Consultivo Nacional',
+            'D) Congreso de la Unión'
+        ],
+        correct: 'A',
+        justification: 'Artículo 1: "El presente ordenamiento tiene por objeto reglamentar la forma y términos en que el Instituto ejercerá las atribuciones y facultades que la Constitución Política de los Estados Unidos Mexicanos, la Ley del Sistema Nacional de Información Estadística y Geográfica, así como otras Leyes, Reglamentos, Decretos y Acuerdos de la Junta de Gobierno le confieren."',
+        distractors: 'B) El Presidente de la República no expide acuerdos para el INEGI en este contexto; C) el Consejo es consultivo; D) el Congreso expide leyes, no acuerdos para el INEGI.'
+    },
+    // 2. Art. 2 - definición de Actividades Estadísticas y Geográficas
+    {
+        type: 'c',
+        text: 'Las Actividades Estadísticas y Geográficas son las relativas al diseño, captación, producción, actualización, organización, procesamiento, integración, compilación, publicación, divulgación y conservación de la ______.',
+        options: [
+            'A) Información de Interés Nacional',
+            'B) Información Estadística',
+            'C) Información Geográfica',
+            'D) Red Nacional de Información'
+        ],
+        correct: 'A',
+        justification: 'Artículo 2, fracción I: "Actividades Estadísticas y Geográficas o Actividades.- las relativas al diseño, captación, producción, actualización, organización, procesamiento, integración, compilación, publicación, divulgación y conservación de la Información de Interés Nacional."',
+        distractors: 'B) Información Estadística es un concepto más limitado; C) Información Geográfica es otro tipo; D) Red Nacional de Información es un conjunto de procesos.'
+    },
+    // 3. Art. 2 - definición de Información Estadística
+    {
+        type: 'a',
+        text: 'Según el Artículo 2, la Información Estadística es el conjunto de resultados cuantitativos o datos que se obtienen de las Actividades Estadísticas y Geográficas en materia estadística, tomando como base los datos primarios obtenidos de los ______.',
+        options: [
+            'A) Informantes del Sistema',
+            'B) registros administrativos',
+            'C) censos nacionales',
+            'D) encuestas nacionales'
+        ],
+        correct: 'A',
+        justification: 'Artículo 2, fracción III: "...tomando como base los datos primarios obtenidos de los informantes del Sistema sobre hechos que son relevantes..."',
+        distractors: 'B) los registros administrativos son una fuente, no la base primaria; C) los censos son un tipo de operativo; D) las encuestas son otro instrumento.'
+    },
+    // 4. Art. 2 - definición de Información Geográfica
+    {
+        type: 'a',
+        text: 'La Información Geográfica se define como el conjunto organizado de datos espaciales georreferenciados que genera conocimiento acerca de las condiciones físico-ambientales, de los recursos naturales y de las ______ del territorio nacional.',
+        options: [
+            'A) obras de naturaleza antrópica',
+            'B) actividades económicas',
+            'C) demografía',
+            'D) gobierno'
+        ],
+        correct: 'A',
+        justification: 'Artículo 2, fracción IV: "...que mediante símbolos y códigos genera el conocimiento acerca de las condiciones físico-ambientales, de los recursos naturales y de las obras de naturaleza antrópica del territorio nacional."',
+        distractors: 'B) corresponde a Información Económica; C) es demografía; D) es gobierno.'
+    },
+    // 5. Art. 2 - definición de Interoperabilidad de datos
+    {
+        type: 'c',
+        text: 'La Interoperabilidad de datos se refiere a la capacidad de sistemas y servicios para crear, intercambiar y consumir datos reconociendo su ______.',
+        options: [
+            'A) contexto y significado',
+            'B) formato y estructura',
+            'C) origen y destino',
+            'D) calidad y oportunidad'
+        ],
+        correct: 'A',
+        justification: 'Artículo 2, fracción VII Bis: "Interoperabilidad de datos.- se refiere a la capacidad de sistemas y servicios para crear, intercambiar y consumir datos reconociendo su contexto y significado."',
+        distractors: 'B) es parte de la interoperabilidad técnica, pero no la definición completa; C) no es el enfoque; D) son atributos de calidad.'
+    },
+    // 6. Art. 3 - estructura de Unidades Administrativas
+    {
+        type: 'b',
+        text: 'Relacione cada Unidad Administrativa del Artículo 3 con sus Direcciones Generales Adjuntas correspondientes:',
+        options: [
+            'A) 1-C, 2-D, 3-B, 4-A',
+            'B) 1-A, 2-C, 3-D, 4-B',
+            'C) 1-B, 2-A, 3-D, 4-C',
+            'D) 1-C, 2-A, 3-B, 4-D'
+        ],
+        correct: 'A',
+        justification: 'Artículo 3: I. Unidad de Estadísticas Sociodemográficas (C: DGA del Censo, DGA de Encuestas, DGA de Infraestructura, DGA de Registros Administrativos); II. Unidad de Estadísticas Económicas (D: DGA de Censos Económicos, DGA de Encuestas, DGA de Cuentas Nacionales, DGA de Índices, DGA de Registros Administrativos); III. Unidad de Geografía y Medio Ambiente (B: DGA de Información Geográfica Básica, DGA de Recursos Naturales, DGA de Información Geográfica para Administración del Territorio, DGA de Integración Geoespacial); IV. Dirección General de Integración, Análisis e Investigación (A: DGA de Integración, DGA de Análisis, DGA de Investigación).',
+        distractors: 'Las otras opciones confunden las correspondencias entre Unidades y DGAs.',
+        relacionItems: '1) Unidad de Estadísticas Sociodemográficas  2) Unidad de Estadísticas Económicas  3) Unidad de Geografía y Medio Ambiente  4) Dirección General de Integración, Análisis e Investigación',
+        relacionOpciones: 'A) DGA de Integración, Análisis e Investigación   B) DGA de Información Geográfica Básica, Recursos Naturales, etc.   C) DGA del Censo, Encuestas, Infraestructura, Registros Administrativos   D) DGA de Censos Económicos, Encuestas, Cuentas Nacionales, Índices, Registros Administrativos'
+    },
+    // 7. Art. 4 - órganos superiores
+    {
+        type: 'c',
+        text: 'El ejercicio de las funciones que la Ley encomienda al Instituto corresponde al Órgano Superior de Dirección, constituido por la Junta de Gobierno, y al Órgano Superior Ejecutivo, representado por el ______.',
+        options: [
+            'A) Presidente del INEGI',
+            'B) Vicepresidente de la Junta',
+            'C) Secretario Técnico',
+            'D) Director General de Administración'
+        ],
+        correct: 'A',
+        justification: 'Artículo 4: "...al Órgano Superior Ejecutivo, representado por el Presidente del INEGI."',
+        distractors: 'B) los Vicepresidentes son miembros de la Junta, no el Órgano Ejecutivo; C) el Secretario Técnico es de apoyo; D) el Director de Administración es un área administrativa.'
+    },
+    // 8. Art. 5 - atribuciones de la Junta de Gobierno (fracción I)
+    {
+        type: 'a',
+        text: '¿Cuál de las siguientes NO es una atribución de la Junta de Gobierno según el Artículo 5?',
+        options: [
+            'A) Aprobar el nombramiento del Presidente del Instituto',
+            'B) Aprobar el Programa Estratégico del SNIEG',
+            'C) Determinar la Información de Interés Nacional',
+            'D) Aprobar el Reglamento Interior del Instituto'
+        ],
+        correct: 'A',
+        justification: 'El Artículo 5 enumera las atribuciones de la Junta. La aprobación del nombramiento del Presidente corresponde al Ejecutivo Federal con ratificación del Senado (Art. 67 de la Ley), no es atribución de la Junta. Las otras opciones sí están en el Artículo 5: I, II, IX.',
+        distractors: 'B) Está en fracción I; C) en fracción II; D) en fracción IX.'
+    },
+    // 9. Art. 5 - atribuciones de la Junta (fracción X)
+    {
+        type: 'c',
+        text: 'La Junta de Gobierno aprobará el Programa Anual de Trabajo del Instituto, el cual deberá elaborarse con base en el Programa Anual de Estadística y Geografía; el Anteproyecto de Presupuesto Anual; el establecimiento y cierre de oficinas regionales; así como el nombramiento y remoción de los servidores públicos que ocupen los dos niveles jerárquicos inferiores al de miembro de la Junta de Gobierno y de los niveles de ______.',
+        options: [
+            'A) dirección general adjunta y coordinación general',
+            'B) dirección general y subdirección general',
+            'C) dirección de área y jefatura de departamento',
+            'D) subdirección y enlace'
+        ],
+        correct: 'A',
+        justification: 'Artículo 5, fracción X: "...así como el nombramiento y remoción de los servidores públicos que ocupen los dos niveles jerárquicos inferiores al de miembro de la Junta de Gobierno, así como de los niveles de dirección general adjunta y coordinación general."',
+        distractors: 'B) dirección general es nivel superior; C) y D) son niveles inferiores, no especificados en esa fracción.'
+    },
+    // 10. Art. 5 - atribuciones de la Junta (fracción XI)
+    {
+        type: 'a',
+        text: 'La Junta de Gobierno aprobará al final de cada año el calendario anual de difusión de la información estadística y geográfica y de Interés Nacional del Instituto, al que habrá de sujetarse el Instituto en el año inmediato siguiente. Esta atribución está en la fracción ______ del Artículo 5.',
+        options: [
+            'A) XI',
+            'B) XII',
+            'C) X',
+            'D) IX'
+        ],
+        correct: 'A',
+        justification: 'Artículo 5, fracción XI: "Aprobar al final de cada año, el calendario anual de difusión de la información estadística y geográfica y de Interés Nacional del Instituto, a los que habrá de sujetarse el Instituto, en el año inmediato siguiente."',
+        distractors: 'B) XII es expedir lineamientos; C) X es programa anual y presupuesto; D) IX es Reglamento Interior.'
+    },
+    // 11. Art. 6 - Secretario de Actas
+    {
+        type: 'c',
+        text: 'Al Secretario de Actas de la Junta de Gobierno le corresponden, entre otras, las funciones de comunicar a los miembros e invitados las convocatorias; levantar, registrar y suscribir las actas; comunicar y dar seguimiento a los acuerdos; recibir propuestas y documentos; y certificar las copias de las actas. Esto se establece en el Artículo 6, párrafo ______.',
+        options: [
+            'A) tercero',
+            'B) segundo',
+            'C) primero',
+            'D) cuarto'
+        ],
+        correct: 'A',
+        justification: 'Artículo 6, tercer párrafo: "Al Secretario de Actas de la Junta de Gobierno le corresponden las siguientes funciones: ..."',
+        distractors: 'B) segundo párrafo habla de comités; C) primero es de responsabilidades; D) cuarto es de sesiones.'
+    },
+    // 12. Art. 7 - representación legal del Presidente
+    {
+        type: 'a',
+        text: 'Según el Artículo 7, el Presidente tiene la representación legal, trámite y resolución de los asuntos competencia del Instituto. Para la mejor distribución del trabajo, el Presidente podrá delegar facultades en algún Vicepresidente o servidores públicos subalternos, sin perjuicio de su ______.',
+        options: [
+            'A) ejercicio directo',
+            'B) control jerárquico',
+            'C) responsabilidad administrativa',
+            'D) rendición de cuentas'
+        ],
+        correct: 'A',
+        justification: 'Artículo 7: "...el Presidente podrá delegar facultades en algún Vicepresidente o servidores públicos subalternos, sin perjuicio de su ejercicio directo."',
+        distractors: 'B) control jerárquico no se menciona; C) responsabilidad administrativa es un concepto general; D) rendición de cuentas es un principio.'
+    },
+    // 13. Art. 8 - atribuciones del Presidente (fracción III)
+    {
+        type: 'c',
+        text: 'El Presidente someterá a la consideración y aprobación de la Junta de Gobierno los asuntos mencionados en las fracciones I, III, X y XIV del Artículo 77 de la Ley, así como la fracción X del Artículo 5 del Reglamento. Esta atribución es indelegable según la fracción ______ del Artículo 8.',
+        options: [
+            'A) III',
+            'B) IV',
+            'C) V',
+            'D) VI'
+        ],
+        correct: 'A',
+        justification: 'Artículo 8, fracción III: "Someter a la consideración y, en su caso, aprobación de la Junta de Gobierno los asuntos mencionados en las fracciones I, III, X y XIV del artículo 77 de la Ley, así como la fracción X del artículo 5 del Reglamento." El último párrafo del Artículo 8 dice: "Las atribuciones a que se refieren las fracciones III y IV de este artículo serán indelegables."',
+        distractors: 'B) fracción IV es dar a conocer el calendario, también indelegable; C) V es aplicar políticas; D) VI es intervenir en convenios.'
+    },
+    // 14. Art. 9 - sectores de organización
+    {
+        type: 'a',
+        text: 'Las funciones del Instituto se organizan a partir de cinco sectores. ¿Cuál de los siguientes NO es uno de esos sectores según el Artículo 9?',
+        options: [
+            'A) Información de Seguridad Nacional',
+            'B) Información Demográfica y Social',
+            'C) Información Económica y Financiera',
+            'D) Información Geográfica, del Medio Ambiente, Ordenamiento Territorial y Urbano'
+        ],
+        correct: 'A',
+        justification: 'Artículo 9: sectores: I. Información Demográfica y Social; II. Información Económica y Financiera; III. Información Geográfica, del Medio Ambiente, Ordenamiento Territorial y Urbano; IV. Información de Gobierno, Seguridad Pública e Impartición de Justicia; V. Relaciones con los sectores académico, privado e internacional. No existe "Información de Seguridad Nacional".',
+        distractors: 'B) es el sector I; C) es el II; D) es el III.'
+    },
+    // 15. Art. 10 - atribuciones de los Vicepresidentes (fracción II)
+    {
+        type: 'c',
+        text: 'Los Vicepresidentes de la Junta de Gobierno presidirán los Comités Ejecutivos de los Subsistemas de su competencia, los cuales corresponderán al sector que les sea asignado. Esta atribución está en la fracción ______ del Artículo 10.',
+        options: [
+            'A) II',
+            'B) I',
+            'C) III',
+            'D) IV'
+        ],
+        correct: 'A',
+        justification: 'Artículo 10, fracción II: "Presidir los Comités Ejecutivos de los Subsistemas de su competencia, los cuales corresponderán al sector que le sea asignado..."',
+        distractors: 'B) I es atender y coordinar el sector; C) III es coordinar actividades de Secretarios Técnicos; D) IV es presentar asuntos a la Junta.'
+    },
+    // 16. Art. 11 - atribuciones de Titulares de Unidades (fracción I)
+    {
+        type: 'a',
+        text: 'Según el Artículo 11, los Titulares de las Unidades Administrativas tienen la atribución de planear, programar, organizar, dirigir y evaluar el desempeño de las actividades encomendadas a su Unidad, de acuerdo con los lineamientos que fije la ______.',
+        options: [
+            'A) Junta de Gobierno y el Presidente',
+            'B) Consejo Consultivo Nacional',
+            'C) Secretaría de Hacienda',
+            'D) el propio Titular'
+        ],
+        correct: 'A',
+        justification: 'Artículo 11, fracción I: "...de acuerdo con los lineamientos que fije la Junta de Gobierno y el Presidente."',
+        distractors: 'B) el Consejo es consultivo; C) no se menciona; D) no es correcto.'
+    },
+    // 17. Art. 11 - atribuciones (fracción I Bis)
+    {
+        type: 'c',
+        text: 'Los Titulares de las Unidades Administrativas deberán asegurar y evaluar que la información que se produce, se integra y se difunde, dentro de su ámbito de competencia, cumpla con los atributos de calidad, pertinencia, veracidad y oportunidad, así como con los principios de accesibilidad, transparencia, objetividad e independencia dispuestos en el Artículo 3 de la Ley. Esta atribución está en la fracción ______ del Artículo 11.',
+        options: [
+            'A) I Bis',
+            'B) I Ter',
+            'C) II',
+            'D) III'
+        ],
+        correct: 'A',
+        justification: 'Artículo 11, fracción I Bis: contiene exactamente esta atribución.',
+        distractors: 'B) I Ter es dirigir instrumentación de procesos; C) II es participar en programas; D) III es acordar con el Presidente.'
+    },
+    // 18. Art. 12 - atribuciones de Directores Generales Adjuntos (fracción I)
+    {
+        type: 'a',
+        text: 'Los Directores Generales Adjuntos tienen la atribución de dirigir la instrumentación de los procesos de producción de Información Estadística y Geográfica que correspondan a su área, en términos de las disposiciones normativas emitidas por la Junta de Gobierno y, en su caso, designar a los servidores públicos responsables de la ejecución de las actividades y de la integración de las evidencias correspondientes a cada proceso. Esta atribución está en el Artículo 12, fracción ______.',
+        options: [
+            'A) I',
+            'B) II',
+            'C) III',
+            'D) IV'
+        ],
+        correct: 'A',
+        justification: 'Artículo 12, fracción I: "Dirigir la instrumentación de los procesos de producción de Información Estadística y Geográfica que correspondan a su Dirección General Adjunta, en términos de las disposiciones normativas emitidas por la Junta de Gobierno y, en su caso, designar a los servidores públicos responsables de la ejecución de las actividades y de la integración de las evidencias correspondientes a cada proceso."',
+        distractors: 'B) II es participar en programas; C) III es apoyar el desarrollo del Sistema; D) IV es acordar con el Titular de la Unidad.'
+    },
+    // 19. Art. 12 - atribuciones (fracción IX)
+    {
+        type: 'c',
+        text: 'Los Directores Generales Adjuntos deberán guardar los principios de confidencialidad y reserva que la Ley establece respecto de los datos que los Informantes del Sistema proporcionen para fines estadísticos al Instituto, así como respecto de la información de carácter confidencial que provenga de registros administrativos de las Unidades del Estado. Esta atribución está en la fracción ______ del Artículo 12.',
+        options: [
+            'A) IX',
+            'B) X',
+            'C) XI',
+            'D) XII'
+        ],
+        correct: 'A',
+        justification: 'Artículo 12, fracción IX: contiene exactamente esta disposición.',
+        distractors: 'B) X es firmar acuerdos; C) XI es aplicar ordenamientos; D) XII es proporcionar información.'
+    },
+    // 20. Art. 40 - atribuciones de la Dirección General Adjunta de Relaciones Institucionales (fracción I)
+    {
+        type: 'a',
+        text: 'La Dirección General Adjunta de Relaciones Institucionales tiene la atribución de coordinar las acciones de vinculación del Instituto con los Poderes Ejecutivo y Legislativo, organismos autónomos, sector privado, sector académico y organismos no gubernamentales, con la finalidad de desarrollar el Sistema, fomentar la cultura estadística y geográfica y fortalecer las relaciones institucionales. Esta atribución está en el Artículo 40, fracción ______.',
+        options: [
+            'A) I',
+            'B) II',
+            'C) III',
+            'D) IV'
+        ],
+        correct: 'A',
+        justification: 'Artículo 40, fracción I: "Coordinar las acciones de vinculación del Instituto con los Poderes Ejecutivo y Legislativo, organismos autónomos, sector privado, sector académico y organismos no gubernamentales, con la finalidad de desarrollar el Sistema; fomentar la cultura estadística y geográfica y fortalecer las relaciones institucionales con dichos sectores."',
+        distractors: 'B) II es fungir como enlace; C) III es proponer disposiciones normativas; D) IV es coordinar solicitudes.'
+    },
+    // 21. Art. 40 - fracción II
+    {
+        type: 'c',
+        text: 'La Dirección General Adjunta de Relaciones Institucionales fungirá como enlace del Instituto ante los Poderes Ejecutivo y Legislativo, organismos autónomos, sector privado, sector académico y organismos no gubernamentales a nivel federal, para atender los temas relacionados con el ámbito de competencia de la Unidad Administrativa de su adscripción. Esta atribución está en el Artículo 40, fracción ______.',
+        options: [
+            'A) II',
+            'B) I',
+            'C) III',
+            'D) IV'
+        ],
+        correct: 'A',
+        justification: 'Artículo 40, fracción II: "Fungir como enlace del Instituto ante los Poderes Ejecutivo y Legislativo, organismos autónomos, sector privado, sector académico y organismos no gubernamentales a nivel federal, para atender los temas relacionados con el ámbito de competencia de la Unidad Administrativa de su adscripción."',
+        distractors: 'B) I es coordinar vinculación; C) III es proponer disposiciones; D) IV es coordinar solicitudes.'
+    },
+    // 22. Art. 40 - fracción VII
+    {
+        type: 'a',
+        text: 'La Dirección General Adjunta de Relaciones Institucionales propondrá ante las instancias competentes, previa opinión de la Dirección General de Asuntos Jurídicos, proyectos de iniciativas y reformas de carácter legislativo relacionadas con las materias competencia del Instituto. Esta atribución está en el Artículo 40, fracción ______.',
+        options: [
+            'A) VII',
+            'B) VI',
+            'C) V',
+            'D) VIII'
+        ],
+        correct: 'A',
+        justification: 'Artículo 40, fracción VII: "Proponer ante las instancias competentes, previa opinión de la Dirección General de Asuntos Jurídicos, proyectos de iniciativas y reformas de carácter legislativo relacionadas con las materias competencia del Instituto."',
+        distractors: 'B) VI es coordinar comparecencias; C) V es coordinar acciones ante instancias; D) VIII es coordinar actividades de consejos consultivos.'
+    },
+    // 23. Art. 40 - fracción VI
+    {
+        type: 'c',
+        text: 'La Dirección General Adjunta de Relaciones Institucionales coordinará las comparecencias y presentaciones de la Junta de Gobierno y otros servidores públicos del Instituto ante las diversas instancias del Poder Legislativo Federal. Esta atribución está en el Artículo 40, fracción ______.',
+        options: [
+            'A) VI',
+            'B) V',
+            'C) VII',
+            'D) VIII'
+        ],
+        correct: 'A',
+        justification: 'Artículo 40, fracción VI: "Coordinar las comparecencias y presentaciones de la Junta de Gobierno y otros servidores públicos del Instituto ante las diversas instancias del Poder Legislativo Federal."',
+        distractors: 'B) V es coordinar acciones ante instancias; C) VII es proponer iniciativas; D) VIII es coordinar consejos consultivos.'
+    },
+    // 24. Art. 40 - fracción IV
+    {
+        type: 'a',
+        text: 'La Dirección General Adjunta de Relaciones Institucionales coordinará y dará seguimiento a las solicitudes y requerimientos de información de los Poderes Ejecutivo y Legislativo a nivel federal, organismos autónomos, así como del sector privado, sector académico y organismos no gubernamentales. Esta atribución está en el Artículo 40, fracción ______.',
+        options: [
+            'A) IV',
+            'B) III',
+            'C) V',
+            'D) II'
+        ],
+        correct: 'A',
+        justification: 'Artículo 40, fracción IV: "Coordinar y dar seguimiento a las solicitudes y requerimientos de información de los Poderes Ejecutivo y Legislativo a nivel federal, organismos autónomos, así como del sector privado, sector académico y organismos no gubernamentales."',
+        distractors: 'B) III es proponer disposiciones; C) V es coordinar acciones ante instancias; D) II es fungir como enlace.'
+    },
+    // 25. Art. 40 - fracción VIII
+    {
+        type: 'c',
+        text: 'La Dirección General Adjunta de Relaciones Institucionales coordinará las actividades del Consejo Consultivo Académico y del Consejo Consultivo de Usuarios. Esta atribución está en el Artículo 40, fracción ______.',
+        options: [
+            'A) VIII',
+            'B) VII',
+            'C) VI',
+            'D) IX'
+        ],
+        correct: 'A',
+        justification: 'Artículo 40, fracción VIII: "Coordinar las actividades del Consejo Consultivo Académico y del Consejo Consultivo de Usuarios."',
+        distractors: 'B) VII es proponer iniciativas; C) VI es comparecencias; D) IX es las demás facultades.'
+    },
+    // 26. Art. 42 - atribuciones de la Dirección General Adjunta de Recursos Humanos (fracción I)
+    {
+        type: 'a',
+        text: 'La Dirección General Adjunta de Recursos Humanos tiene la atribución de proponer el anteproyecto del presupuesto anual del Instituto en lo concerniente al capítulo de servicios personales. Esta atribución está en el Artículo 42, fracción ______.',
+        options: [
+            'A) I',
+            'B) II',
+            'C) III',
+            'D) IV'
+        ],
+        correct: 'A',
+        justification: 'Artículo 42, fracción I: "Proponer el anteproyecto del presupuesto anual del Instituto en lo concerniente al capítulo de servicios personales."',
+        distractors: 'B) II es proponer mecanismos de movimientos; C) III es ejecutar políticas del Servicio Profesional de Carrera; D) IV es organizar reclutamiento y selección.'
+    },
+    // 27. Art. 42 - fracción III
+    {
+        type: 'c',
+        text: 'La Dirección General Adjunta de Recursos Humanos ejecutará las políticas y procedimientos aprobados por la Junta de Gobierno para la implementación y operación del ______ del Instituto.',
+        options: [
+            'A) Servicio Profesional de Carrera',
+            'B) Sistema de Escalafón',
+            'C) Programa de Capacitación',
+            'D) Programa de Igualdad de Género'
+        ],
+        correct: 'A',
+        justification: 'Artículo 42, fracción III: "Ejecutar las políticas y procedimientos, aprobados por la Junta de Gobierno, para la implementación y operación del Servicio Profesional de Carrera del Instituto."',
+        distractors: 'B) el escalafón es parte de la seguridad e higiene; C) la capacitación es otra atribución; D) el programa de igualdad es una fracción posterior.'
+    },
+    // 28. Art. 42 - fracción V
+    {
+        type: 'a',
+        text: 'La Dirección General Adjunta de Recursos Humanos emitirá las constancias de nombramiento del personal del Instituto, así como las constancias y certificaciones administrativas, y expedirá las credenciales de identificación del Instituto. Esta atribución está en el Artículo 42, fracción ______.',
+        options: [
+            'A) V',
+            'B) IV',
+            'C) VI',
+            'D) VII'
+        ],
+        correct: 'A',
+        justification: 'Artículo 42, fracción V: "Emitir las constancias de nombramiento del personal del Instituto, así como las constancias y certificaciones administrativas, cuando por motivo de la relación laboral se requiera, así como expedir las credenciales de identificación del Instituto..."',
+        distractors: 'B) IV es reclutamiento y selección; C) VI es proponer disposiciones laborales; D) VII es autorizar dictámenes de estructura.'
+    },
+    // 29. Art. 42 - fracción XX Bis
+    {
+        type: 'c',
+        text: 'La Dirección General Adjunta de Recursos Humanos dará atención y seguimiento a las acciones previstas en el Programa Institucional de Igualdad de Género correspondiente y promoverá las mismas entre las Unidades Administrativas. Esta atribución está en el Artículo 42, fracción ______.',
+        options: [
+            'A) XX Bis',
+            'B) XX',
+            'C) XIX',
+            'D) XVIII'
+        ],
+        correct: 'A',
+        justification: 'Artículo 42, fracción XX Bis: "Dar atención y seguimiento a las acciones previstas en el Programa Institucional de Igualdad de Género correspondiente y promover las mismas entre las Unidades Administrativas."',
+        distractors: 'B) XX es aplicar penas convencionales; C) XIX es conformar ventanilla única; D) XVIII es suscribir contratos.'
+    },
+    // 30. Art. 42 - fracción IV
+    {
+        type: 'b',
+        text: 'Relacione las atribuciones de la Dirección General Adjunta de Recursos Humanos con sus descripciones:',
+        options: [
+            'A) 1-C, 2-D, 3-B, 4-A',
+            'B) 1-A, 2-C, 3-D, 4-B',
+            'C) 1-B, 2-A, 3-D, 4-C',
+            'D) 1-C, 2-B, 3-A, 4-D'
+        ],
+        correct: 'A',
+        justification: 'Artículo 42: fracción IV: organizar reclutamiento, selección, ingreso, evaluación, desarrollo profesional y separación del personal (C); fracción VI: proponer, difundir y aplicar disposiciones que rijan la relación laboral (D); fracción VII: autorizar y emitir dictámenes técnico y organizacional de modificación de estructura (B); fracción VIII: evaluar y autorizar movimientos de personal (A).',
+        distractors: 'Las otras opciones confunden las correspondencias.',
+        relacionItems: '1) Organizar reclutamiento, selección, ingreso, evaluación, desarrollo profesional y separación  2) Proponer, difundir y aplicar disposiciones que rijan la relación laboral  3) Autorizar y emitir dictámenes de modificación de estructura  4) Evaluar y autorizar movimientos de personal',
+        relacionOpciones: 'A) Evaluar y autorizar movimientos de personal   B) Autorizar dictámenes de estructura   C) Organizar reclutamiento, selección, ingreso, evaluación, desarrollo profesional y separación   D) Proponer disposiciones laborales'
+    }
+];
+
+// --------------------------------------------------------------
+// Lógica de la aplicación
+// --------------------------------------------------------------
+const total = questions.length;
+let current = 0;
+let selected = new Array(total).fill(null);
+let verified = new Array(total).fill(false);
+let correctCount = 0;
+
+const qText = document.getElementById('qText');
+const optionsContainer = document.getElementById('optionsContainer');
+const feedbackBox = document.getElementById('feedbackBox');
+const feedbackContent = document.getElementById('feedbackContent');
+const qCounter = document.getElementById('qCounter');
+const qStatus = document.getElementById('qStatus');
+const prevBtn = document.getElementById('prevBtn');
+const nextBtn = document.getElementById('nextBtn');
+const checkBtn = document.getElementById('checkBtn');
+const resetBtn = document.getElementById('resetBtn');
+const progressBar = document.getElementById('progressBar');
+const resultsArea = document.getElementById('resultsArea');
+const resultsContent = document.getElementById('resultsContent');
+const relacionList = document.getElementById('relacionList');
+
+function renderQuestion(index) {
+    const q = questions[index];
+    qText.textContent = q.text;
+
+    if (q.type === 'b' && q.relacionItems) {
+        relacionList.style.display = 'block';
+        relacionList.innerHTML = `<strong>Relacionar:</strong> ${q.relacionItems} <br> <strong>Opciones:</strong> ${q.relacionOpciones}`;
+    } else {
+        relacionList.style.display = 'none';
+    }
+
+    optionsContainer.innerHTML = '';
+    q.options.forEach((opt, idx) => {
+        const label = document.createElement('label');
+        label.className = 'opt-label';
+        const radio = document.createElement('input');
+        radio.type = 'radio';
+        radio.name = 'question';
+        radio.value = String.fromCharCode(65 + idx);
+        radio.addEventListener('change', () => {
+            selected[current] = radio.value;
+            document.querySelectorAll('.opt-label').forEach(el => el.classList.remove('selected'));
+            label.classList.add('selected');
+            if (verified[current]) {
+                verified[current] = false;
+                feedbackBox.classList.remove('show');
+                updateStatusAndProgress();
+            }
+        });
+        if (selected[current] === radio.value) {
+            radio.checked = true;
+            label.classList.add('selected');
+        }
+        label.appendChild(radio);
+        label.append(' ' + opt);
+        optionsContainer.appendChild(label);
+    });
+
+    qCounter.textContent = `Pregunta ${index+1} / ${total}`;
+    updateStatusAndProgress();
+
+    if (verified[index]) {
+        showFeedback(index);
+    } else {
+        feedbackBox.classList.remove('show');
+    }
+
+    prevBtn.disabled = (index === 0);
+    nextBtn.disabled = (index === total - 1);
+    checkBtn.disabled = (selected[index] === null || verified[index]);
+}
+
+function updateStatusAndProgress() {
+    const idx = current;
+    if (verified[idx]) {
+        qStatus.textContent = '✓ Verificada';
+        qStatus.style.color = '#0d6e2b';
+    } else if (selected[idx] !== null) {
+        qStatus.textContent = '● Respondida';
+        qStatus.style.color = '#b68b1a';
+    } else {
+        qStatus.textContent = '● Sin responder';
+        qStatus.style.color = '#4a6a8a';
+    }
+    const answered = selected.filter(a => a !== null).length;
+    const pct = (answered / total) * 100;
+    progressBar.style.width = pct + '%';
+    correctCount = 0;
+    for (let i=0; i<total; i++) {
+        if (verified[i] && selected[i] === questions[i].correct) correctCount++;
+    }
+}
+
+function showFeedback(index) {
+    const q = questions[index];
+    const userAns = selected[index];
+    const isCorrect = (userAns === q.correct);
+    let html = '';
+    if (isCorrect) {
+        html += `<div class="badge-correct">✅ Correcto</div>`;
+    } else {
+        html += `<div class="badge-wrong">❌ Incorrecto</div>`;
+    }
+    html += `<div class="justify"><strong>Justificación:</strong> ${q.justification}</div>`;
+    if (q.distractors) {
+        html += `<div class="distractor"><strong>Análisis de distractores:</strong> ${q.distractors}</div>`;
+    }
+    feedbackContent.innerHTML = html;
+    feedbackBox.classList.add('show');
+
+    const labels = document.querySelectorAll('.opt-label');
+    labels.forEach((label, idx) => {
+        const letter = String.fromCharCode(65 + idx);
+        label.classList.remove('correct-highlight', 'wrong-highlight');
+        if (letter === q.correct) {
+            label.classList.add('correct-highlight');
+        } else if (letter === userAns && userAns !== q.correct) {
+            label.classList.add('wrong-highlight');
+        }
+    });
+    document.querySelectorAll('input[name="question"]').forEach(inp => inp.disabled = true);
+    checkBtn.disabled = true;
+    correctCount = 0;
+    for (let i=0; i<total; i++) {
+        if (verified[i] && selected[i] === questions[i].correct) correctCount++;
+    }
+    if (verified.every(v => v === true)) {
+        showFinalResults();
+    }
+}
+
+function verifyCurrent() {
+    const idx = current;
+    if (selected[idx] === null) {
+        alert('Selecciona una opción primero.');
+        return;
+    }
+    if (verified[idx]) {
+        alert('Esta pregunta ya fue verificada.');
+        return;
+    }
+    verified[idx] = true;
+    showFeedback(idx);
+    updateStatusAndProgress();
+}
+
+function showFinalResults() {
+    const pct = (correctCount / total) * 100;
+    resultsContent.innerHTML = `✅ Has completado el cuestionario.<br>
+        <span style="font-size:2rem;">${correctCount} / ${total}</span><br>
+        <span style="font-size:1.4rem;">${pct.toFixed(1)}% de aciertos</span>`;
+    resultsArea.style.display = 'block';
+}
+
+function resetQuiz() {
+    selected = new Array(total).fill(null);
+    verified = new Array(total).fill(false);
+    correctCount = 0;
+    current = 0;
+    resultsArea.style.display = 'none';
+    feedbackBox.classList.remove('show');
+    renderQuestion(0);
+    document.querySelectorAll('input[name="question"]').forEach(inp => inp.disabled = false);
+    checkBtn.disabled = false;
+}
+
+function goPrev() {
+    if (current > 0) { current--; renderQuestion(current); }
+}
+function goNext() {
+    if (current < total-1) { current++; renderQuestion(current); }
+}
+
+prevBtn.addEventListener('click', goPrev);
+nextBtn.addEventListener('click', goNext);
+checkBtn.addEventListener('click', verifyCurrent);
+resetBtn.addEventListener('click', resetQuiz);
+
+renderQuestion(0);
+</script>
+</body>
+</html>
